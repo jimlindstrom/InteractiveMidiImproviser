@@ -6,9 +6,9 @@ require 'rubygems'
 require 'midi/device_layer'
 require 'listen/listener'
 
-IN_PORT_VMPK       = 6
-OUT_PORT_VMPK      = 7
-OUT_PORT_TIMIDITY0 = 2
+IN_PORT_VMPK       = Portmidi.input_devices.find{ |x| x.name=="VMPK Output"      }.device_id
+OUT_PORT_VMPK      = Portmidi.output_devices.find{|x| x.name=="VMPK Input"       }.device_id
+OUT_PORT_TIMIDITY0 = Portmidi.output_devices.find{|x| x.name=="TiMidity port 0"  }.device_id
 
 Thread.abort_on_exception = true
 
