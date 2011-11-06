@@ -5,7 +5,7 @@ require 'midi/event_queue'
 # assumes a @critic has been defined :before this
 shared_examples_for "a critic" do
 
-  describe "#make_observation" do
+  describe "#observe" do
     it "should return a hash containing :surprise" do
       @evq = Midi::EventQueue.new
       @num_events=(rand*50).round
@@ -13,7 +13,7 @@ shared_examples_for "a critic" do
         @evq.enqueue({:message=>[144,40,100,0],:timestamp=>1000})
       end
 
-      @critic.make_observation(@evq).keys.should == [:surprise]
+      @critic.observe(@evq).keys.should == [:surprise]
     end
   end
 
@@ -30,7 +30,7 @@ shared_examples_for "a critic" do
       @num_events.times do 
         @evq.enqueue({:message=>[144,40,100,0],:timestamp=>1000})
       end
-      @critic.make_observation(@evq)
+      @critic.observe(@evq)
 
       @critic.generate_next_event(Midi::EventQueue.new).keys.sort.should == [:next_state, :surprise]
     end
@@ -49,7 +49,7 @@ shared_examples_for "a critic" do
       @num_events.times do 
         @evq.enqueue({:message=>[144,40,100,0],:timestamp=>1000})
       end
-      @critic.make_observation(@evq)
+      @critic.observe(@evq)
 
       @critic.evaluate_next_event(Midi::EventQueue.new, {:message=>[144,40,100,0],:timestamp=>1000}).keys.should == [:surprise]
     end

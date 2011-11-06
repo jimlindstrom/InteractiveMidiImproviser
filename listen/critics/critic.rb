@@ -2,27 +2,45 @@
 
 module Listen
 
-	module Critics
+  module Critics
 
-		class Critic
-			def initialize
-				raise RuntimeError.new("cannot instantiate Critic - it's abstract")
-			end
+    class EventCritic
+      def initialize
+        raise RuntimeError.new("cannot instantiate EventCritic - it's abstract")
+      end
 
-			def make_observation(events)
-				# should return nothing
-			end
+      def observe(events)
+        # should return nothing
+      end
 
-			def generate_next_event(events)
-				# should return { :next_event => ?, :surprise => ? }
-			end
+      def generate_next_event(events)
+        # should return { :next_event => ?, :surprise => ? }
+      end
 
-			def evaluate_next_event(events, next_event)
-				# should return { :next_event => ?, :surprise => ? }
-			end
-		end
+      def evaluate_next_event(events, next_event)
+        # should return { :next_event => ?, :surprise => ? }
+      end
+    end
 
-	end
+    class EventQueueCritic
+      def initialize
+        raise RuntimeError.new("cannot instantiate EventQueueCritic - it's abstract")
+      end
+
+      def observe(events)
+        # should return nothing
+      end
+
+      def generate
+        # should return { :choice => ?, :surprise => ? }
+      end
+
+      def evaluate(choice)
+        # should return { :surprise => ? }
+      end
+    end
+
+  end
 
 end
 

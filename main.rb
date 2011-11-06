@@ -6,10 +6,67 @@ require 'rubygems'
 require 'midi/device_layer'
 require 'listen/listener'
 
-class InteractiveImproviser
+module Observers
 
-  def initialize
+  class ResponseGenerator
+  
+    def initialize(machine, listener)
+      @machine  = machine
+      @listener = listener
+  
+      @machine.context.add_observer(self)
+    end
+  
+    def update(event_queue)
+      Thread.new do
+        @listener.respond(event_queue)
+        @machine.response_done
+      end
+    end
+  
   end
+
+  class InboundEventRouter
+    def initialize(dev_layer, machine)
+      dev_layer.add_observer(self)
+      @machine = machine
+    end
+  
+    def update(event)
+      @machine.midievent(event)
+    end
+  end
+
+  class ResponsePlayer
+  
+    def initialize(listener, device_layer)
+      @device_layer = device_layer
+
+      listener.add_observer(self)
+    end
+  
+    def update(ev_queue)
+      last_timestamp = ev_queue.first[:timestamp]
+      ev_queue.each do |cur_event|
+        if !last_timestamp.nil? and (cur_event[:timestamp] > last_timestamp)
+          sleep_delta = (cur_event[:timestamp] - last_timestamp)
+          puts "sleeping for #{sleep_delta} sec"
+          sleep sleep_delta
+          last_timestamp = cur_event[:timestamp]
+        end
+
+        @device_layer.write(cur_event[:message])
+      end
+
+      puts "done."
+      puts
+    end
+
+  end
+
+end
+
+class InteractiveImproviser
 
   def setup_devices
     begin
@@ -35,9 +92,9 @@ class InteractiveImproviser
     @listener = Listen::Listener.new
     @machine  = Listen::create_listener_machine
     
-    @midi_event_router = Listen::MidiEventRouter.new(@midi_device_layer, @machine)
-	@machine_observer  = Listen::MachineObserver.new(@machine, @listener)
-    @listener_observer = Listen::ListenerObserver.new(@listener, @midi_device_layer)
+    @inbound_event_router = Observers::InboundEventRouter.new(@midi_device_layer, @machine)
+	@response_generator   = Observers::ResponseGenerator.new(@machine, @listener)
+    @response_player      = Observers::ResponsePlayer.new(@listener, @midi_device_layer)
   end
 
   def run
@@ -47,7 +104,6 @@ class InteractiveImproviser
   end
 
 end
-
 
 Thread.abort_on_exception = true
 

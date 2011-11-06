@@ -7,7 +7,7 @@ module Listen
 
 	module Critics
 
-		class PitchCritic
+		class PitchCritic < EventCritic
 			NUM_MIDI_PITCHES = 128
 
 			def initialize
@@ -15,7 +15,7 @@ module Listen
 				@no_observations_made = true
 			end
 
-			def make_observation(event_queue)
+			def observe(event_queue)
 				# should return nothing
 
 				@no_observations_made = false
