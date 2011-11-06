@@ -5,7 +5,6 @@ $LOAD_PATH.unshift "."
 require 'rubygems'
 require 'midi/device_layer'
 require 'listen/listener'
-require 'midi_event_router'
 
 class InteractiveImproviser
 
@@ -36,14 +35,10 @@ class InteractiveImproviser
     @listener = Listen::Listener.new
     @listener.set_device_layer(@midi_device_layer)
     
-    @machine = Listen::create_listener_machine(
-      lambda { |ev_queue, finished_lambda| 
-          puts "respond!"
-          @listener.respond(ev_queue, finished_lambda) 
-        }
-      )
+    @machine = Listen::create_listener_machine
     
-    @midi_event_router = MidiEventRouter.new(@midi_device_layer, @machine)
+    @midi_event_router = Listen::MidiEventRouter.new(@midi_device_layer, @machine)
+	@machine_observer = Listen::MachineObserver.new(@machine, @listener)
   end
 
   def run
