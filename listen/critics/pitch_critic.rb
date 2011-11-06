@@ -5,46 +5,73 @@ require 'markov/chain'
 
 module Listen
 
-	module Critics
+  module Critics
 
-		class PitchCritic < EventCritic
-			NUM_MIDI_PITCHES = 128
+    class PitchTranscoder
+      NUM_MIDI_PITCHES = 128
 
-			def initialize
-				@markov_chain = Markov::Chain.new(NUM_MIDI_PITCHES)
-				@no_observations_made = true
-			end
+      def self.num_symbols
+        return NUM_MIDI_PITCHES
+      end
 
-			def observe(event_queue)
-				# should return nothing
+      def self.pitch_to_symbol(p)
+        return p
+      end
 
-				@no_observations_made = false
-				pitches = event_queue.get_pitches
-				surprise = @markov_chain.add_observation(pitches)
-	
-				puts "PitchCritic:"
-				puts "\tobservation: " + pitches.inspect
-				puts "\tobservation surprise: #{surprise}"
+      def self.pitches_to_symbols(ps)
+        ps.map{ |p| self.pitch_to_symbol(p) }
+      end
 
-				return {:surprise => surprise }
-			end
+      def self.symbol_to_pitch(s)
+        return s
+      end
 
-			def generate_next_event(events_queue)
-				return nil if @no_observations_made
+      def self.symbols_to_pitches(ss)
+        ss.map{ |s| self.symbol_to_pitch(s) }
+      end
+    end
 
-				pitches = events_queue.get_pitches
-				return @markov_chain.generate_next(pitches)
-			end
+    class PitchCritic < EventCritic
 
-			def evaluate_next_event(events_queue, next_event)
-				return nil if @no_observations_made
+      def initialize
+        @markov_chain = Markov::Chain.new(PitchTranscoder.num_symbols)
+        @no_observations_made = true
+      end
 
-				pitches = events_queue.get_pitches
-				return @markov_chain.evaluate_next(pitches, next_event[:message][1])
-			end
-		end
+      def observe(event_queue)
+        # should return nothing
 
-	end
+        @no_observations_made = false
+        pitches = event_queue.get_pitches
+        symbols = PitchTranscoder.pitches_to_symbols(pitches)
+        surprise = @markov_chain.add_observation(symbols)
+  
+        puts "PitchCritic:"
+        puts "\tobservation: " + pitches.inspect
+        puts "\tobservation surprise: #{surprise}"
+
+        return {:surprise => surprise }
+      end
+
+      def generate_next_event(events_queue)
+        return nil if @no_observations_made
+
+        pitches = events_queue.get_pitches
+        symbols = PitchTranscoder.pitches_to_symbols(pitches)
+        symbol = @markov_chain.generate_next(symbols)
+        return PitchTranscoder.symbol_to_pitch(symbol)
+      end
+
+      def evaluate_next_event(events_queue, next_event)
+        return nil if @no_observations_made
+
+        pitches = events_queue.get_pitches
+        symbols = PitchTranscoder.pitches_to_symbols(pitches)
+        return @markov_chain.evaluate_next(symbols, PitchTranscoder.pitch_to_symbol(next_event[:message][1]))
+      end
+    end
+
+  end
 
 end
 

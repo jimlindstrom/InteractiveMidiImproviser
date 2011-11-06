@@ -48,10 +48,8 @@ module Observers
     def update(ev_queue)
       last_timestamp = ev_queue.first[:timestamp]
       ev_queue.each do |cur_event|
-        if !last_timestamp.nil? and (cur_event[:timestamp] > last_timestamp)
-          sleep_delta = (cur_event[:timestamp] - last_timestamp)
-          puts "sleeping for #{sleep_delta} sec"
-          sleep sleep_delta
+        if cur_event[:timestamp] > last_timestamp
+          sleep (cur_event[:timestamp] - last_timestamp)
           last_timestamp = cur_event[:timestamp]
         end
 

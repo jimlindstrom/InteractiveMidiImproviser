@@ -61,11 +61,10 @@ module Listen
           cur_velocity = MIDI_VELOCITY_MED
           cur_note     = pitch_resp[:next_state]
           cur_ioi      = ioi_resp[:next_state]
-          puts "cur ioi: #{cur_ioi}"
 
           event_queue.enqueue( { :message => [ MIDI_NOTE_ON, cur_note, cur_velocity ],
                                  :timestamp => timestamp } )
-          timestamp += (5*tempo) * cur_ioi
+          timestamp += (5*tempo) * cur_ioi # not sure why this has to be *5'ed
           event_queue.enqueue( { :message => [ MIDI_NOTE_OFF, cur_note, cur_velocity ],
                                  :timestamp => timestamp } )
         end
