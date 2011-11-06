@@ -1,6 +1,10 @@
   task :test do
     sh "rspec -c -I '.' specs/"
-    puts "You should now run: killall -9 ruby && killall -9 amidi"
+    puts "You should now run 'rake test:cleanup' in order to do: killall -9 ruby && killall -9 amidi"
+  end
+
+  task 'test:cleanup' do
+    sh "killall -9 ruby && killall -9 amidi"
   end
 
   task :miditest do

@@ -39,6 +39,13 @@ module Markov
       return { :surprise => @initial_state.calc_surprise(next_state) } if history == []
       return { :surprise => @states[history.last].calc_surprise(next_state) }
     end
+    
+    def possible_next_states(history)
+      return nil if @no_observations_yet
+      return @initial_state.possible_next_states if history == []
+      return @states[history.last].possible_next_states
+    end
+
   end
   
 end
