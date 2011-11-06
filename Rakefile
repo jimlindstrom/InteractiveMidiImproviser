@@ -1,6 +1,6 @@
   task :test do
     sh "rspec -c -I '.' specs/"
-    echo "You should now run: killall -9 ruby && killall -9 amidi"
+    puts "You should now run: killall -9 ruby && killall -9 amidi"
   end
 
   task :miditest do

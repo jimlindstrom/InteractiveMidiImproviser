@@ -4,6 +4,7 @@ require 'observer'
 require 'thread'
 require 'listen/machine'
 require 'listen/critics/pitch_critic'
+require 'listen/critics/interval_critic'
 require 'listen/critics/ioi_critic'
 require 'listen/critics/pitch_count_critic'
 require 'listen/critics/tempo_critic'
@@ -17,6 +18,7 @@ module Listen
     
     def initialize
       @pitch_critic       = Listen::Critics::PitchCritic.new
+      @interval_critic    = Listen::Critics::IntervalCritic.new
       @pitch_count_critic = Listen::Critics::PitchCountCritic.new
       @ioi_critic         = Listen::Critics::IOICritic.new
       @tempo_critic       = Listen::Critics::TempoCritic.new
@@ -34,6 +36,7 @@ module Listen
   
     def make_observation(event_queue)
       @pitch_critic.observe(event_queue)
+      @interval_critic.observe(event_queue)
       @ioi_critic.observe(event_queue)
       @pitch_count_critic.observe(event_queue)
       @tempo_critic.observe(event_queue)
@@ -51,12 +54,15 @@ module Listen
       timestamp = 0
       num_notes.times do
 
-        pitch_resp = @pitch_critic.generate_next_event(event_queue)
-        ioi_resp   = @ioi_critic.generate_next_event(event_queue)
+        pitch_resp    = @pitch_critic.generate_next_event(event_queue)
+        interval_resp = @interval_critic.generate_next_event(event_queue)
+        ioi_resp      = @ioi_critic.generate_next_event(event_queue)
         if pitch_resp.nil?
-          puts "got nil next pitch" # I think this happens because of states that have only been observed as terminals
+          puts "got nil next pitch"    # I think this happens because of states that have only been observed as terminals
+        elsif interval_resp.nil?
+          puts "got nil next interval" # I think this happens because of states that have only been observed as terminals
         elsif ioi_resp.nil?
-          puts "got nil next ioi" # I think this happens because of states that have only been observed as terminals
+          puts "got nil next ioi"      # I think this happens because of states that have only been observed as terminals
         else
           cur_velocity = MIDI_VELOCITY_MED
           cur_note     = pitch_resp[:next_state]
