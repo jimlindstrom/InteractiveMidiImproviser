@@ -33,12 +33,11 @@ class InteractiveImproviser
 
   def setup_listener
     @listener = Listen::Listener.new
-    @listener.set_device_layer(@midi_device_layer)
-    
-    @machine = Listen::create_listener_machine
+    @machine  = Listen::create_listener_machine
     
     @midi_event_router = Listen::MidiEventRouter.new(@midi_device_layer, @machine)
-	@machine_observer = Listen::MachineObserver.new(@machine, @listener)
+	@machine_observer  = Listen::MachineObserver.new(@machine, @listener)
+    @listener_observer = Listen::ListenerObserver.new(@listener, @midi_device_layer)
   end
 
   def run
