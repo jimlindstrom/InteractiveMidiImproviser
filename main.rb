@@ -6,9 +6,19 @@ require 'rubygems'
 require 'midi/device_layer'
 require 'listen/listener'
 
-IN_PORT_VMPK       = Portmidi.input_devices.find{ |x| x.name=="VMPK Output"      }.device_id
-OUT_PORT_VMPK      = Portmidi.output_devices.find{|x| x.name=="VMPK Input"       }.device_id
-OUT_PORT_TIMIDITY0 = Portmidi.output_devices.find{|x| x.name=="TiMidity port 0"  }.device_id
+begin
+  IN_PORT_VMPK       = Portmidi.input_devices.find{ |x| x.name=="VMPK Output"      }.device_id
+  OUT_PORT_VMPK      = Portmidi.output_devices.find{|x| x.name=="VMPK Input"       }.device_id
+rescue NoMethodError
+  puts "Please start VMPK (virtual midi piano keyboard)"
+  exit
+end
+begin
+  OUT_PORT_TIMIDITY0 = Portmidi.output_devices.find{|x| x.name=="TiMidity port 0"  }.device_id
+rescue NoMethodError
+  puts "Please set up Timidity"
+  exit
+end
 
 Thread.abort_on_exception = true
 

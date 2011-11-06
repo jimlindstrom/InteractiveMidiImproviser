@@ -32,7 +32,7 @@ shared_examples_for "a critic" do
       end
       @critic.make_observation(@evq)
 
-      @critic.generate_next_event(Midi::EventQueue.new).keys.should == [:surprise, :next_state]
+      @critic.generate_next_event(Midi::EventQueue.new).keys.sort.should == [:next_state, :surprise]
     end
   end
 
