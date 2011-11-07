@@ -12,15 +12,16 @@ module Midi
     end
 
     def enqueue(e)
+      raise ArgumentError, "Midi::EventQueue only accepts Midi::Event items" if e.class != Midi::Event
       push(e)
     end
 
     def get_pitches
-      select{|x| x[:message][0]==Midi::Event::NOTE_ON }.map{|x| x[:message][1] }
+      select{|x| x.message==Midi::Event::NOTE_ON }.map{|x| x.pitch }
     end
 
     def get_interonset_intervals
-      return Midi::IOIArray.new( select{|x| x[:message][0]==Midi::Event::NOTE_ON }.map{|x| x[:timestamp] }.each_cons(2).map{ |a,b| b-a } )
+      return Midi::IOIArray.new( select{|x| x.message==Midi::Event::NOTE_ON }.map{|x| x.timestamp }.each_cons(2).map{ |a,b| b-a } )
     end
   end
 
