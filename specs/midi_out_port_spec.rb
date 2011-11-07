@@ -3,6 +3,7 @@
 require 'thread'
 require 'midi/out_port'
 require 'midi/in_port'
+require 'midi/event'
 
 describe Midi::OutPort do
 
@@ -26,9 +27,7 @@ describe Midi::OutPort do
     it "throws an error if you specify an invalid midi port" do
       expect { @outport = Midi::OutPort.new("Invalid MIDI port") }.to raise_error(ArgumentError)
     end
-  end
 
-  describe "#initialize" do
     it "succeeds if you specify a valid midi port" do
       @outport = Midi::OutPort.new("VirMIDI 1-0")
       @outport.class.should == Midi::OutPort
@@ -37,21 +36,24 @@ describe Midi::OutPort do
 
   describe "#write" do
     it "writes a single event into the port" do
+      Thread.abort_on_exception = true
       @inport = Midi::InPort.new("VirMIDI 1-1")
       @outport = Midi::OutPort.new("VirMIDI 1-0")
       @reading=false
       @thread_id = Thread.new do
-        @reading=true
-        @inport.blocking_read.class.should == Midi::Event
+        while !@reading do 
+          sleep 0.1 
+        end
+        sleep 0.2
+        @event = Midi::Event.new({:message=>Midi::Event::NOTE_ON,  :pitch=>100, :velocity=>100, :timestamp=>0})
+        @outport.write(@event)
+        sleep 0.1
+        @event = Midi::Event.new({:message=>Midi::Event::NOTE_OFF, :pitch=>100, :velocity=>100, :timestamp=>0})
+        @outport.write(@event)
       end
-      while !@reading do 
-        sleep 0.1 
-      end
-      @event = Midi::Event.new({:message=>Midi::Event::NOTE_ON,  :pitch=>100, :velocity=>100, :timestamp=>0})
-      @outport.write(@event)
-      sleep 0.1
-      @event = Midi::Event.new({:message=>Midi::Event::NOTE_OFF, :pitch=>100, :velocity=>100, :timestamp=>0})
-      @outport.write(@event)
+      @reading=true
+      @evt = @inport.blocking_read
+      @evt.class.should == Midi::Event
       @thread_id.join
     end
   end

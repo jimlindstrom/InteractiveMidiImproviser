@@ -24,7 +24,7 @@ module Midi
     def blocking_read
       event = nil
       while event.nil?
-        raw_events = @port.read
+        raw_events = @port.read(16) # 1 messsage == 4 32-bit integers  ?
         if raw_events
           raise RuntimeError("Can't handle >1 event yet...") if raw_events.length > 1
 
