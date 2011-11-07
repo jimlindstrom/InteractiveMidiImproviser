@@ -5,7 +5,8 @@ require 'portmidi'
 module Midi
 
   class InPort
-    def initialize(port_name)
+    def initialize(port_name, clock)
+      @clock = clock
       selected_port = nil
       Portmidi.input_devices.each do |cur_port|
         if cur_port.name == port_name
@@ -29,6 +30,10 @@ module Midi
           raise RuntimeError("Can't handle >1 event yet...") if raw_events.length > 1
 
           raw_event = raw_events[0]
+
+          if !@clock.is_ready?
+            @clock.set_timestamp(raw_event[:timestamp])
+          end
           case raw_event[:message][0]
           when Midi::Event::NOTE_ON
             event = Midi::Event.new({
@@ -37,6 +42,7 @@ module Midi
                                      :velocity  => raw_event[:message][2],
                                      :timestamp => raw_event[:timestamp],
                                     })
+            #puts "{:message => #{raw_event[:message].inspect}, :timestamp => #{raw_event[:timestamp]}"
           when Midi::Event::NOTE_OFF
             event = Midi::Event.new({
                                      :message   => Midi::Event::NOTE_OFF,
@@ -44,8 +50,9 @@ module Midi
                                      :velocity  => raw_event[:message][2],
                                      :timestamp => raw_event[:timestamp],
                                     })
+            #puts "{:message => #{raw_event[:message].inspect}, :timestamp => #{raw_event[:timestamp]}"
           else
-            raise RuntimeError("Can't handle event type yet...") if raw_events.length > 1
+            raise RuntimeError("Can't handle event type yet...") 
           end
         end
       end
