@@ -1,8 +1,9 @@
 # midi_ioi_array_spec.rb
 
-require 'specs/vectors/midi'
+require 'midi/event'
 require 'midi/event_queue'
 require 'midi/ioi_array'
+require 'specs/vectors/midi'
 
 describe Midi::IOIArray do
 
