@@ -4,7 +4,7 @@ require 'observer'
 require 'portmidi'
 require 'midi/clock'
 
-# Refactorings:
+# Refactorings to do:
 # 1. Split into Midi::InPort and Midi::OutPort
 # 2. Write should take events
 # 3. Events should be better parsed.  Don't pass up (or expect in) raw message bytes

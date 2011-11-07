@@ -7,9 +7,7 @@ require 'midi/device_layer'
 require 'listen/listener'
 
 module Observers
-
   class ResponseGenerator
-  
     def initialize(machine, listener)
       @machine  = machine
       @listener = listener
@@ -23,7 +21,6 @@ module Observers
         @machine.response_done
       end
     end
-  
   end
 
   class InboundEventRouter
@@ -38,7 +35,6 @@ module Observers
   end
 
   class ResponsePlayer
-  
     def initialize(listener, device_layer)
       @device_layer = device_layer
 
@@ -59,9 +55,7 @@ module Observers
       puts "done."
       puts
     end
-
   end
-
 end
 
 class InteractiveImproviser
