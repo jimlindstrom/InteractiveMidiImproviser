@@ -69,6 +69,16 @@ module Listen
         symbols = PitchTranscoder.pitches_to_symbols(pitches)
         return @markov_chain.evaluate_next(symbols, PitchTranscoder.pitch_to_symbol(next_event[:message][1]))
       end
+
+      def possible_next_states(event_queue)
+        pitches = event_queue.get_pitches
+        symbols = PitchTranscoder.pitches_to_symbols(pitches)
+        pns = @markov_chain.possible_next_states(symbols)
+        pns[:possible_next_states].map!{ |x| { :next_state => PitchTranscoder.symbol_to_pitch(x[:next_state]), 
+                                               :num_observations => x[:num_observations] } }
+
+        return pns
+      end
     end
 
   end

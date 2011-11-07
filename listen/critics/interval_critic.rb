@@ -70,6 +70,18 @@ module Listen
         symbols = IntervalTranscoder.intervals_to_symbols(intervals)
         return @markov_chain.evaluate_next(symbols, IntervalTranscoder.interval_to_symbol(next_event[:message][1]))
       end
+
+      def possible_next_states(event_queue)
+        last_pitch = event_queue.get_pitches.last
+        intervals = event_queue.get_pitches.each_cons(2).map{ |x,y| y - x }
+        symbols = IntervalTranscoder.intervals_to_symbols(intervals)
+        pns = @markov_chain.possible_next_states(symbols)
+        pns[:possible_next_states].map!{ |x| { :next_state => last_pitch + IntervalTranscoder.symbol_to_interval(x[:next_state]), 
+                                               :num_observations => x[:num_observations] } }
+
+        return pns
+
+      end
     end
 
   end

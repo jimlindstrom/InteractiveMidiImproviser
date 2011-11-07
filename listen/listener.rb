@@ -8,6 +8,7 @@ require 'listen/critics/interval_critic'
 require 'listen/critics/ioi_critic'
 require 'listen/critics/pitch_count_critic'
 require 'listen/critics/tempo_critic'
+require 'markov/combined_cdf'
 
 module Listen
 
@@ -42,6 +43,27 @@ module Listen
       @tempo_critic.observe(event_queue)
     end
 
+    def generate_next_pitch(event_queue)
+      if event_queue.get_pitches.count == 0
+        return @pitch_critic.generate_next_event(event_queue)[:next_state]
+      else
+        combo_cdf = Markov::CombinedCDF.new(Listen::Critics::PitchTranscoder.num_symbols)
+
+        pns = @pitch_critic.possible_next_states(event_queue)
+        pns[:possible_next_states].map! { |x| { :next_state => Listen::Critics::PitchTranscoder.pitch_to_symbol(x[:next_state]),
+                                                :num_observations => x[:num_observations] } }
+        combo_cdf.add_possible_next_states pns
+
+        pns = @interval_critic.possible_next_states(event_queue)
+        pns[:possible_next_states].map! { |x| { :next_state => Listen::Critics::PitchTranscoder.pitch_to_symbol(x[:next_state]),
+                                                :num_observations => x[:num_observations] } }
+        combo_cdf.add_possible_next_states pns
+
+        symbol = combo_cdf.generate[:next_state]
+        return Listen::Critics::PitchTranscoder.symbol_to_pitch(symbol)
+      end
+    end
+
     MIDI_NOTE_ON  = 144
     MIDI_NOTE_OFF = 128
     MIDI_VELOCITY_MED = 100
@@ -54,26 +76,17 @@ module Listen
       timestamp = 0
       num_notes.times do
 
-        pitch_resp    = @pitch_critic.generate_next_event(event_queue)
-        interval_resp = @interval_critic.generate_next_event(event_queue)
         ioi_resp      = @ioi_critic.generate_next_event(event_queue)
-        if pitch_resp.nil?
-          puts "got nil next pitch"    # I think this happens because of states that have only been observed as terminals
-        elsif interval_resp.nil?
-          puts "got nil next interval" # I think this happens because of states that have only been observed as terminals
-        elsif ioi_resp.nil?
-          puts "got nil next ioi"      # I think this happens because of states that have only been observed as terminals
-        else
-          cur_velocity = MIDI_VELOCITY_MED
-          cur_note     = pitch_resp[:next_state]
-          cur_ioi      = ioi_resp[:next_state]
 
-          event_queue.enqueue( { :message => [ MIDI_NOTE_ON, cur_note, cur_velocity ],
-                                 :timestamp => timestamp } )
-          timestamp += (5*tempo) * cur_ioi # not sure why this has to be *5'ed
-          event_queue.enqueue( { :message => [ MIDI_NOTE_OFF, cur_note, cur_velocity ],
-                                 :timestamp => timestamp } )
-        end
+        cur_velocity = MIDI_VELOCITY_MED
+        cur_note     = generate_next_pitch(event_queue)
+        cur_ioi      = ioi_resp[:next_state]
+
+        event_queue.enqueue( { :message => [ MIDI_NOTE_ON, cur_note, cur_velocity ],
+                               :timestamp => timestamp } )
+        timestamp += (5*tempo) * cur_ioi # not sure why this has to be *5'ed
+        event_queue.enqueue( { :message => [ MIDI_NOTE_OFF, cur_note, cur_velocity ],
+                               :timestamp => timestamp } )
 
       end
 
@@ -81,6 +94,7 @@ module Listen
       iois = event_queue.get_interonset_intervals
       iois.quantize!
       puts "response IOIs: " + iois.inspect
+
       return event_queue
     end
 
