@@ -10,7 +10,7 @@ shared_examples_for "a critic" do
       @evq = Midi::EventQueue.new
       @num_events=(rand*50).round
       @num_events.times do 
-        @evq.enqueue({:message=>[Midi::Event::NOTE_ON,40,100,0],:timestamp=>1000})
+        @evq.enqueue(Midi::Event.new({:message => Midi::Event::NOTE_ON, :pitch => 40, :velocity => 100, :timestamp => 1000}))
       end
 
       @critic.observe(@evq).keys.should == [:surprise]
@@ -28,7 +28,7 @@ shared_examples_for "a critic" do
       @evq = Midi::EventQueue.new
       @num_events=(rand*50).round
       @num_events.times do 
-        @evq.enqueue({:message=>[Midi::Event::NOTE_ON,40,100,0],:timestamp=>1000})
+        @evq.enqueue(Midi::Event.new({:message => Midi::Event::NOTE_ON, :pitch => 40, :velocity => 100, :timestamp => 1000}))
       end
       @critic.observe(@evq)
 
@@ -38,7 +38,12 @@ shared_examples_for "a critic" do
 
   describe "#evaluate_next_event" do
     it "returns nil if no observations have been made" do
-      @critic.evaluate_next_event(Midi::EventQueue.new, {:message=>[Midi::Event::NOTE_ON,40,100,0],:timestamp=>1000}).nil?.should be_true
+      @critic.evaluate_next_event(
+                      Midi::EventQueue.new, 
+                      Midi::Event.new({:message => Midi::Event::NOTE_ON, 
+                                       :pitch => 40, 
+                                       :velocity => 100, 
+                                       :timestamp => 1000}) ).nil?.should be_true
     end
   end
 
@@ -47,11 +52,16 @@ shared_examples_for "a critic" do
       @evq = Midi::EventQueue.new
       @num_events=(rand*50).round
       @num_events.times do 
-        @evq.enqueue({:message=>[Midi::Event::NOTE_ON,40,100,0],:timestamp=>1000})
+        @evq.enqueue(Midi::Event.new({:message => Midi::Event::NOTE_ON, :pitch => 40, :velocity => 100, :timestamp => 1000}))
       end
       @critic.observe(@evq)
 
-      @critic.evaluate_next_event(Midi::EventQueue.new, {:message=>[Midi::Event::NOTE_ON,40,100,0],:timestamp=>1000}).keys.should == [:surprise]
+      @critic.evaluate_next_event(
+                      Midi::EventQueue.new, 
+                      Midi::Event.new({:message => Midi::Event::NOTE_ON, 
+                                       :pitch => 40, 
+                                       :velocity => 100, 
+                                       :timestamp => 1000}) ).keys.should == [:surprise]
     end
   end
 
