@@ -1,15 +1,9 @@
 # midi_out_port_spec.rb
 
-require 'thread'
-require 'midi/clock'
-require 'midi/out_port'
-require 'midi/in_port'
-require 'midi/event'
-
 describe Midi::OutPort do
 
   before(:each) do
-    system("/home/lindstro/code/rubymidi/util/virtual_midi_loopback.rb &")
+    Midi::Loopback.create
   end
 
   after(:each) do
@@ -18,10 +12,7 @@ describe Midi::OutPort do
     @outport.close if !@outport.nil?
     @outport = nil if !@outport.nil?
 
-    @pid=`ps aux | grep 'util/virtual' | grep -v grep | awk '{print $2}'`
-    if @pid.to_i > 1 and @pid.to_i < 65565
-      system("kill -9 #{@pid.to_i}")
-    end
+    Midi::Loopback.destroy
   end
 
   describe "#initialize" do

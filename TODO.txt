@@ -1,0 +1,14 @@
+New Critic: phrase length
+New Critic: tempo
+New Critic: 
+
+New Critic: tactus/meter/time sig
+New Critic: chord/scale (w/ underlying chord generation too)
+New Critic: key sig (look at prevalence of all notes so far. match to existing schemes)
+New Critic: overall shape of line
+
+Some sort of ending prediction
+	- factor oracle
+	- markov chain based on [cur note; # notes left] to predict [next note]
+
+Change to planning based on time, vs. # notes

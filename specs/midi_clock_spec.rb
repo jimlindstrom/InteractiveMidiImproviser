@@ -1,7 +1,5 @@
 # midi_clock_spec.rb
 
-require 'midi/clock'
-
 describe Midi::Clock do
 
   before(:each) do
