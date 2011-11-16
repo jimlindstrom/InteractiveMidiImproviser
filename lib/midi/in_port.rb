@@ -60,6 +60,16 @@ module Midi
       return event
     end
 
+    def read_with_timeout
+      timeout_duration = 2.0
+      t0 = Time.now
+      while !@port.poll
+        sleep (1.0/20.0)
+        return nil if (Time.now-t0) > timeout_duration
+      end
+      return blocking_read
+    end
+
   end
 
 end

@@ -48,7 +48,7 @@ describe Midi::InPort do
       end
       @reading=true
       @evt = @inport.blocking_read
-      @evt.class.should == Midi::Event
+      @evt.message == Midi::Event::NOTE_ON
       @thread_id.join
     end
 
@@ -74,8 +74,39 @@ describe Midi::InPort do
       @clock.is_ready?.should be_true
       @thread_id.join
     end
+  end
 
+  describe "#read_with_timeout" do
+    it "returns nil if no event comes before the timeout" do
+      @clock = Midi::Clock.new(0)
+      @inport = Midi::InPort.new("VirMIDI 1-1", @clock)
+      @outport = Midi::OutPort.new("VirMIDI 1-0")
+      @evt = @inport.read_with_timeout
+      @evt.should == nil
+    end
 
+    it "reads an event if it occurs before the timeout" do
+      Thread.abort_on_exception = true
+      @clock = Midi::Clock.new(0)
+      @inport = Midi::InPort.new("VirMIDI 1-1", @clock)
+      @outport = Midi::OutPort.new("VirMIDI 1-0")
+      @reading=false
+      @thread_id = Thread.new do
+        while !@reading do 
+          sleep 0.1 
+        end
+        sleep 0.2
+        @event = Midi::Event.new({:message=>Midi::Event::NOTE_ON,  :pitch=>100, :velocity=>100, :timestamp=>0})
+        @outport.write(@event)
+        sleep 0.1
+        @event = Midi::Event.new({:message=>Midi::Event::NOTE_OFF, :pitch=>100, :velocity=>100, :timestamp=>0})
+        @outport.write(@event)
+      end
+      @reading=true
+      @evt = @inport.read_with_timeout
+      @evt.message == Midi::Event::NOTE_ON
+      @thread_id.join
+    end
   end
 
 end

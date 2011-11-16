@@ -15,11 +15,12 @@ module Midi
 
       max_num_events = 2
       Midi::Loopback::read_thread = self.read_midi_events(max_num_events)
-      #Midi::Loopback::read_thread.join
     end
 
     def self.destroy
-      Midi::Loopback::read_thread.kill
+      #Midi::Loopback::read_thread.join
+      `killall -9 amidi`
+      Thread.kill(Midi::Loopback::read_thread)
     end
 
   private
@@ -28,6 +29,7 @@ module Midi
     
       read_thread = Thread.new do
         num_events = 0
+        #cmd = "amidi --port=hw:1,0 --dump --timeout=1"
         cmd = "amidi --port=hw:1,0 --dump"
         IO.popen(cmd) do |stdout|
           stdout.each do |line|
@@ -36,7 +38,7 @@ module Midi
     
             num_events = num_events + 1
             if num_events >= max_num_events
-              #exit
+              Thread.current.kill
             end
           end
         end
