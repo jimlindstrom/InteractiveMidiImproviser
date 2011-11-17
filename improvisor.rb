@@ -39,6 +39,7 @@ require File.join(File.dirname(__FILE__), 'lib', 'note_generator')
 
 require File.join(File.dirname(__FILE__), 'lib', 'sensor')
 require File.join(File.dirname(__FILE__), 'lib', 'fake_sensor')
+require File.join(File.dirname(__FILE__), 'lib', 'midi_sensor')
 
 require File.join(File.dirname(__FILE__), 'lib', 'fake_performer')
 

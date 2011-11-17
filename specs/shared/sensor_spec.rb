@@ -13,7 +13,8 @@ shared_examples_for "a sensor" do
     it "return nil if there are no more stimuli" do
       stimuli          = []
       expected_stimuli = []
-      @expected_num_responses.times do
+      @expected_num_responses.times do |stimulus_idx|
+        puts "waiting for stimulus # #{stimulus_idx}"
         stimuli.push @sensor.get_stimulus.class
         expected_stimuli.push Midi::EventQueue
       end
