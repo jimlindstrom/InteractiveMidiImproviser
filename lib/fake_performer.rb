@@ -2,7 +2,10 @@
 
 #require 'interactive_improvisor_lib'
 
-class FakePerformer
+class FakePerformer < Performer
+  def initialize
+  end
+
   def perform(event_queue)
     puts "Fake performer:"
     event_queue.each do |e|
