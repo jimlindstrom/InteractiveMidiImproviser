@@ -1,0 +1,10 @@
+GEM
+  remote: http://rubygems.org/
+  specs:
+    portmidi (0.0.6)
+
+PLATFORMS
+  ruby
+
+DEPENDENCIES
+  portmidi

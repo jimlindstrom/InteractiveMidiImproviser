@@ -1,15 +1,13 @@
 # midi_ioi_array_spec.rb
 
-require 'specs/vectors/midi'
-require 'midi/event_queue'
-require 'midi/ioi_array'
+require 'spec_helper'
 
 describe Midi::IOIArray do
 
   before(:each) do
   end
      
-  describe "#quantize!" do
+  describe ".quantize!" do
     it "returns a hash containing the quantization value" do
       @i = Midi::IOIArray.new([81, 72, 64, 65, 64, 64, 120, 57, 87, 53, 69, 141, 129, 
                                63, 66, 65, 58, 61, 70, 116, 61, 60, 58, 63, 125])
@@ -21,7 +19,7 @@ describe Midi::IOIArray do
     end
   end
    
-  describe "#quantize!" do
+  describe ".quantize!" do
     it "returns a hash containing the quantization error" do
       @i = Midi::IOIArray.new([81, 72, 64, 65, 64, 64, 120, 57, 87, 53, 69, 141, 129, 
                                63, 66, 65, 58, 61, 70, 116, 61, 60, 58, 63, 125])
@@ -33,7 +31,7 @@ describe Midi::IOIArray do
     end
   end
 
-  describe "#quantize!" do
+  describe ".quantize!" do
     it "quantizes its array values according to the quantization value" do
       @i = Midi::IOIArray.new([81, 72, 64, 65, 64, 64, 120, 57, 87, 53, 69, 141, 129, 
                                63, 66, 65, 58, 61, 70, 116, 61, 60, 58, 63, 125])
@@ -46,7 +44,7 @@ describe Midi::IOIArray do
     end
   end
 
-  describe "#quantize!" do
+  describe ".quantize!" do
     it "quantizes its array values according to the quantization value" do
       @iois = Midi::IOIArray.new([257, 51, 54, 54, 63, 116, 111])
       @q_ret = @iois.quantize!
@@ -54,42 +52,45 @@ describe Midi::IOIArray do
     end
   end
 
-  describe "#quantize!" do
+  describe ".quantize!" do
     it "properly quantizes 'good king wencelis'" do
-      @evq = Midi::EventQueue.new
-      $test_vectors["good king wencelis"][:events].each do |event|
-        @evq.enqueue(event)
+      events = $qioi_vectors["good king wencelis"][:events]
+      @iois = []
+      events.select { |x, y| x.message==Midi::Event::NOTE_ON }.each_cons(2) do |x, y|
+        @iois.push y.timestamp - x.timestamp
       end
-      @iois = @evq.get_interonset_intervals
+      @iois = Midi::IOIArray.new(@iois)
+
       @q_ret = @iois.quantize!
-      @iois.should == $test_vectors["good king wencelis"][:qiois]
+      @iois.should == $qioi_vectors["good king wencelis"][:qiois]
     end
   end
 
-  describe "#quantize!" do
+  describe ".quantize!" do
     it "properly quantizes 'old macdonald had a farm'" do
-      @evq = Midi::EventQueue.new
-      $test_vectors["old macdonald had a farm"][:events].each do |event|
-        @evq.enqueue(event)
+      events = $qioi_vectors["old macdonald had a farm"][:events]
+      @iois = []
+      events.select { |x, y| x.message==Midi::Event::NOTE_ON }.each_cons(2) do |x, y|
+        @iois.push y.timestamp - x.timestamp
       end
-      @iois = @evq.get_interonset_intervals
+      @iois = Midi::IOIArray.new(@iois)
+
       @q_ret = @iois.quantize!
-      @iois.should == $test_vectors["old macdonald had a farm"][:qiois]
+      @iois.should == $qioi_vectors["old macdonald had a farm"][:qiois]
     end
   end
 
-  describe "#quantize!" do
+  describe ".quantize!" do
     it "properly quantizes 'mary had a little lamb'" do
-      @evq = Midi::EventQueue.new
-      $test_vectors["mary had a little lamb"][:events].each do |event|
-        @evq.enqueue(event)
+      events = $qioi_vectors["mary had a little lamb"][:events]
+      @iois = []
+      events.select { |x, y| x.message==Midi::Event::NOTE_ON }.each_cons(2) do |x, y|
+        @iois.push y.timestamp - x.timestamp
       end
-      @iois = @evq.get_interonset_intervals
-      #puts "    @iois: #{@iois.inspect}"
+      @iois = Midi::IOIArray.new(@iois)
+
       @q_ret = @iois.quantize!
-      #puts "    @q_ret: #{@q_ret}"
-      #puts "    @iois: #{@iois.inspect}"
-      @iois.should == $test_vectors["mary had a little lamb"][:qiois]
+      @iois.should == $qioi_vectors["mary had a little lamb"][:qiois]
     end
   end
 
