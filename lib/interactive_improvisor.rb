@@ -5,8 +5,6 @@ require 'specs/vectors/fake_sensor_vectors'
 
 class InteractiveImprovisor
   def initialize
-    @performer = FakePerformer.new
-
     @improvisor = Improvisor.new
 
     @listener = Listener.new
@@ -22,8 +20,16 @@ class InteractiveImprovisor
     end
   end
 
-  def run
-    @sensor = FakeSensor.new($fake_sensor_vectors)
+  def run(use_real_midi=true)
+    if use_real_midi
+      clock      = Midi::Clock.new(0)
+      @sensor    = MidiSensor.new("VMPK Output", clock)
+      @sensor.set_stimulus_timeout(5.0)
+      @performer = MidiPerformer.new("VMPK Input")
+    else
+      @sensor = FakeSensor.new($fake_sensor_vectors)
+      @performer = FakePerformer.new
+    end
 
     until (stimulus_events = @sensor.get_stimulus).nil?
       stimulus_notes = stimulus_events.to_note_queue
@@ -35,5 +41,8 @@ class InteractiveImprovisor
       response_events = response_notes.to_event_queue
       @performer.perform response_events
     end
+
+    @sensor.close if @sensor.class == MidiSensor
+    @performer.close if @performer.class == MidiPerformer
   end
 end

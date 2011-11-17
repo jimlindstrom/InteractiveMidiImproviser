@@ -25,9 +25,9 @@ module Midi
     def blocking_read
       event = nil
       while event.nil?
-        raw_events = @port.read(16) # 1 messsage == 4 32-bit integers  ?
+        raw_events = @port.read# (16) # 1 messsage == 4 32-bit integers  ?
         if raw_events
-          raise RuntimeError("Can't handle >1 event yet...") if raw_events.length > 1
+          raise RuntimeError.new("Can't handle >1 event yet...") if raw_events.length > 1
 
           raw_event = raw_events[0]
 
@@ -52,7 +52,7 @@ module Midi
                                     })
             #puts "{:message => #{raw_event[:message].inspect}, :timestamp => #{raw_event[:timestamp]}"
           else
-            raise RuntimeError("Can't handle event type yet...") 
+            raise RuntimeError.new("Can't handle event type yet...") 
           end
         end
       end

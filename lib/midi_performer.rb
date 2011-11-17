@@ -17,12 +17,12 @@ class MidiPerformer < Performer
     event_queue.each do |e|
       if e.timestamp > last_timestamp
         t = (e.timestamp - last_timestamp)/1000.0
-        puts "sleeping for #{t}"
+        #puts "sleeping for #{t}"
         sleep t
         last_timestamp = e.timestamp
       end
 
-      puts "writing event"
+      #puts "writing event"
       @outport.write(e)
     end
   end
