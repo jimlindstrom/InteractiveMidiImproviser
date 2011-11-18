@@ -54,4 +54,26 @@ describe NoteQueue do
     end
   end
 
+  describe "detect_meter" do
+    it "detects the time signature (my bonnie lies...)" do
+      vector = $meter_vectors["Bring back my bonnie to me"]
+      nq = vector[:note_queue]
+      nq.detect_meter
+      nq.meter[:time_sig].should   == vector[:time_sig]
+      nq.meter[:multiplier].should == vector[:multiplier]
+      nq.meter[:offset].should     == vector[:offset]
+    end
+    it "detects the time signature (battle hymn...)" do
+      vector = $meter_vectors["Battle hymn of the republic"]
+      nq = vector[:note_queue]
+      nq.detect_meter
+      nq.meter[:time_sig].should   == vector[:time_sig]
+      nq.meter[:multiplier].should == vector[:multiplier]
+      nq.meter[:offset].should     == vector[:offset]
+    end
+
+
+
+  end
+
 end

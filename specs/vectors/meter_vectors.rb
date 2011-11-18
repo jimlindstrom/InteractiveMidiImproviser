@@ -56,7 +56,7 @@ end
 
 $meter_vectors["Bring back my bonnie to me"] =
   {
-    :meter      => [3, 4] # 3 beats per measure, quarter note tactus
+    :time_sig   => [3, 4], # 3 beats per measure, quarter note tactus
     :multiplier => 1, # durations are expressed in the meter's tactus
     :offset     => 2, # 0 based (meaning beat 3 of 3)
     :note_queue => nq
@@ -132,9 +132,9 @@ nq.push Note.new(Pitch.new(2), Duration.new(16)) # on
 
 $meter_vectors["Battle hymn of the republic"] =
   {
-    :meter      => [4, 4] # 4 beats per measure, quarter note tactus
-    :multiplier => 4, # durations are expressed in sixteenth notes
-    :offset     => 3, # 0 based (meaning beat 4 of 4)
+    :time_sig   => [4, 4], # 4 beats per measure, quarter note tactus
+    :multiplier => 4, # durations are expressed in 16th notes
+    :offset     => 15, # 0 based (the last 16th note of the measure)
     :note_queue => nq
   }
 
