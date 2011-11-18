@@ -2,7 +2,7 @@
 
 class MeterDetectorWeights < Array
   def expand(multiplier, off_tactus_penalty)
-    self.map!{ |x| [x]+[off_tactus_penalty]*(multiplier-1) }
+    self.map!{ |x| [x]+([off_tactus_penalty]*(multiplier-1.0)) }
     self.flatten!
   end
   def normalize
