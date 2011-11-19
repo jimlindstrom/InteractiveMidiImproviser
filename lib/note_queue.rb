@@ -33,12 +33,12 @@ class NoteQueue < Array
     (1..8).each do |m|
       meter = { }
       meter[:time_sig]   = [4, 4]
-      meter[:weights]    = [4, 1, 2, 1]
       meter[:multiplier] = m
-      md = MeterDetector.new(meter[:time_sig], meter[:weights], meter[:multiplier])
+      md = MeterDetector.new(meter[:time_sig], meter[:multiplier])
       score = md.calculate(self.map{|x| x.duration.val})
-      meter[:offset] = score[:offset]
-      meter[:score]  = score[:score]
+      meter[:weights] = score[:weights]
+      meter[:offset]  = score[:offset]
+      meter[:score]   = score[:score]
 
       meters.push meter
     end
@@ -46,12 +46,12 @@ class NoteQueue < Array
     (1..8).each do |m|
       meter = { }
       meter[:time_sig]   = [3, 4]
-      meter[:weights]    = [3, 1, 1]
       meter[:multiplier] = m
-      md = MeterDetector.new(meter[:time_sig], meter[:weights], meter[:multiplier])
+      md = MeterDetector.new(meter[:time_sig], meter[:multiplier])
       score = md.calculate(self.map{|x| x.duration.val})
-      meter[:offset] = score[:offset]
-      meter[:score]  = score[:score]
+      meter[:weights] = score[:weights]
+      meter[:offset]  = score[:offset]
+      meter[:score]   = score[:score]
 
       meters.push meter
     end

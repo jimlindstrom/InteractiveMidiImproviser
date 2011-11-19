@@ -71,8 +71,22 @@ describe NoteQueue do
       nq.meter[:multiplier].should == vector[:multiplier]
       nq.meter[:offset].should     == vector[:offset]
     end
-
-
+    it "detects the time signature (Minuet...)" do
+      vector = $meter_vectors["Bach Minuet in G"]
+      nq = vector[:note_queue]
+      nq.detect_meter
+      nq.meter[:time_sig].should   == vector[:time_sig]
+      nq.meter[:multiplier].should == vector[:multiplier]
+      nq.meter[:offset].should     == vector[:offset]
+    end
+    it "detects the time signature (somewhere over...)" do
+      vector = $meter_vectors["Somewhere over the rainbow"]
+      nq = vector[:note_queue]
+      nq.detect_meter
+      nq.meter[:time_sig].should   == vector[:time_sig]
+      nq.meter[:multiplier].should == vector[:multiplier]
+      nq.meter[:offset].should     == vector[:offset]
+    end
 
   end
 

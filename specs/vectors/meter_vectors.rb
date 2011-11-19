@@ -138,3 +138,90 @@ $meter_vectors["Battle hymn of the republic"] =
     :note_queue => nq
   }
 
+
+###############################################################################
+# Bach - Minuet in G
+###############################################################################
+
+nq = NoteQueue.new
+nq.tempo = 100
+
+2.times do 
+  nq.push Note.new(Pitch.new(1), Duration.new(2)) 
+  nq.push Note.new(Pitch.new(2), Duration.new(1)) 
+  nq.push Note.new(Pitch.new(3), Duration.new(1)) 
+  nq.push Note.new(Pitch.new(3), Duration.new(1)) 
+  nq.push Note.new(Pitch.new(3), Duration.new(1)) 
+  
+  nq.push Note.new(Pitch.new(2), Duration.new(2)) 
+  nq.push Note.new(Pitch.new(3), Duration.new(2)) 
+  nq.push Note.new(Pitch.new(3), Duration.new(2)) 
+end
+
+3.times do 
+  nq.push Note.new(Pitch.new(1), Duration.new(2)) 
+  nq.push Note.new(Pitch.new(2), Duration.new(1)) 
+  nq.push Note.new(Pitch.new(3), Duration.new(1)) 
+  nq.push Note.new(Pitch.new(3), Duration.new(1)) 
+  nq.push Note.new(Pitch.new(3), Duration.new(1)) 
+end
+
+nq.push Note.new(Pitch.new(3), Duration.new(6)) 
+
+$meter_vectors["Bach Minuet in G"] =
+  {
+    :time_sig   => [3, 4], # 4 beats per measure, quarter note tactus
+    :multiplier => 2, # durations are expressed in 16th notes
+    :offset     => 0, # 0 based (the first 16th note of the measure)
+    :note_queue => nq
+  }
+
+
+
+###############################################################################
+# Somewhere over the rainbow
+###############################################################################
+
+nq = NoteQueue.new
+nq.tempo = 100
+
+nq.push Note.new(Pitch.new(1), Duration.new(4)) # some-
+nq.push Note.new(Pitch.new(2), Duration.new(4)) # -where
+
+nq.push Note.new(Pitch.new(3), Duration.new(2)) # ov-
+nq.push Note.new(Pitch.new(3), Duration.new(1)) # -er
+nq.push Note.new(Pitch.new(3), Duration.new(1)) # the
+nq.push Note.new(Pitch.new(2), Duration.new(2)) # rain-
+nq.push Note.new(Pitch.new(3), Duration.new(2)) # -bow
+
+nq.push Note.new(Pitch.new(1), Duration.new(4)) # way
+nq.push Note.new(Pitch.new(2), Duration.new(4)) # up
+
+nq.push Note.new(Pitch.new(2), Duration.new(8)) # high
+
+nq.push Note.new(Pitch.new(1), Duration.new(4)) # there's
+nq.push Note.new(Pitch.new(2), Duration.new(4)) # a
+
+nq.push Note.new(Pitch.new(3), Duration.new(2)) # land
+nq.push Note.new(Pitch.new(3), Duration.new(1)) # that
+nq.push Note.new(Pitch.new(3), Duration.new(1)) # I
+nq.push Note.new(Pitch.new(2), Duration.new(2)) # heard
+nq.push Note.new(Pitch.new(3), Duration.new(2)) # of
+
+nq.push Note.new(Pitch.new(3), Duration.new(2)) # once
+nq.push Note.new(Pitch.new(3), Duration.new(1)) # in
+nq.push Note.new(Pitch.new(3), Duration.new(1)) # a
+nq.push Note.new(Pitch.new(2), Duration.new(2)) # lu-
+nq.push Note.new(Pitch.new(3), Duration.new(2)) # -la-
+
+nq.push Note.new(Pitch.new(3), Duration.new(8)) # -by
+
+$meter_vectors["Somewhere over the rainbow"] =
+  {
+    :time_sig   => [4, 4], # 4 beats per measure, quarter note tactus
+    :multiplier => 2, # durations are expressed in 8th notes
+    :offset     => 0, # 0 based (first 8th note of measure)
+    :note_queue => nq
+  }
+
+
