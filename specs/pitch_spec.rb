@@ -52,4 +52,22 @@ describe Pitch do
       p.val.should equal 5
     end
   end
+
+  context "similarity_to" do
+    it "should return 0.0 when compared to nil" do
+      p1 = Pitch.new(0)
+      p1.similarity_to(nil).should be_within(0.01).of(0.0)
+    end
+    it "should return 0.0 when compared to a radically different pitch" do
+      p1 = Pitch.new(0)
+      p2 = Pitch.new(100)
+      p1.similarity_to(p2).should be_within(0.01).of(0.0)
+    end
+    it "should return 1.0 when compared to itself" do
+      p1 = Pitch.new(0)
+      p2 = Pitch.new(0)
+      p1.similarity_to(p2).should be_within(0.01).of(1.0)
+    end
+  end
+
 end

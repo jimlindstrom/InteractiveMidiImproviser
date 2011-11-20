@@ -46,4 +46,22 @@ describe Duration do
       p.val.should equal 5
     end
   end
+
+  context "similarity_to" do
+    it "should return 0.0 when compared to nil" do
+      d1 = Duration.new(1)
+      d1.similarity_to(nil).should be_within(0.01).of(0.0)
+    end
+    it "should return 0.0 when compared to a radically different duration" do
+      d1 = Duration.new(1)
+      d2 = Duration.new(10)
+      d1.similarity_to(d2).should be_within(0.01).of(0.0)
+    end
+    it "should return 1.0 when compared to itself" do
+      d1 = Duration.new(1)
+      d2 = Duration.new(1)
+      d1.similarity_to(d2).should be_within(0.01).of(1.0)
+    end
+  end
+
 end

@@ -25,4 +25,15 @@ class Pitch
   def to_symbol
     return PitchSymbol.new(@val)
   end
+
+  def similarity_to(p)
+    return 0.00 if p.nil?
+    delta = Float(p.val - @val)
+    max_delta = 20.0
+    diff = delta**2 / max_delta**2
+    flattened_diff = diff
+    clipped_diff = [ 0.0, [ 1.0, flattened_diff ].min ].max
+    similarity = 1.0 - clipped_diff
+    return similarity
+  end
 end

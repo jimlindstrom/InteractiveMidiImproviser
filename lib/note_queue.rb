@@ -27,38 +27,31 @@ class NoteQueue < Array
     return eq
   end
 
+  def beat_array
+    beats = []
+    prev = nil
+    self.each do |note|
+      b = Beat.new
+      b.prev_note = prev
+      b.cur_note = note
+      beats.push b
+
+      (note.duration.val-1).times do
+        beats.push nil
+      end
+
+      prev = note
+    end
+    return beats
+  end
+
   def detect_meter
-    meters = []
-     
-    (1..8).each do |m|
-      meter = { }
-      meter[:time_sig]   = [4, 4]
-      meter[:multiplier] = m
-      md = MeterDetector.new(meter[:time_sig], meter[:multiplier])
-      score = md.calculate(self.map{|x| x.duration.val})
-      meter[:weights] = score[:weights]
-      meter[:offset]  = score[:offset]
-      meter[:score]   = score[:score]
-
-      meters.push meter
-    end
-
-    (1..8).each do |m|
-      meter = { }
-      meter[:time_sig]   = [3, 4]
-      meter[:multiplier] = m
-      md = MeterDetector.new(meter[:time_sig], meter[:multiplier])
-      score = md.calculate(self.map{|x| x.duration.val})
-      meter[:weights] = score[:weights]
-      meter[:offset]  = score[:offset]
-      meter[:score]   = score[:score]
-
-      meters.push meter
-    end
-
-    meters.sort!{ |x,y| x[:score] <=> y[:score] }
-    @meter = meters.last
-    @meter[:confidence] = meters[-1][:score] / meters[-2][:score]
+    bsm = BeatSimilarityMatrix.new(self.beat_array)
+    data = (1..20).map{ |i| { :beat=>i, :score=>bsm.mean_of_diag(i) } }.sort{ |x,y| y[:score] <=> x[:score] }
+    @meter = {}
+    @meter[:tactus]     = data[0][:beat]
+    @meter[:time_sig]   = [data[1][:beat] / @meter[:tactus], 4]
+    @meter[:confidence] = data[1][:score] / data[2][:score]
   end
 
 end

@@ -73,4 +73,22 @@ describe Interval do
       p.val.should equal 5
     end
   end
+
+  context "similarity_to" do
+    it "should return 0.0 when compared to nil" do
+      i1 = Interval.new(1)
+      i1.similarity_to(nil).should be_within(0.01).of(0.0)
+    end
+    it "should return 0.0 when compared to a radically different interval" do
+      i1 = Interval.new(0)
+      i2 = Interval.new(10)
+      i1.similarity_to(i2).should be_within(0.01).of(0.0)
+    end
+    it "should return 1.0 when compared to itself" do
+      i1 = Interval.new(1)
+      i2 = Interval.new(1)
+      i1.similarity_to(i2).should be_within(0.01).of(1.0)
+    end
+  end
+
 end
