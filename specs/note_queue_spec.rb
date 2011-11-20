@@ -132,6 +132,25 @@ describe NoteQueue do
       nq.meter[:offset].should   == vector[:offset]
     end
 
+    it "detects the time signature (minuet (2)...)" do
+      vector = $meter_vectors["Bach Minuet (2)"]
+      nq = vector[:note_queue]
+      nq.detect_meter
+      nq.meter[:time_sig].should == vector[:time_sig]
+    end
+    it "detects the tactus (minuet (2)...)" do
+      vector = $meter_vectors["Bach Minuet (2)"]
+      nq = vector[:note_queue]
+      nq.detect_meter
+      nq.meter[:tactus].should   == vector[:tactus]
+    end
+    it "detects the offset (minuet (2)...)" do
+      vector = $meter_vectors["Bach Minuet (2)"]
+      nq = vector[:note_queue]
+      nq.detect_meter
+      nq.meter[:offset].should   == vector[:offset]
+    end
+
     it "detects the time signature (somewhere over...)" do
       vector = $meter_vectors["Somewhere over the rainbow"]
       nq = vector[:note_queue]
@@ -146,6 +165,25 @@ describe NoteQueue do
     end
     it "detects the offset (somewhere over...)" do
       vector = $meter_vectors["Somewhere over the rainbow"]
+      nq = vector[:note_queue]
+      nq.detect_meter
+      nq.meter[:offset].should   == vector[:offset]
+    end
+
+    it "detects the time signature (this train...)" do
+      vector = $meter_vectors["This train is bound for glory"]
+      nq = vector[:note_queue]
+      nq.detect_meter
+      nq.meter[:time_sig].should == vector[:time_sig]
+    end
+    it "detects the tactus (this train...)" do
+      vector = $meter_vectors["This train is bound for glory"]
+      nq = vector[:note_queue]
+      nq.detect_meter
+      nq.meter[:tactus].should   == vector[:tactus]
+    end
+    it "detects the offset (this train...)" do
+      vector = $meter_vectors["This train is bound for glory"]
       nq = vector[:note_queue]
       nq.detect_meter
       nq.meter[:offset].should   == vector[:offset]

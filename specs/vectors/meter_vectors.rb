@@ -8,15 +8,19 @@ PA3  = 57
 PB3  = 59
 
 PC4  = 60
+PCs4 = 61
 PD4  = 62
+PDs4 = 63
 PE4  = 64
 PF4  = 65
 PFs4 = 66
 PG4  = 67
+PGs4 = 68
 PA4  = 69
 PB4  = 71
 
 PC5  = 72
+PCs5 = 73
 PD5  = 74
 PE5  = 76
 PFs5 = 78
@@ -302,6 +306,128 @@ $meter_vectors["Somewhere over the rainbow"] =
     :time_sig   => [4, 4], # 4 beats per measure, quarter note tactus
     :tactus     => 2, # durations are expressed in 8th notes
     :offset     => 0, # 0 based (first 8th note of measure)
+    :note_queue => nq
+  }
+
+
+###############################################################################
+# This train is bound for glory
+###############################################################################
+
+nq = NoteQueue.new
+nq.tempo = 100
+
+nq.push Note.new(Pitch.new(PE4 ), Duration.new(2)) # this
+nq.push Note.new(Pitch.new(PE4 ), Duration.new(4)) # train
+nq.push Note.new(Pitch.new(PGs4), Duration.new(2)) # is 
+nq.push Note.new(Pitch.new(PFs4), Duration.new(3)) # bound
+nq.push Note.new(Pitch.new(PE4 ), Duration.new(1)) # for
+nq.push Note.new(Pitch.new(PCs4), Duration.new(2)) # glo-
+nq.push Note.new(Pitch.new(PB3 ), Duration.new(2)) # -ry
+
+nq.push Note.new(Pitch.new(PE4 ), Duration.new(2)) # this
+nq.push Note.new(Pitch.new(PE4 ), Duration.new(14)) # train
+
+nq.push Note.new(Pitch.new(PB4 ), Duration.new(2)) # this
+nq.push Note.new(Pitch.new(PB4 ), Duration.new(4)) # train
+nq.push Note.new(Pitch.new(PE5 ), Duration.new(2)) # is 
+nq.push Note.new(Pitch.new(PCs5), Duration.new(3)) # bound
+nq.push Note.new(Pitch.new(PB4 ), Duration.new(1)) # for
+nq.push Note.new(Pitch.new(PGs4), Duration.new(2)) # glo-
+nq.push Note.new(Pitch.new(PB4 ), Duration.new(2)) # -ry
+
+nq.push Note.new(Pitch.new(PB4 ), Duration.new(2)) # this
+nq.push Note.new(Pitch.new(PB4 ), Duration.new(14)) # train
+
+nq.push Note.new(Pitch.new(PB4 ), Duration.new(2)) # this
+nq.push Note.new(Pitch.new(PB4 ), Duration.new(4)) # train
+nq.push Note.new(Pitch.new(PE5 ), Duration.new(2)) # is 
+nq.push Note.new(Pitch.new(PCs5), Duration.new(3)) # bound
+nq.push Note.new(Pitch.new(PB4 ), Duration.new(1)) # for
+nq.push Note.new(Pitch.new(PGs4), Duration.new(2)) # glo-
+nq.push Note.new(Pitch.new(PE4 ), Duration.new(2)) # -ry
+
+nq.push Note.new(Pitch.new(PFs4), Duration.new(2)) # don't
+nq.push Note.new(Pitch.new(PFs4), Duration.new(2)) # take
+nq.push Note.new(Pitch.new(PE4 ), Duration.new(1)) # no-
+nq.push Note.new(Pitch.new(PE4 ), Duration.new(1)) # -thing
+nq.push Note.new(Pitch.new(PE4 ), Duration.new(1)) # but
+nq.push Note.new(Pitch.new(PE4 ), Duration.new(1)) # the
+nq.push Note.new(Pitch.new(PGs4), Duration.new(1)) # right-
+nq.push Note.new(Pitch.new(PGs4), Duration.new(1)) # -eous
+nq.push Note.new(Pitch.new(PE4 ), Duration.new(1)) # an'
+nq.push Note.new(Pitch.new(PE4 ), Duration.new(1)) # the
+nq.push Note.new(Pitch.new(PCs4), Duration.new(2)) # ho-
+nq.push Note.new(Pitch.new(PB3 ), Duration.new(2)) # -ly
+
+nq.push Note.new(Pitch.new(PE4 ), Duration.new(2)) # this
+nq.push Note.new(Pitch.new(PE4 ), Duration.new(4)) # train
+nq.push Note.new(Pitch.new(PGs4), Duration.new(2)) # is 
+nq.push Note.new(Pitch.new(PFs4), Duration.new(3)) # bound
+nq.push Note.new(Pitch.new(PE4 ), Duration.new(1)) # for
+nq.push Note.new(Pitch.new(PCs4), Duration.new(2)) # glo-
+nq.push Note.new(Pitch.new(PB3 ), Duration.new(2)) # -ry
+
+nq.push Note.new(Pitch.new(PE4 ), Duration.new(2)) # this
+nq.push Note.new(Pitch.new(PE4 ), Duration.new(14)) # train
+
+$meter_vectors["This train is bound for glory"] =
+  {
+    :time_sig   => [4, 4], # 3 beats per measure, quarter note tactus
+    :tactus     => 4, # durations are expressed in 16th notes
+    :offset     => 0, # 0 based (meaning beat 1)
+    :note_queue => nq
+  }
+
+
+###############################################################################
+# Bach Minuet (2)
+###############################################################################
+
+nq = NoteQueue.new
+nq.tempo = 100
+
+nq.push Note.new(Pitch.new(PD5 ), Duration.new(2)) 
+nq.push Note.new(Pitch.new(PD5 ), Duration.new(2))
+nq.push Note.new(Pitch.new(PD5 ), Duration.new(2))
+
+nq.push Note.new(Pitch.new(PB4 ), Duration.new(2))
+nq.push Note.new(Pitch.new(PA4 ), Duration.new(1))
+nq.push Note.new(Pitch.new(PB4 ), Duration.new(1))
+nq.push Note.new(Pitch.new(PG4 ), Duration.new(2))
+
+nq.push Note.new(Pitch.new(PA4 ), Duration.new(2)) 
+nq.push Note.new(Pitch.new(PD5 ), Duration.new(2))
+nq.push Note.new(Pitch.new(PC5 ), Duration.new(2))
+
+nq.push Note.new(Pitch.new(PB4 ), Duration.new(4)) 
+nq.push Note.new(Pitch.new(PA4 ), Duration.new(2))
+
+nq.push Note.new(Pitch.new(PD5 ), Duration.new(2))
+nq.push Note.new(Pitch.new(PC5 ), Duration.new(1))
+nq.push Note.new(Pitch.new(PB4 ), Duration.new(1))
+nq.push Note.new(Pitch.new(PA4 ), Duration.new(1))
+nq.push Note.new(Pitch.new(PG4 ), Duration.new(1))
+
+nq.push Note.new(Pitch.new(PE5 ), Duration.new(2))
+nq.push Note.new(Pitch.new(PC5 ), Duration.new(1))
+nq.push Note.new(Pitch.new(PB4 ), Duration.new(1))
+nq.push Note.new(Pitch.new(PA4 ), Duration.new(1))
+nq.push Note.new(Pitch.new(PG4 ), Duration.new(1))
+
+nq.push Note.new(Pitch.new(PFs4), Duration.new(2))
+nq.push Note.new(Pitch.new(PE4 ), Duration.new(1))
+nq.push Note.new(Pitch.new(PD4 ), Duration.new(1))
+nq.push Note.new(Pitch.new(PFs4), Duration.new(2))
+
+nq.push Note.new(Pitch.new(PG4 ), Duration.new(6)) 
+
+
+$meter_vectors["Bach Minuet (2)"] =
+  {
+    :time_sig   => [3, 4], # 3 beats per measure, quarter note tactus
+    :tactus     => 2, # durations are expressed in 16th notes
+    :offset     => 0, # 0 based (meaning beat 1)
     :note_queue => nq
   }
 

@@ -1,6 +1,8 @@
 #!/usr/bin/env ruby
 
 class BeatSimilarityMatrix
+  :width
+
   def initialize(beat_array)
     @width = beat_array.size
     @matrix = []
@@ -24,28 +26,32 @@ class BeatSimilarityMatrix
   def mean_of_diag(i)
     x = i
     y = 0
-    count = 0
-    sum = 0.0
     prod = 1.0
     while x < @width
-      sum += val(x, y)
-      count += 1
       prod = prod * (1.0 + val(x, y))
       x += 1
       y += 1
     end
-    #return sum / count
     return prod
   end
 
-  def save(filename, expected, marker_idx)
+  def autocorrel_of_main_diag(len)
+    correls = [0.0]*len
+    (0..(@width-1)).each do |i|
+      correls[len - 1 - ((len -1 + i) % len)] += @matrix[i][i]
+    end
+    return correls
+  end
+
+  def save(filename, expected, meter_idx, offset_idx)
     f = File.new(filename+".html", "w")
     f.puts "<html>"
     f.puts "<body>"
 
     f.puts "expected: #{expected}<br />"  
 
-    save_meter_candidates(f, marker_idx)
+    meter = save_meter_candidates(f, meter_idx)
+    save_offset_candidates(f, meter, offset_idx)
     save_similarity_matrix(f)
 
     f.puts "</body>"
@@ -62,6 +68,23 @@ private
     data.map!{|x| (x*80.0).round }
     f.puts "<br/>"
     f.puts "<img style='border: 1px solid #a0a0a0;' src=\"https://chart.googleapis.com/chart?cht=ls&chd=s:underp&chm=N,000000,0,-1,11|s,3399CC,0,#{marker_idx-1}.0,11.0&chxt=x&chxr=0,1,20,1&chd=t:#{data.join(',')}&chs=500x200\">"
+    f.puts "<br/>"
+
+    return (1..20).map{ |i| {:offset=>i,:score=>mean_of_diag(i) } }.sort{|x,y| y[:score]<=>x[:score]}[1][:offset]
+  end
+
+  def save_offset_candidates(f, meter, marker_idx)
+    scores = [0.0]*meter
+    (0..(@width-1)).each do |i|
+      #scores[            (i % meter)] += @matrix[i][i]
+      scores[meter - 1 - ((meter -1 + i) % meter)] += @matrix[i][i]
+    end
+    m = scores.max
+    scores.map!{|x| 80.0*x/m }
+    puts "scores: #{scores}"
+
+    f.puts "<br/>"
+    f.puts "<img style='border: 1px solid #a0a0a0;' src=\"https://chart.googleapis.com/chart?cht=lc&chxt=x&chxr=0,0,#{meter-1},1&chd=s:underp&chm=N,000000,0,-1,11|s,3399CC,0,#{marker_idx}.0,11.0&chd=t:#{scores.join(',')}&chs=500x200\">"
     f.puts "<br/>"
   end
 
