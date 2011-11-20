@@ -25,7 +25,8 @@ class InteractiveImprovisor
       clock      = Midi::Clock.new(0)
       @sensor    = MidiSensor.new("VMPK Output", clock)
       @sensor.set_stimulus_timeout(5.0)
-      @performer = MidiPerformer.new("VMPK Input")
+      #@performer = MidiPerformer.new("VMPK Input")
+      @performer = MidiPerformer.new("TiMidity port 0")
     else
       @sensor = FakeSensor.new($fake_sensor_vectors)
       @performer = FakePerformer.new
@@ -33,6 +34,11 @@ class InteractiveImprovisor
 
     until (stimulus_events = @sensor.get_stimulus).nil?
       stimulus_notes = stimulus_events.to_note_queue
+
+      ###
+      stimulus_notes.detect_meter
+      puts "meter: #{stimulus_notes.meter.inspect}"
+      ###
 
       @listener.listen stimulus_notes
       response_notes = @improvisor.generate

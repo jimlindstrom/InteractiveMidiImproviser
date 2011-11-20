@@ -22,7 +22,7 @@ class MidiPerformer < Performer
         last_timestamp = e.timestamp
       end
 
-      #puts "writing event"
+      #puts "writing event: #{e.inspect}"
       @outport.write(e)
     end
   end
