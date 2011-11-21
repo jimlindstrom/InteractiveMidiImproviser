@@ -23,7 +23,7 @@ describe Pitch do
 
   context "num_values" do
     it "should return 128" do
-      Pitch.num_values.should be 128
+      Pitch.num_values.should == 128
     end
   end
 

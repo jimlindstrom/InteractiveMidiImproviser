@@ -27,7 +27,7 @@ describe RandomVariable do
 
       x.transform_outcomes lambda { |y| y*10 }
 
-      x.choose_outcome.should be 30
+      x.choose_outcome.should == 30
     end
     it "causes 'get_surprise' to reverse-transform the given outcome" do
       num_outcomes = 5
@@ -69,12 +69,12 @@ describe RandomVariable do
     it "combines the random variables, even if the first one is transformed" do
       @x1.transform_outcomes lambda {|y| y+1}
       @x1 = @x1 + @x2
-      @x1.choose_outcome.should be 4
+      @x1.choose_outcome.should == 4
     end
     it "combines the random variables, even if the second one is transformed" do
       @x2.transform_outcomes lambda {|y| y-1}
       @x1 = @x1 + @x2
-      @x1.choose_outcome.should be 3
+      @x1.choose_outcome.should == 3
     end
     it "combines the random variables, even the two have different numbers of outcomes and are transformed" do
       num_outcomes = 5
@@ -104,7 +104,7 @@ describe RandomVariable do
       num_outcomes = 5
       x = RandomVariable.new(num_outcomes)
       x.add_possible_outcome(outcome, num_observations)
-      x.choose_outcome.should be 3
+      x.choose_outcome.should == 3
     end
     it "raises an error if the number of observations is negative" do
       outcome = 3

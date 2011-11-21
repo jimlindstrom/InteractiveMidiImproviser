@@ -23,7 +23,7 @@ describe Interval do
 
   context "num_values" do
     it "should return 255" do
-      Interval.num_values.should be 255
+      Interval.num_values.should == 255
     end
   end
 
@@ -51,7 +51,7 @@ describe Interval do
     end
     it "should perform the inverse of IntervalSymbol.to_interval" do
       p = Interval.new(127)
-      p.to_symbol.to_interval.val.should be 127
+      p.to_symbol.to_interval.val.should == 127
     end
     it "should perform the inverse of IntervalSymbol.to_interval" do
       p = Interval.new(-127)

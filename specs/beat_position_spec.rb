@@ -7,6 +7,33 @@ describe BeatPosition do
   before(:each) do
   end
 
+  context "num_values" do
+    it "should return 1584" do
+      BeatPosition.num_values.should == 1584
+    end
+  end
+
+  context "to_symbol" do
+    it "should return a BeatPositionSymbol" do
+      b = BeatPosition.new
+      b.measure = 0
+      b.beat    = 2
+      b.subbeat = 3
+      b.beats_per_measure = 4
+      b.subbeats_per_beat = 1
+      b.to_symbol.should be_an_instance_of BeatPositionSymbol
+    end
+    it "should return a BeatPositionSymbol whose value corresponds to the BeatPosition's value" do
+      b = BeatPosition.new
+      b.measure = 0
+      b.beat    = 2
+      b.subbeat = 3
+      b.beats_per_measure = 4
+      b.subbeats_per_beat = 1
+      b.to_symbol.val.should == 1166
+    end
+  end
+
   context "measure" do
     it "should return whatever you set it to" do
       b=BeatPosition.new

@@ -29,6 +29,7 @@ require File.join(File.dirname(__FILE__), 'lib', 'duration_symbol')
 require File.join(File.dirname(__FILE__), 'lib', 'interval_symbol')
 require File.join(File.dirname(__FILE__), 'lib', 'pitch_symbol')
 require File.join(File.dirname(__FILE__), 'lib', 'meter_symbol')
+require File.join(File.dirname(__FILE__), 'lib', 'beat_position_symbol')
 
 require File.join(File.dirname(__FILE__), 'lib', 'random_variable')
 require File.join(File.dirname(__FILE__), 'lib', 'markov_chain')

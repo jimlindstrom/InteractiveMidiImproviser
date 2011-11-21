@@ -32,11 +32,11 @@ describe IntervalSymbol do
     end
     it "should perform the inverse of Interval.to_symbol" do
       p = IntervalSymbol.new(0)
-      p.to_interval.to_symbol.val.should be 0
+      p.to_interval.to_symbol.val.should == 0
     end
     it "should perform the inverse of Interval.to_symbol" do
       p = IntervalSymbol.new(254)
-      p.to_interval.to_symbol.val.should be 254
+      p.to_interval.to_symbol.val.should == 254
     end
   end
 

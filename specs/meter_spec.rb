@@ -68,7 +68,7 @@ describe Meter do
 
   context "num_values" do
     it "should return 99" do # Array(2..12).length * [2, 4, 8].length * [1, 2, 4].length
-      Meter.num_values.should be 99
+      Meter.num_values.should == 99
     end
   end
 

@@ -20,7 +20,7 @@ describe DurationCritic do
       dc.listen(Note.new(Pitch.new(0), Duration.new(1)))
       dc.reset
       x = dc.get_expectations
-      Duration.new(x.choose_outcome).val.should be 1
+      Duration.new(x.choose_outcome).val.should == 1
     end
   end
 
@@ -57,7 +57,7 @@ describe DurationCritic do
       dc.listen(Note.new(Pitch.new(0), Duration.new(1)))
       dc.reset
       x = dc.get_expectations
-      Duration.new(x.choose_outcome).val.should be 1
+      Duration.new(x.choose_outcome).val.should == 1
     end
     it "returns a random variable that only chooses states observed (higher order)" do
       order = 2
@@ -76,7 +76,7 @@ describe DurationCritic do
       dc.listen(Note.new(Pitch.new(0), Duration.new(2)))
       dc.listen(Note.new(Pitch.new(0), Duration.new(3)))
       x = dc.get_expectations
-      Duration.new(x.choose_outcome).val.should be 4
+      Duration.new(x.choose_outcome).val.should == 4
     end
   end
 

@@ -20,7 +20,7 @@ describe PitchCritic do
       pc.listen(Note.new(Pitch.new(1), Duration.new(0)))
       pc.reset
       x = pc.get_expectations
-      Pitch.new(x.choose_outcome).val.should be 1
+      Pitch.new(x.choose_outcome).val.should == 1
     end
   end
 
@@ -57,7 +57,7 @@ describe PitchCritic do
       pc.listen(Note.new(Pitch.new(1), Duration.new(0)))
       pc.reset
       x = pc.get_expectations
-      Pitch.new(x.choose_outcome).val.should be 1
+      Pitch.new(x.choose_outcome).val.should == 1
     end
     it "returns a random variable that only chooses states observed (higher order)" do
       order = 2
@@ -76,7 +76,7 @@ describe PitchCritic do
       pc.listen(Note.new(Pitch.new(2), Duration.new(0)))
       pc.listen(Note.new(Pitch.new(3), Duration.new(0)))
       x = pc.get_expectations
-      Pitch.new(x.choose_outcome).val.should be 4
+      Pitch.new(x.choose_outcome).val.should == 4
     end
   end
 
