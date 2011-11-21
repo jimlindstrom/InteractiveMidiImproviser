@@ -9,7 +9,7 @@ class MeterSymbol
 
   def set_val(new_val)
     raise ArgumentError.new("value cannot be negative") if new_val < 0
-    raise ArgumentError.new("value cannot be > 131") if new_val > 131
+    raise ArgumentError.new("value cannot be > 98") if new_val > 98
 
     @val = new_val
   end
@@ -21,8 +21,8 @@ class MeterSymbol
   def to_meter
     v = @val
 
-    subdivs_per_beat = Array(1..4)[v % Array(1..4).length]
-    v = Float(v / Array(1..4).length).floor
+    subdivs_per_beat = [1, 2, 4][v % [1, 2, 4].length]
+    v = Float(v / [1, 2, 4].length).floor
 
     beat_unit = [2, 4, 8][v % [2, 4, 8].length]
     v = Float(v / [2, 4, 8].length).floor

@@ -48,15 +48,15 @@ class NoteQueue < Array
   def detect_meter
     bsm = BeatSimilarityMatrix.new(self.beat_array)
     bsm_diags = (1..20).map{ |i| { :beat=>i, :score=>bsm.mean_of_diag(i) } }.sort{ |x,y| y[:score] <=> x[:score] }
-    @meter = {}
-    @meter[:tactus]      = bsm_diags[0][:beat]
-    @meter[:time_sig]    = [bsm_diags[1][:beat] / @meter[:tactus], 4]
-    @meter[:confidence]  = bsm_diags[1][:score] / bsm_diags[2][:score]
+
+    subdivs_per_beat  = bsm_diags[0][:beat]
+    beats_per_measure = bsm_diags[1][:beat] / subdivs_per_beat
+    beat_unit         = 4
+    @meter = Meter.new(beats_per_measure, beat_unit, subdivs_per_beat)
 
     correls = bsm.autocorrel_of_main_diag(bsm_diags[1][:beat])
     correls = (0..(correls.length-1)).collect { |i| { :offset=>i, :score=>correls[i] } }.sort{ |x,y| y[:score]<=>x[:score] }
-    @meter[:offset]      = correls[0][:offset]
-    @meter[:confidence] *= correls[0][:score] / correls[1][:score]
+    #@meter[:offset]      = correls[0][:offset]
   end
 
 end

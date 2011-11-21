@@ -38,11 +38,11 @@ describe Meter do
       Meter.new(@beats_per_measure, @beat_unit, @subdivs_per_beat).should be_an_instance_of Meter
     end
 
-    it "should take subdivs/beat of 1 through 4" do
+    it "should take subdivs/beat of 1, 2, or 4" do
       @subdivs_per_beat = 1 # expressed in the beat unit
       Meter.new(@beats_per_measure, @beat_unit, @subdivs_per_beat).should be_an_instance_of Meter
     end
-    it "should take subdivs/beat of 1 through 4" do
+    it "should take subdivs/beat of 1, 2, or 4" do
       @subdivs_per_beat = 4 # expressed 4ths of the beat unit
       Meter.new(@beats_per_measure, @beat_unit, @subdivs_per_beat).should be_an_instance_of Meter
     end
@@ -58,6 +58,7 @@ describe Meter do
       lambdas.push lambda { Meter.new(@beats_per_measure, 7,          @subdivs_per_beat) }
       lambdas.push lambda { Meter.new(@beats_per_measure, 9,          @subdivs_per_beat) }
       lambdas.push lambda { Meter.new(@beats_per_measure, @beat_unit, 0                ) }
+      lambdas.push lambda { Meter.new(@beats_per_measure, @beat_unit, 3                ) }
       lambdas.push lambda { Meter.new(@beats_per_measure, @beat_unit, 5                ) }
       lambdas.each do |l|
         expect { l.call }.to raise_error(ArgumentError)
@@ -66,8 +67,8 @@ describe Meter do
   end
 
   context "num_values" do
-    it "should return 132" do # Array(2..12).length * [2, 4, 8].length * Array(1..4).length
-      Meter.num_values.should be 132
+    it "should return 99" do # Array(2..12).length * [2, 4, 8].length * [1, 2, 4].length
+      Meter.num_values.should be 99
     end
   end
 
@@ -115,6 +116,16 @@ describe Meter do
       @subdivs_per_beat  = 1 # expressed in eight notes
       m = Meter.new(@beats_per_measure, @beat_unit, @subdivs_per_beat)
       m.subdivs_per_beat.should equal 1
+    end
+  end
+
+  context "val" do
+    it "should return all values" do
+      @beats_per_measure = 2 # 3/4 time
+      @beat_unit         = 2
+      @subdivs_per_beat  = 1 # expressed in eight notes
+      m = Meter.new(@beats_per_measure, @beat_unit, @subdivs_per_beat)
+      m.val.should == {:beats_per_measure => 2, :beat_unit => 2, :subdivs_per_beat => 1}
     end
   end
 

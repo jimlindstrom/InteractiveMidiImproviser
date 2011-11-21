@@ -123,8 +123,7 @@ nq.push Note.new(Pitch.new(PC5), Duration.new(6)) # me
 
 $meter_vectors["Bring back my bonnie to me"] =
   {
-    :time_sig   => [3, 4], # 3 beats per measure, quarter note tactus
-    :tactus     => 1, # durations are expressed in the meter's tactus
+    :meter      => Meter.new(3, 4, 1), # 3/4 time, quarter note pulses
     :offset     => 2, # 0 based (meaning beat 3 of 3)
     :note_queue => nq
   }
@@ -199,8 +198,7 @@ nq.push Note.new(Pitch.new(PC5), Duration.new(16)) # on
 
 $meter_vectors["Battle hymn of the republic"] =
   {
-    :time_sig   => [4, 4], # 4 beats per measure, quarter note tactus
-    :tactus     => 4, # durations are expressed in 16th notes
+    :meter      => Meter.new(4, 4, 4), # 4/4 time, sixteenth note pulses
     :offset     => 15, # 0 based (the last 16th note of the measure)
     :note_queue => nq
   }
@@ -255,8 +253,7 @@ nq.push Note.new(Pitch.new(PA4), Duration.new(6))
 
 $meter_vectors["Bach Minuet in G"] =
   {
-    :time_sig   => [3, 4], # 4 beats per measure, quarter note tactus
-    :tactus     => 2, # durations are expressed in 8th notes
+    :meter      => Meter.new(3, 4, 2), # 3/4 time, eighth note pulses
     :offset     => 0, # 0 based (the first 8th note of the measure)
     :note_queue => nq
   }
@@ -303,8 +300,7 @@ nq.push Note.new(Pitch.new(PC4), Duration.new(8)) # -by
 
 $meter_vectors["Somewhere over the rainbow"] =
   {
-    :time_sig   => [4, 4], # 4 beats per measure, quarter note tactus
-    :tactus     => 2, # durations are expressed in 8th notes
+    :meter      => Meter.new(4, 4, 2), # 4/4 time, eighth note pulses
     :offset     => 0, # 0 based (first 8th note of measure)
     :note_queue => nq
   }
@@ -373,8 +369,7 @@ nq.push Note.new(Pitch.new(PE4 ), Duration.new(14)) # train
 
 $meter_vectors["This train is bound for glory"] =
   {
-    :time_sig   => [4, 4], # 3 beats per measure, quarter note tactus
-    :tactus     => 4, # durations are expressed in 16th notes
+    :meter      => Meter.new(4, 4, 4), # 4/4 time, sixteenth note pulses
     :offset     => 0, # 0 based (meaning beat 1)
     :note_queue => nq
   }
@@ -425,8 +420,7 @@ nq.push Note.new(Pitch.new(PG4 ), Duration.new(6))
 
 $meter_vectors["Bach Minuet (2)"] =
   {
-    :time_sig   => [3, 4], # 3 beats per measure, quarter note tactus
-    :tactus     => 2, # durations are expressed in 16th notes
+    :meter      => Meter.new(3, 4, 2), # 3/4 time, eighth note pulses
     :offset     => 0, # 0 based (meaning beat 1)
     :note_queue => nq
   }

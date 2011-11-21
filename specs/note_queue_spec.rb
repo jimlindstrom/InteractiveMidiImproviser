@@ -79,114 +79,84 @@ describe NoteQueue do
       vector = $meter_vectors["Bring back my bonnie to me"]
       nq = vector[:note_queue]
       nq.detect_meter
-      nq.meter[:time_sig].should == vector[:time_sig]
-    end
-    it "detects the tactus (my bonnie lies...)" do
-      vector = $meter_vectors["Bring back my bonnie to me"]
-      nq = vector[:note_queue]
-      nq.detect_meter
-      nq.meter[:tactus].should   == vector[:tactus]
+      nq.meter.val.should == vector[:meter].val
     end
     it "detects the offset (my bonnie lies...)" do
-      vector = $meter_vectors["Bring back my bonnie to me"]
-      nq = vector[:note_queue]
-      nq.detect_meter
-      nq.meter[:offset].should   == vector[:offset]
+      #vector = $meter_vectors["Bring back my bonnie to me"]
+      #nq = vector[:note_queue]
+      #nq.detect_meter
+      #nq.meter[:offset].should   == vector[:offset]
+      pending "need to add beat info to notes"
     end
 
     it "detects the time signature (battle hymn...)" do
       vector = $meter_vectors["Battle hymn of the republic"]
       nq = vector[:note_queue]
       nq.detect_meter
-      nq.meter[:time_sig].should == vector[:time_sig]
-    end
-    it "detects the tactus (battle hymn...)" do
-      vector = $meter_vectors["Battle hymn of the republic"]
-      nq = vector[:note_queue]
-      nq.detect_meter
-      nq.meter[:tactus].should   == vector[:tactus]
+      nq.meter.val.should == vector[:meter].val
     end
     it "detects the offset (battle hymn...)" do
-      vector = $meter_vectors["Battle hymn of the republic"]
-      nq = vector[:note_queue]
-      nq.detect_meter
-      nq.meter[:offset].should   == vector[:offset]
+      #vector = $meter_vectors["Battle hymn of the republic"]
+      #nq = vector[:note_queue]
+      #nq.detect_meter
+      #nq.meter[:offset].should   == vector[:offset]
+      pending "need to add beat info to notes"
     end
 
     it "detects the time signature (minuet...)" do
       vector = $meter_vectors["Bach Minuet in G"]
       nq = vector[:note_queue]
       nq.detect_meter
-      nq.meter[:time_sig].should == vector[:time_sig]
-    end
-    it "detects the tactus (minuet...)" do
-      vector = $meter_vectors["Bach Minuet in G"]
-      nq = vector[:note_queue]
-      nq.detect_meter
-      nq.meter[:tactus].should   == vector[:tactus]
+      nq.meter.val.should == vector[:meter].val
     end
     it "detects the offset (minuet...)" do
-      vector = $meter_vectors["Bach Minuet in G"]
-      nq = vector[:note_queue]
-      nq.detect_meter
-      nq.meter[:offset].should   == vector[:offset]
+      #vector = $meter_vectors["Bach Minuet in G"]
+      #nq = vector[:note_queue]
+      #nq.detect_meter
+      #nq.meter[:offset].should   == vector[:offset]
+      pending "need to add beat info to notes"
     end
 
     it "detects the time signature (minuet (2)...)" do
       vector = $meter_vectors["Bach Minuet (2)"]
       nq = vector[:note_queue]
       nq.detect_meter
-      nq.meter[:time_sig].should == vector[:time_sig]
-    end
-    it "detects the tactus (minuet (2)...)" do
-      vector = $meter_vectors["Bach Minuet (2)"]
-      nq = vector[:note_queue]
-      nq.detect_meter
-      nq.meter[:tactus].should   == vector[:tactus]
+      nq.meter.val.should == vector[:meter].val
     end
     it "detects the offset (minuet (2)...)" do
-      vector = $meter_vectors["Bach Minuet (2)"]
-      nq = vector[:note_queue]
-      nq.detect_meter
-      nq.meter[:offset].should   == vector[:offset]
+      #vector = $meter_vectors["Bach Minuet (2)"]
+      #nq = vector[:note_queue]
+      #nq.detect_meter
+      #nq.meter[:offset].should   == vector[:offset]
+      pending "need to add beat info to notes"
     end
 
     it "detects the time signature (somewhere over...)" do
       vector = $meter_vectors["Somewhere over the rainbow"]
       nq = vector[:note_queue]
       nq.detect_meter
-      nq.meter[:time_sig].should == vector[:time_sig]
-    end
-    it "detects the tactus (somewhere over...)" do
-      vector = $meter_vectors["Somewhere over the rainbow"]
-      nq = vector[:note_queue]
-      nq.detect_meter
-      nq.meter[:tactus].should   == vector[:tactus]
+      nq.meter.val.should == vector[:meter].val
     end
     it "detects the offset (somewhere over...)" do
-      vector = $meter_vectors["Somewhere over the rainbow"]
-      nq = vector[:note_queue]
-      nq.detect_meter
-      nq.meter[:offset].should   == vector[:offset]
+      #vector = $meter_vectors["Somewhere over the rainbow"]
+      #nq = vector[:note_queue]
+      #nq.detect_meter
+      #nq.meter[:offset].should   == vector[:offset]
+      pending "need to add beat info to notes"
     end
 
     it "detects the time signature (this train...)" do
       vector = $meter_vectors["This train is bound for glory"]
       nq = vector[:note_queue]
       nq.detect_meter
-      nq.meter[:time_sig].should == vector[:time_sig]
-    end
-    it "detects the tactus (this train...)" do
-      vector = $meter_vectors["This train is bound for glory"]
-      nq = vector[:note_queue]
-      nq.detect_meter
-      nq.meter[:tactus].should   == vector[:tactus]
+      nq.meter.val.should == vector[:meter].val
     end
     it "detects the offset (this train...)" do
-      vector = $meter_vectors["This train is bound for glory"]
-      nq = vector[:note_queue]
-      nq.detect_meter
-      nq.meter[:offset].should   == vector[:offset]
+      #vector = $meter_vectors["This train is bound for glory"]
+      #nq = vector[:note_queue]
+      #nq.detect_meter
+      #nq.meter[:offset].should   == vector[:offset]
+      pending "need to add beat info to notes"
     end
 
   end
