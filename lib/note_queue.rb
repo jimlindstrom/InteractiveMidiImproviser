@@ -56,7 +56,34 @@ class NoteQueue < Array
 
     correls = bsm.autocorrel_of_main_diag(bsm_diags[1][:beat])
     correls = (0..(correls.length-1)).collect { |i| { :offset=>i, :score=>correls[i] } }.sort{ |x,y| y[:score]<=>x[:score] }
-    #@meter[:offset]      = correls[0][:offset]
+
+    b = BeatPosition.new
+    b.measure     = 0
+    b.num_beats   = beats_per_measure
+    b.num_subdivs = subdivs_per_beat
+    b.beat        = Float(correls[0][:offset] / subdivs_per_beat).floor
+    b.subdiv      = correls[0][:offset] % subdivs_per_beat
+
+    set_beat_position_of_all_notes(b)
+  end
+
+private
+
+  def set_beat_position_of_all_notes(first_beat_pos)
+    beat_pos = first_beat_pos
+    self.each do |n|
+      n.analysis[:beat_position] = beat_pos.dup
+
+      beat_pos.subdiv += n.duration.val
+      while beat_pos.subdiv > beat_pos.num_subdivs
+        beat_pos.beat   += 1
+        beat_pos.subdiv -= beat_pos.num_subdivs
+      end
+      while beat_pos.beat > beat_pos.num_beats
+        beat_pos.measure += 1
+        beat_pos.beat    -= beat_pos.num_beats
+      end
+    end
   end
 
 end

@@ -121,11 +121,18 @@ nq.push Note.new(Pitch.new(PB4), Duration.new(1)) # to
   
 nq.push Note.new(Pitch.new(PC5), Duration.new(6)) # me
 
+m = Meter.new(3, 4, 1) # 3/4 time, quarter note pulses
+b = BeatPosition.new
+b.measure     = 0
+b.beat        = 2 # 0-based: beat 3 
+b.subdiv      = 0 # 0-based: first subdivision
+b.num_beats   = 3 # 0-based: beat 3 
+b.num_subdivs = 1 # 0-based: first subdivision
 $meter_vectors["Bring back my bonnie to me"] =
   {
-    :meter      => Meter.new(3, 4, 1), # 3/4 time, quarter note pulses
-    :offset     => 2, # 0 based (meaning beat 3 of 3)
-    :note_queue => nq
+    :meter               => m,
+    :first_beat_position => b,
+    :note_queue          => nq
   }
 
 
@@ -196,11 +203,20 @@ nq.push Note.new(Pitch.new(PB4), Duration.new(4)) # -ing
 
 nq.push Note.new(Pitch.new(PC5), Duration.new(16)) # on
 
+
+m = Meter.new(4, 4, 4) # 4/4 time, sixteenth note pulses
+b = BeatPosition.new
+b.measure     = 0
+b.beat        = 3 # 0-based: beat 4 
+b.subdiv      = 3 # 0-based: last subdivision
+b.num_beats   = 4 # 4 beats
+b.num_subdivs = 4 # 4th of quarter notes
+
 $meter_vectors["Battle hymn of the republic"] =
   {
-    :meter      => Meter.new(4, 4, 4), # 4/4 time, sixteenth note pulses
-    :offset     => 15, # 0 based (the last 16th note of the measure)
-    :note_queue => nq
+    :meter               => m,
+    :first_beat_position => b,
+    :note_queue          => nq
   }
 
 
@@ -251,13 +267,20 @@ nq.push Note.new(Pitch.new(PG4), Duration.new(1))
 
 nq.push Note.new(Pitch.new(PA4), Duration.new(6)) 
 
+m = Meter.new(3, 4, 2) # 4/4 time, sixteenth note pulses
+b = BeatPosition.new
+b.measure     = 0
+b.beat        = 0 # 0-based: beat 1 
+b.subdiv      = 0 # 0-based: first subdivision
+b.num_beats   = 3 # 3 beats
+b.num_subdivs = 2 # half of quarter notes
+
 $meter_vectors["Bach Minuet in G"] =
   {
-    :meter      => Meter.new(3, 4, 2), # 3/4 time, eighth note pulses
-    :offset     => 0, # 0 based (the first 8th note of the measure)
-    :note_queue => nq
+    :meter               => m,
+    :first_beat_position => b,
+    :note_queue          => nq
   }
-
 
 
 ###############################################################################
@@ -298,11 +321,19 @@ nq.push Note.new(Pitch.new(PE4), Duration.new(2)) # -la-
 
 nq.push Note.new(Pitch.new(PC4), Duration.new(8)) # -by
 
+m = Meter.new(4, 4, 2) # 4/4 time, sixteenth note pulses
+b = BeatPosition.new
+b.measure     = 0
+b.beat        = 0 # 0-based: beat 1 
+b.subdiv      = 0 # 0-based: first subdivision
+b.num_beats   = 4 # 4 beats
+b.num_subdivs = 2 # half of quarter notes
+
 $meter_vectors["Somewhere over the rainbow"] =
   {
-    :meter      => Meter.new(4, 4, 2), # 4/4 time, eighth note pulses
-    :offset     => 0, # 0 based (first 8th note of measure)
-    :note_queue => nq
+    :meter               => m,
+    :first_beat_position => b,
+    :note_queue          => nq
   }
 
 
@@ -367,11 +398,19 @@ nq.push Note.new(Pitch.new(PB3 ), Duration.new(2)) # -ry
 nq.push Note.new(Pitch.new(PE4 ), Duration.new(2)) # this
 nq.push Note.new(Pitch.new(PE4 ), Duration.new(14)) # train
 
+m = Meter.new(4, 4, 4) # 4/4 time, sixteenth note pulses
+b = BeatPosition.new
+b.measure     = 0
+b.beat        = 0 # 0-based: beat 1 
+b.subdiv      = 0 # 0-based: first subdivision
+b.num_beats   = 4 # 4 beats
+b.num_subdivs = 4 # half of quarter notes
+
 $meter_vectors["This train is bound for glory"] =
   {
-    :meter      => Meter.new(4, 4, 4), # 4/4 time, sixteenth note pulses
-    :offset     => 0, # 0 based (meaning beat 1)
-    :note_queue => nq
+    :meter               => m,
+    :first_beat_position => b,
+    :note_queue          => nq
   }
 
 
@@ -417,12 +456,18 @@ nq.push Note.new(Pitch.new(PFs4), Duration.new(2))
 
 nq.push Note.new(Pitch.new(PG4 ), Duration.new(6)) 
 
+m = Meter.new(3, 4, 2) # 3/4 time, eighth note pulses
+b = BeatPosition.new
+b.measure     = 0
+b.beat        = 0 # 0-based: beat 1 
+b.subdiv      = 0 # 0-based: first subdivision
+b.num_beats   = 3 # 4 beats
+b.num_subdivs = 2 # half of quarter notes
 
 $meter_vectors["Bach Minuet (2)"] =
   {
-    :meter      => Meter.new(3, 4, 2), # 3/4 time, eighth note pulses
-    :offset     => 0, # 0 based (meaning beat 1)
-    :note_queue => nq
+    :meter               => m,
+    :first_beat_position => b,
+    :note_queue          => nq
   }
-
 

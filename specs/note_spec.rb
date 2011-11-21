@@ -28,4 +28,11 @@ describe Note do
     end
   end
 
+  context "analysis" do
+    it "should return a hash that can be extended with whatever values critics want" do
+      n = Note.new(Pitch.new(0), Duration.new(3))
+      n.analysis.should be_an_instance_of Hash
+    end
+  end
+
 end

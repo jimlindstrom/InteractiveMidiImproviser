@@ -17,6 +17,7 @@ require File.join(File.dirname(__FILE__), 'lib', 'duration')
 require File.join(File.dirname(__FILE__), 'lib', 'note')
 
 require File.join(File.dirname(__FILE__), 'lib', 'meter')
+require File.join(File.dirname(__FILE__), 'lib', 'beat_position')
 
 require File.join(File.dirname(__FILE__), 'lib', 'beat')
 require File.join(File.dirname(__FILE__), 'lib', 'beat_similarity_matrix')
