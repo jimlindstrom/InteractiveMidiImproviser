@@ -125,9 +125,9 @@ m = Meter.new(3, 4, 1) # 3/4 time, quarter note pulses
 b = BeatPosition.new
 b.measure     = 0
 b.beat        = 2 # 0-based: beat 3 
-b.subdiv      = 0 # 0-based: first subdivision
-b.num_beats   = 3 # 0-based: beat 3 
-b.num_subdivs = 1 # 0-based: first subdivision
+b.subbeat     = 0 # 0-based: first subbeatision
+b.beats_per_measure = 3 # 0-based: beat 3 
+b.subbeats_per_beat = 1 # 0-based: first subbeatision
 $meter_vectors["Bring back my bonnie to me"] =
   {
     :meter               => m,
@@ -208,9 +208,9 @@ m = Meter.new(4, 4, 4) # 4/4 time, sixteenth note pulses
 b = BeatPosition.new
 b.measure     = 0
 b.beat        = 3 # 0-based: beat 4 
-b.subdiv      = 3 # 0-based: last subdivision
-b.num_beats   = 4 # 4 beats
-b.num_subdivs = 4 # 4th of quarter notes
+b.subbeat     = 3 # 0-based: last subbeatision
+b.beats_per_measure = 4 # 4 beats
+b.subbeats_per_beat = 4 # 4th of quarter notes
 
 $meter_vectors["Battle hymn of the republic"] =
   {
@@ -271,9 +271,9 @@ m = Meter.new(3, 4, 2) # 4/4 time, sixteenth note pulses
 b = BeatPosition.new
 b.measure     = 0
 b.beat        = 0 # 0-based: beat 1 
-b.subdiv      = 0 # 0-based: first subdivision
-b.num_beats   = 3 # 3 beats
-b.num_subdivs = 2 # half of quarter notes
+b.subbeat     = 0 # 0-based: first subbeatision
+b.beats_per_measure = 3 # 3 beats
+b.subbeats_per_beat = 2 # half of quarter notes
 
 $meter_vectors["Bach Minuet in G"] =
   {
@@ -325,9 +325,9 @@ m = Meter.new(4, 4, 2) # 4/4 time, sixteenth note pulses
 b = BeatPosition.new
 b.measure     = 0
 b.beat        = 0 # 0-based: beat 1 
-b.subdiv      = 0 # 0-based: first subdivision
-b.num_beats   = 4 # 4 beats
-b.num_subdivs = 2 # half of quarter notes
+b.subbeat     = 0 # 0-based: first subbeatision
+b.beats_per_measure = 4 # 4 beats
+b.subbeats_per_beat = 2 # half of quarter notes
 
 $meter_vectors["Somewhere over the rainbow"] =
   {
@@ -402,9 +402,9 @@ m = Meter.new(4, 4, 4) # 4/4 time, sixteenth note pulses
 b = BeatPosition.new
 b.measure     = 0
 b.beat        = 0 # 0-based: beat 1 
-b.subdiv      = 0 # 0-based: first subdivision
-b.num_beats   = 4 # 4 beats
-b.num_subdivs = 4 # half of quarter notes
+b.subbeat     = 0 # 0-based: first subbeatision
+b.beats_per_measure = 4 # 4 beats
+b.subbeats_per_beat = 4 # half of quarter notes
 
 $meter_vectors["This train is bound for glory"] =
   {
@@ -460,9 +460,9 @@ m = Meter.new(3, 4, 2) # 3/4 time, eighth note pulses
 b = BeatPosition.new
 b.measure     = 0
 b.beat        = 0 # 0-based: beat 1 
-b.subdiv      = 0 # 0-based: first subdivision
-b.num_beats   = 3 # 4 beats
-b.num_subdivs = 2 # half of quarter notes
+b.subbeat     = 0 # 0-based: first subbeatision
+b.beats_per_measure = 3 # 4 beats
+b.subbeats_per_beat = 2 # half of quarter notes
 
 $meter_vectors["Bach Minuet (2)"] =
   {

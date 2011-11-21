@@ -23,37 +23,37 @@ describe BeatPosition do
     end
   end
 
-  context "num_beats" do
+  context "beats_per_measure" do
     it "should return whatever you set it to" do
       b=BeatPosition.new
-      b.num_beats = 10
-      b.num_beats.should == 10
+      b.beats_per_measure = 10
+      b.beats_per_measure.should == 10
     end
   end
 
-  context "subdiv" do
+  context "subbeat" do
     it "should return whatever you set it to" do
       b=BeatPosition.new
-      b.subdiv = 10
-      b.subdiv.should == 10
+      b.subbeat = 10
+      b.subbeat.should == 10
     end
   end
 
-  context "num_subdivs" do
+  context "subbeats_per_beat" do
     it "should return whatever you set it to" do
       b=BeatPosition.new
-      b.num_subdivs = 10
-      b.num_subdivs.should == 10
+      b.subbeats_per_beat = 10
+      b.subbeats_per_beat.should == 10
     end
   end
 
   context "to_hash" do
-    it "should reutrn a hash of the measure, beat, and subdiv" do
+    it "should reutrn a hash of the measure, beat, and subbeat" do
       b=BeatPosition.new
       b.measure = 12
       b.beat    = 2
-      b.subdiv  = 3
-      b.to_hash.should == {:measure=>12, :beat=>2, :subdiv=>3}
+      b.subbeat = 3
+      b.to_hash.should == {:measure=>12, :beat=>2, :subbeat=>3}
     end
   end
 

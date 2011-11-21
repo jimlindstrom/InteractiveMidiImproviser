@@ -1,7 +1,7 @@
 class BeatPosition
-  attr_accessor :measure, :beat, :num_beats, :subdiv, :num_subdivs
+  attr_accessor :measure, :beat, :beats_per_measure, :subbeat, :subbeats_per_beat
 
   def to_hash
-    return {:measure=>@measure, :beat=>@beat, :subdiv=>@subdiv}
+    return {:measure=>@measure, :beat=>@beat, :subbeat=>@subbeat}
   end
 end

@@ -49,20 +49,20 @@ class NoteQueue < Array
     bsm = BeatSimilarityMatrix.new(self.beat_array)
     bsm_diags = (1..20).map{ |i| { :beat=>i, :score=>bsm.mean_of_diag(i) } }.sort{ |x,y| y[:score] <=> x[:score] }
 
-    subdivs_per_beat  = bsm_diags[0][:beat]
-    beats_per_measure = bsm_diags[1][:beat] / subdivs_per_beat
+    subbeats_per_beat = bsm_diags[0][:beat]
+    beats_per_measure = bsm_diags[1][:beat] / subbeats_per_beat
     beat_unit         = 4
-    @meter = Meter.new(beats_per_measure, beat_unit, subdivs_per_beat)
+    @meter = Meter.new(beats_per_measure, beat_unit, subbeats_per_beat)
 
     correls = bsm.autocorrel_of_main_diag(bsm_diags[1][:beat])
     correls = (0..(correls.length-1)).collect { |i| { :offset=>i, :score=>correls[i] } }.sort{ |x,y| y[:score]<=>x[:score] }
 
     b = BeatPosition.new
-    b.measure     = 0
-    b.num_beats   = beats_per_measure
-    b.num_subdivs = subdivs_per_beat
-    b.beat        = Float(correls[0][:offset] / subdivs_per_beat).floor
-    b.subdiv      = correls[0][:offset] % subdivs_per_beat
+    b.measure           = 0
+    b.beats_per_measure = beats_per_measure
+    b.subbeats_per_beat = subbeats_per_beat
+    b.beat              = Float(correls[0][:offset] / subbeats_per_beat).floor
+    b.subbeat           = correls[0][:offset] % subbeats_per_beat
 
     set_beat_position_of_all_notes(b)
   end
@@ -74,14 +74,14 @@ private
     self.each do |n|
       n.analysis[:beat_position] = beat_pos.dup
 
-      beat_pos.subdiv += n.duration.val
-      while beat_pos.subdiv > beat_pos.num_subdivs
+      beat_pos.subbeat += n.duration.val
+      while beat_pos.subbeat > beat_pos.subbeats_per_beat
         beat_pos.beat   += 1
-        beat_pos.subdiv -= beat_pos.num_subdivs
+        beat_pos.subbeat -= beat_pos.subbeats_per_beat
       end
-      while beat_pos.beat > beat_pos.num_beats
+      while beat_pos.beat > beat_pos.beats_per_measure
         beat_pos.measure += 1
-        beat_pos.beat    -= beat_pos.num_beats
+        beat_pos.beat    -= beat_pos.beats_per_measure
       end
     end
   end
