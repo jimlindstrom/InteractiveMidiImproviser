@@ -22,14 +22,30 @@ describe Improvisor do
   end
 
   context ".generate" do
-    before (:each) do
+    before(:each) do
+      m = Meter.new(4, 4, 1)
+  
+      @notes = NoteQueue.new
+  
+      n = Note.new(Pitch.new(100), Duration.new(1))
+      n.analysis[:beat_position] = m.initial_beat_position
+      @notes.push n
+   
+      n = Note.new(Pitch.new(102), Duration.new(2))
+      n.analysis[:beat_position] = @notes.last.analysis[:beat_position] + @notes.last.duration
+      @notes.push n
+
+      n = Note.new(Pitch.new(104), Duration.new(4))
+      n.analysis[:beat_position] = @notes.last.analysis[:beat_position] + @notes.last.duration
+      @notes.push n
+
       @i = Improvisor.new
       critics = @i.get_critics
       critics.each do |critic|
         critic.reset
-        critic.listen(Note.new(Pitch.new(100), Duration.new(1)))
-        critic.listen(Note.new(Pitch.new(102), Duration.new(2)))
-        critic.listen(Note.new(Pitch.new(104), Duration.new(4)))
+        @notes.each do |note|
+          critic.listen note
+        end
       end
     end
     it "should return an array of notes" do

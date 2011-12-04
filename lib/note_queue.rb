@@ -46,16 +46,28 @@ class NoteQueue < Array
   end
 
   def detect_meter
+    confidences = []
+
     bsm = BeatSimilarityMatrix.new(self.beat_array)
     bsm_diags = (1..20).map{ |i| { :beat=>i, :score=>bsm.mean_of_diag(i) } }.sort{ |x,y| y[:score] <=> x[:score] }
+    confidences[0] = Float(bsm_diags[0][:score]) / bsm_diags[1][:score]
+
+    return false if bsm_diags[1][:beat] % bsm_diags[0][:beat] != 0 # abort if not an integer number of beats per measure
 
     subbeats_per_beat = bsm_diags[0][:beat]
     beats_per_measure = bsm_diags[1][:beat] / subbeats_per_beat
     beat_unit         = 4
-    @meter = Meter.new(beats_per_measure, beat_unit, subbeats_per_beat)
+    #puts "bsm_diags: #{bsm_diags.inspect}"
+    #puts "Meter.new(#{beats_per_measure}, #{beat_unit}, #{subbeats_per_beat})"
+    begin
+      @meter = Meter.new(beats_per_measure, beat_unit, subbeats_per_beat)
+    rescue ArgumentError
+      return false # if any of the params were bogus, just return and fail
+    end
 
     correls = bsm.autocorrel_of_main_diag(bsm_diags[1][:beat])
     correls = (0..(correls.length-1)).collect { |i| { :offset=>i, :score=>correls[i] } }.sort{ |x,y| y[:score]<=>x[:score] }
+    confidences[1] = Float(correls[0][:score]) / correls[1][:score]
 
     b = BeatPosition.new
     b.measure           = 0
@@ -65,6 +77,12 @@ class NoteQueue < Array
     b.subbeat           = correls[0][:offset] % subbeats_per_beat
 
     set_beat_position_of_all_notes(b)
+
+    confidence = confidences.inject(:*)
+    confidence = 0.0 if (confidence.infinite? != nil)
+    is_confident = (confidence > 1.5)
+    #puts "#{confidences.inspect} -> #{confidence.inspect} -> #{is_confident.inspect}"
+    return is_confident
   end
 
 private

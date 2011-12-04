@@ -3,7 +3,18 @@
 require 'spec_helper'
 	
 describe NoteGenerator do
-  before do
+  before(:each) do
+    m = Meter.new(3, 4, 1)
+
+    @notes = NoteQueue.new
+
+    n = Note.new(Pitch.new(50), Duration.new(1))
+    n.analysis[:beat_position] = m.initial_beat_position
+    @notes.push n
+
+    n = Note.new(Pitch.new(55), Duration.new(2))
+    n.analysis[:beat_position] = @notes.first.analysis[:beat_position] + @notes.first.duration
+    @notes.push n
   end
 
   context ".get_critics" do
@@ -26,8 +37,9 @@ describe NoteGenerator do
       ng = NoteGenerator.new
       critics = ng.get_critics
       critics.each do |critic|
-        critic.listen(Note.new(Pitch.new(50), Duration.new(1)))
-        critic.listen(Note.new(Pitch.new(55), Duration.new(2)))
+        @notes.each do |note|
+          critic.listen note
+        end
       end
       ng.reset
       ng.generate.pitch.val.should == 50
@@ -36,8 +48,9 @@ describe NoteGenerator do
       ng = NoteGenerator.new
       critics = ng.get_critics
       critics.each do |critic|
-        critic.listen(Note.new(Pitch.new(50), Duration.new(1)))
-        critic.listen(Note.new(Pitch.new(55), Duration.new(2)))
+        @notes.each do |note|
+          critic.listen note
+        end
       end
       ng.reset
       ng.generate.duration.val.should == 1
@@ -49,8 +62,9 @@ describe NoteGenerator do
       ng = NoteGenerator.new
       critics = ng.get_critics
       critics.each do |critic|
-        critic.listen(Note.new(Pitch.new(50), Duration.new(1)))
-        critic.listen(Note.new(Pitch.new(55), Duration.new(2)))
+        @notes.each do |note|
+          critic.listen note
+        end
       end
       ng.reset
       ng.generate.should be_an_instance_of Note

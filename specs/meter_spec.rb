@@ -72,6 +72,19 @@ describe Meter do
     end
   end
 
+  context "random" do
+    it "should return a Meter" do
+      Meter.random.should be_an_instance_of Meter
+    end
+  end
+
+  context "initial_beat_position" do
+    it "should return a BeatPosition corresponding to the first beat in that meter" do
+      m = Meter.random
+      m.initial_beat_position.should be_an_instance_of BeatPosition
+    end
+  end
+
   context "to_symbol" do
     it "should return a MeterSymbol" do
       @beats_per_measure = 3 # 3/4 time

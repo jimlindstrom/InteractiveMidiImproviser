@@ -27,6 +27,27 @@ class BeatPosition
     return BeatPositionSymbol.new(v)
   end
 
+  def +(duration)
+    b = BeatPosition.new
+    b.subbeats_per_beat = @subbeats_per_beat
+    b.beats_per_measure = @beats_per_measure
+    b.subbeat = @subbeat + duration.val
+    b.beat = @beat
+    b.measure = @measure
+
+    while b.subbeat >= b.subbeats_per_beat
+      b.beat += 1
+      b.subbeat -= b.subbeats_per_beat
+    end
+
+    while b.beat >= b.beats_per_measure
+      b.measure += 1
+      b.beat -= b.beats_per_measure
+    end
+
+    return b
+  end
+
   def to_hash
     return {:measure=>@measure, :beat=>@beat, :subbeat=>@subbeat}
   end

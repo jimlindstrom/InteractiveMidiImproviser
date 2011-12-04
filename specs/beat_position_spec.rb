@@ -13,6 +13,29 @@ describe BeatPosition do
     end
   end
 
+  context "+" do
+    it "should take a BeatPosition and a Duration and return a new BeatPosition" do
+      m = Meter.random
+      b = m.initial_beat_position
+      d = Duration.new(9)
+      (b + d).should be_an_instance_of BeatPosition
+    end
+    it "should add the Duration to the BeatPosition" do
+      m = Meter.new(4, 4, 2) # 4/4 in eighth notes
+      b = m.initial_beat_position
+      d = Duration.new(2+1) # 3 eighth notes
+      x = b + d
+      x.to_hash.should == {:measure=>0, :beat=>1, :subbeat=>1}
+    end
+    it "should add the Duration to the BeatPosition, wrapping measures as needed" do
+      m = Meter.new(4, 4, 2) # 4/4 in eighth notes
+      b = m.initial_beat_position
+      d = Duration.new(8+4+1) # 3 eighth notes
+      x = b + d
+      x.to_hash.should == {:measure=>1, :beat=>2, :subbeat=>1}
+    end
+  end
+
   context "to_symbol" do
     it "should return a BeatPositionSymbol" do
       b = BeatPosition.new

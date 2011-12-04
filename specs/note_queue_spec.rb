@@ -75,6 +75,18 @@ describe NoteQueue do
   end
 
   describe "detect_meter" do
+    it "returns true if it's confident about the detected meter" do
+      vector = $meter_vectors["Bring back my bonnie to me"]
+      nq = vector[:note_queue]
+      nq.detect_meter.should == true
+    end
+    it "returns false if it's not confident about the detected meter" do
+      vector = $meter_vectors["Bring back my bonnie to me"]
+      nq = vector[:note_queue]
+      nq = nq[0..0] # something so short it's guaranteed to be metrically ambiguous
+      nq.detect_meter.should == false
+    end
+
     it "detects the time signature (my bonnie lies...)" do
       vector = $meter_vectors["Bring back my bonnie to me"]
       nq = vector[:note_queue]

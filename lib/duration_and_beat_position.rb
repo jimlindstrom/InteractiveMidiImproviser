@@ -8,9 +8,13 @@ class DurationAndBeatPosition
   def initialize(*params)
     @duration      = Duration.new(0)
     @beat_position = BeatPosition.new
-    if params.length==2
-      @duration      = params[0]
-      @beat_position = params[1]
+    if params.length==1
+      h = params[0]
+      @duration.set_val                  h[:duration]
+      @beat_position.beat              = h[:beat]
+      @beat_position.subbeat           = h[:subbeat]
+      @beat_position.beats_per_measure = h[:beats_per_measure]
+      @beat_position.subbeats_per_beat = h[:subbeats_per_beat]
     elsif params.length==5
       h = Hash[params]
       @duration.set_val                  h[:duration]
@@ -18,8 +22,11 @@ class DurationAndBeatPosition
       @beat_position.subbeat           = h[:subbeat]
       @beat_position.beats_per_measure = h[:beats_per_measure]
       @beat_position.subbeats_per_beat = h[:subbeats_per_beat]
+    elsif params.length==2
+      @duration      = params[0]
+      @beat_position = params[1]
     else
-      raise ArgumentError("Bad params")
+      raise ArgumentError.new("Bad params: #{params.inspect}")
     end
   end
 

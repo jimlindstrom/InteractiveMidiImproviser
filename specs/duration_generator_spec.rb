@@ -3,7 +3,18 @@
 require 'spec_helper'
 
 describe DurationGenerator do
-  before do
+  before(:each) do
+    m = Meter.new(3, 4, 1)
+
+    @notes = NoteQueue.new
+
+    n = Note.new(Pitch.new(0), Duration.new(1))
+    n.analysis[:beat_position] = m.initial_beat_position
+    @notes.push n
+
+    n = Note.new(Pitch.new(0), Duration.new(2))
+    n.analysis[:beat_position] = @notes.first.analysis[:beat_position] + @notes.first.duration
+    @notes.push n
   end
 
   context ".get_critics" do
@@ -23,11 +34,13 @@ describe DurationGenerator do
 
   context ".reset" do
     it "should cause the next duration (the first in a seq) to be an observed starting duration" do
+
       dg = DurationGenerator.new
       critics = dg.get_critics
       critics.each do |critic|
-        critic.listen(Note.new(Pitch.new(0), Duration.new(1)))
-        critic.listen(Note.new(Pitch.new(0), Duration.new(2)))
+        @notes.each do |note|
+          critic.listen note 
+        end
       end
       dg.reset
       dg.generate.val.should == 1
@@ -39,8 +52,9 @@ describe DurationGenerator do
       dg = DurationGenerator.new
       critics = dg.get_critics
       critics.each do |critic|
-        critic.listen(Note.new(Pitch.new(0), Duration.new(1)))
-        critic.listen(Note.new(Pitch.new(0), Duration.new(2)))
+        @notes.each do |note|
+          critic.listen note 
+        end
       end
       dg.reset
       dg.generate.should be_an_instance_of Duration

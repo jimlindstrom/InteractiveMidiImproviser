@@ -15,8 +15,25 @@ class Meter
     @subdivs_per_beat  = subdivs_per_beat
   end
 
+  def self.random
+    beats_per_measure = Array(2..12)[(rand*10.0).round]
+    beat_unit         = [2, 4, 8][(rand*2.0).round]
+    subdivs_per_beat  = [1, 2, 4][(rand*2.0).round]
+    return Meter.new(beats_per_measure, beat_unit, subdivs_per_beat)
+  end
+
   def self.num_values
     return Array(2..12).length * [2, 4, 8].length * [1, 2, 4].length
+  end
+
+  def initial_beat_position
+    b = BeatPosition.new
+    b.measure = 0
+    b.beat = 0
+    b.beats_per_measure = @beats_per_measure
+    b.subbeat = 0
+    b.subbeats_per_beat = @subdivs_per_beat
+    return b
   end
 
   def to_symbol
