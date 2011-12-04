@@ -13,6 +13,7 @@ New Critic: tactus/meter/time sig
 	
 	In progress:
 		- Trying to modify duration critic to make it look at {beat position (symbol), duration (symbol)}
+			- It needs to know the meter, and it (or something) needs to track the beat position (prev + new)
 		- with the hope that this would cause more rhythmically intelligible improv.
 		- Need to figure out a place to invoke the meter detection.  A bulk critic?
 		- Need to modify duration critic

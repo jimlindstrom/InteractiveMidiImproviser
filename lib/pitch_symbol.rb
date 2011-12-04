@@ -18,7 +18,7 @@ class PitchSymbol
     return @val
   end
 
-  def to_pitch
+  def to_object
     return Pitch.new(@val)
   end
 end

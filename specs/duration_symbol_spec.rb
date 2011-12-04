@@ -21,14 +21,14 @@ describe DurationSymbol do
     end
   end
 
-  context "to_duration" do
+  context "to_object" do
     it "should return a Duration" do
       p = DurationSymbol.new(0)
-      p.to_duration.should be_an_instance_of Duration
+      p.to_object.should be_an_instance_of Duration
     end
     it "should return a Duration whose value corresponds to the DurationSymbol's value" do
       p = DurationSymbol.new(10)
-      p.to_duration.val.should equal 10
+      p.to_object.val.should equal 10
     end
   end
 

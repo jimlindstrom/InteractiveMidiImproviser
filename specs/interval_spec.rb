@@ -49,13 +49,13 @@ describe Interval do
       p = Interval.new(10)
       p.to_symbol.val.should equal 137
     end
-    it "should perform the inverse of IntervalSymbol.to_interval" do
+    it "should perform the inverse of IntervalSymbol.to_object" do
       p = Interval.new(127)
-      p.to_symbol.to_interval.val.should == 127
+      p.to_symbol.to_object.val.should == 127
     end
-    it "should perform the inverse of IntervalSymbol.to_interval" do
+    it "should perform the inverse of IntervalSymbol.to_object" do
       p = Interval.new(-127)
-      p.to_symbol.to_interval.val.should be -127
+      p.to_symbol.to_object.val.should be -127
     end
   end
 

@@ -21,22 +21,22 @@ describe IntervalSymbol do
     end
   end
 
-  context "to_interval" do
+  context "to_object" do
     it "should return a Interval" do
       p = IntervalSymbol.new(0)
-      p.to_interval.should be_an_instance_of Interval
+      p.to_object.should be_an_instance_of Interval
     end
     it "should return a Interval whose value corresponds to the IntervalSymbol's value" do
       p = IntervalSymbol.new(0)
-      p.to_interval.val.should equal -127
+      p.to_object.val.should equal -127
     end
     it "should perform the inverse of Interval.to_symbol" do
       p = IntervalSymbol.new(0)
-      p.to_interval.to_symbol.val.should == 0
+      p.to_object.to_symbol.val.should == 0
     end
     it "should perform the inverse of Interval.to_symbol" do
       p = IntervalSymbol.new(254)
-      p.to_interval.to_symbol.val.should == 254
+      p.to_object.to_symbol.val.should == 254
     end
   end
 

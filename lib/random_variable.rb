@@ -73,7 +73,7 @@ class RandomVariable
         outcome = cur_outcome
       end
     end
-    raise RuntimeError.new("outcome not found") if outcome.nil?
+    raise RuntimeError.new("outcome #{transformed_outcome.inspect} not found.  first outcome = #{@outcome_transformer.call(0).inspect}") if outcome.nil?
 
     cur_expectation = @observations[outcome]
     max_expectation = @observations.max

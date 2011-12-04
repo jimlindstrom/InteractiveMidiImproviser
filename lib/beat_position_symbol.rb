@@ -16,7 +16,7 @@ class BeatPositionSymbol
     return @val
   end
 
-  def to_beat_position
+  def to_object
     b = BeatPosition.new
 
     v = @val
@@ -26,8 +26,8 @@ class BeatPositionSymbol
     b.beats_per_measure = Array(2..12)[v % Array(2..12).length]
     v = Float(v / Array(2..12).length).floor
 
-    b.subbeat = [1, 2, 3, 4][v % [1, 2, 3, 4].length]
-    v = Float(v / [1, 2, 3, 4].length).floor
+    b.subbeat = [0, 1, 2, 3][v % [0, 1, 2, 3].length]
+    v = Float(v / [0, 1, 2, 3].length).floor
     
     b.beat = Array(0..11)[v % Array(0..11).length]
 

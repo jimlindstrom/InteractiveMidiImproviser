@@ -18,7 +18,7 @@ class MeterSymbol
     return @val
   end
 
-  def to_meter
+  def to_object
     v = @val
 
     subdivs_per_beat = [1, 2, 4][v % [1, 2, 4].length]

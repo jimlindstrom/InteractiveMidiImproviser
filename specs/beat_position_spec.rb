@@ -30,7 +30,16 @@ describe BeatPosition do
       b.subbeat = 3
       b.beats_per_measure = 4
       b.subbeats_per_beat = 1
-      b.to_symbol.val.should == 1166
+
+      keys = [:beat, :beats_per_measure, :subbeat, :subbeats_per_beat]
+      obj1 = b
+      h1   = Hash[*keys.zip(keys.map{ |x| obj1.send(x.to_s) }).flatten]
+
+      keys = [:beat, :beats_per_measure, :subbeat, :subbeats_per_beat]
+      obj2 = b.to_symbol.to_object
+      h2   = Hash[*keys.zip(keys.map{ |x| obj2.send(x.to_s) }).flatten]
+
+      h1.should == h2
     end
   end
 

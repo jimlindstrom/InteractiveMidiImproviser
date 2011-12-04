@@ -11,15 +11,17 @@ class BeatPosition
   end
 
   def to_symbol
+    validate
+
     v  = @beat
-    v *= Array(0..11).length 
 
-    v += [1, 2, 3, 4].index(@subbeat)
-    v *= [1, 2, 3, 4].length
+    v *= [0, 1, 2, 3].length
+    v += [0, 1, 2, 3].index(@subbeat)
 
-    v += Array(2..12).index(@beats_per_measure)
     v *= Array(2..12).length
+    v += Array(2..12).index(@beats_per_measure)
 
+    v *= [1, 2, 4].length
     v += [1, 2, 4].index(@subbeats_per_beat)
 
     return BeatPositionSymbol.new(v)
@@ -27,5 +29,12 @@ class BeatPosition
 
   def to_hash
     return {:measure=>@measure, :beat=>@beat, :subbeat=>@subbeat}
+  end
+
+  def validate
+    raise RuntimeError.new("invalid beat: #{@beat}")                           if Array(0..11).index(@beat).nil?
+    raise RuntimeError.new("invalid subbeat: #{@subbeat}")                     if [0, 1, 2, 3].index(@subbeat).nil?
+    raise RuntimeError.new("invalid beats_per_measure: #{@beats_per_measure}") if Array(2..12).index(@beats_per_measure).nil?
+    raise RuntimeError.new("invalid subbeats_per_beat: #{@subbeats_per_beat}") if [1, 2, 4].index(@subbeats_per_beat).nil?
   end
 end

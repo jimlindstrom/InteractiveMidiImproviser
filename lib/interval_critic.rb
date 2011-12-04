@@ -34,7 +34,7 @@ class IntervalCritic < Critic
     return nil if @note_history.empty?
 
     r = @markov_chain.get_expectations
-    r.transform_outcomes lambda { |x| IntervalSymbol.new(x).to_interval.val }
+    r.transform_outcomes lambda { |x| IntervalSymbol.new(x).to_object.val }
     return r
   end
 end

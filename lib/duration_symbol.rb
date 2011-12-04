@@ -18,7 +18,7 @@ class DurationSymbol
     return @val
   end
 
-  def to_duration
+  def to_object
     return Duration.new(@val)
   end
 end

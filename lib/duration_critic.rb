@@ -22,7 +22,7 @@ class DurationCritic < Critic
 
   def get_expectations
     r = @markov_chain.get_expectations
-    r.transform_outcomes lambda { |x| DurationSymbol.new(x).to_duration.val }
+    r.transform_outcomes lambda { |x| DurationSymbol.new(x).to_object.val }
     return r
   end
 end

@@ -21,14 +21,14 @@ describe PitchSymbol do
     end
   end
 
-  context "to_pitch" do
+  context "to_object" do
     it "should return a Pitch" do
       p = PitchSymbol.new(0)
-      p.to_pitch.should be_an_instance_of Pitch
+      p.to_object.should be_an_instance_of Pitch
     end
     it "should return a Pitch whose value corresponds to the PitchSymbol's value" do
       p = PitchSymbol.new(10)
-      p.to_pitch.val.should equal 10
+      p.to_object.val.should equal 10
     end
   end
 

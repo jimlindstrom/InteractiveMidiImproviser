@@ -21,16 +21,16 @@ describe MeterSymbol do
     end
   end
 
-  context "to_meter" do
+  context "to_object" do
     it "should return a Meter" do
       m = MeterSymbol.new(0)
-      m.to_meter.should be_an_instance_of Meter
+      m.to_object.should be_an_instance_of Meter
     end
     it "should return a Meter whose value corresponds to the MeterSymbol's value" do
       m = MeterSymbol.new(0)
-      m.to_meter.beats_per_measure.should equal 2
-      m.to_meter.beat_unit.should equal 2
-      m.to_meter.subdivs_per_beat.should equal 1
+      m.to_object.beats_per_measure.should equal 2
+      m.to_object.beat_unit.should equal 2
+      m.to_object.subdivs_per_beat.should equal 1
     end
   end
 

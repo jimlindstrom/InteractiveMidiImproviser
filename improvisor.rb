@@ -18,6 +18,7 @@ require File.join(File.dirname(__FILE__), 'lib', 'note')
 
 require File.join(File.dirname(__FILE__), 'lib', 'meter')
 require File.join(File.dirname(__FILE__), 'lib', 'beat_position')
+require File.join(File.dirname(__FILE__), 'lib', 'duration_and_beat_position')
 
 require File.join(File.dirname(__FILE__), 'lib', 'beat')
 require File.join(File.dirname(__FILE__), 'lib', 'beat_similarity_matrix')
@@ -30,12 +31,14 @@ require File.join(File.dirname(__FILE__), 'lib', 'interval_symbol')
 require File.join(File.dirname(__FILE__), 'lib', 'pitch_symbol')
 require File.join(File.dirname(__FILE__), 'lib', 'meter_symbol')
 require File.join(File.dirname(__FILE__), 'lib', 'beat_position_symbol')
+require File.join(File.dirname(__FILE__), 'lib', 'duration_and_beat_position_symbol')
 
 require File.join(File.dirname(__FILE__), 'lib', 'random_variable')
 require File.join(File.dirname(__FILE__), 'lib', 'markov_chain')
 
 require File.join(File.dirname(__FILE__), 'lib', 'critic')
 require File.join(File.dirname(__FILE__), 'lib', 'duration_critic')
+require File.join(File.dirname(__FILE__), 'lib', 'duration_and_beat_position_critic')
 require File.join(File.dirname(__FILE__), 'lib', 'pitch_critic')
 require File.join(File.dirname(__FILE__), 'lib', 'interval_critic')
 

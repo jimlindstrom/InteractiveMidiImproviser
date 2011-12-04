@@ -18,7 +18,7 @@ class IntervalSymbol
     return @val
   end
 
-  def to_interval
+  def to_object
     return Interval.new(@val-127)
   end
 end

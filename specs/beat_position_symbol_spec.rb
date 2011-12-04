@@ -21,19 +21,14 @@ describe BeatPositionSymbol do
     end
   end
 
-  context "to_beat_position" do
+  context "to_object" do
     it "should return a BeatPosition" do
       b = BeatPositionSymbol.new(0)
-      b.to_beat_position.should be_an_instance_of BeatPosition
+      b.to_object.should be_an_instance_of BeatPosition
     end
     it "should return a BeatPosition whose value corresponds to the BeatPositionSymbol's value" do
       b = BeatPositionSymbol.new(1102)
-      x = {}
-      x[:beat] = b.to_beat_position.beat
-      x[:subbeat] = b.to_beat_position.subbeat
-      x[:beats_per_measure] = b.to_beat_position.beats_per_measure
-      x[:subbeats_per_beat] = b.to_beat_position.subbeats_per_beat
-      x.should == {:beat=>8, :subbeat=>2, :beats_per_measure=>6, :subbeats_per_beat=>2}
+      b.to_object.to_symbol.val.should == b.val
     end
   end
 

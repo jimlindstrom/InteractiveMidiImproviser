@@ -2,9 +2,9 @@
 
 #require 'interactive_improvisor_lib'
 
-class PitchCritic < Critic
+class DurationAndBeatPositionCritic < Critic
   def initialize(order)
-    @markov_chain = MarkovChain.new(order, Pitch.num_values)
+    @markov_chain = MarkovChain.new(order, DurationAndBeatPosition.num_values)
   end
 
   def reset
@@ -13,7 +13,8 @@ class PitchCritic < Critic
 
   def listen(note)
     raise ArgumentError.new("not a note.  is a #{note.class}") if note.class != Note
-    next_symbol = note.pitch.to_symbol
+    raise ArgumentError.new("note must have meter analysis") if note.analysis[:beat_position].nil?
+    next_symbol = DurationAndBeatPosition.new(note.duration, note.analysis[:beat_position]).to_symbol
     surprise = @markov_chain.get_expectations.get_surprise(next_symbol.val)
     @markov_chain.observe(next_symbol.val)
     @markov_chain.transition(next_symbol.val)
@@ -22,7 +23,10 @@ class PitchCritic < Critic
 
   def get_expectations
     r = @markov_chain.get_expectations
-    r.transform_outcomes lambda { |x| PitchSymbol.new(x).to_object.val }
+    r.transform_outcomes lambda { |x| 
+        [ DurationAndBeatPositionSymbol.new(x).to_object.duration, 
+          DurationAndBeatPositionSymbol.new(x).to_object.beat_position ] } 
+
     return r
   end
 end
