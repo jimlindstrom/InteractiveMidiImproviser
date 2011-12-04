@@ -27,7 +27,7 @@ describe DurationAndBeatPositionCritic do
       dc.listen(@nq1.first)
       dc.reset
       x = dc.get_expectations
-      DurationAndBeatPosition.new(*(x.choose_outcome)).duration.val.should == @nq1.first.duration.val
+      DurationAndBeatPosition.new(*x.choose_outcome).duration.val.should == @nq1.first.duration.val
     end
   end
 
@@ -64,10 +64,8 @@ describe DurationAndBeatPositionCritic do
 
       dbps1 = DurationAndBeatPosition.new(@nq1.first.duration, @nq1.first.analysis[:beat_position])
       dbps2 = DurationAndBeatPosition.new(@nq2.first.duration, @nq2.first.analysis[:beat_position])
-      dbps1.beat_position.measure = nil
-      dbps2.beat_position.measure = nil
 
-      x.get_surprise([dbps1.duration, dbps1.beat_position]).should be < x.get_surprise([dbps2.duration, dbps2.beat_position])
+      x.get_surprise(dbps1.val).should be < x.get_surprise(dbps2.val)
     end
     it "returns a random variable that only chooses states observed" do
       order = 1

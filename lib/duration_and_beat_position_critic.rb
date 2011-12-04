@@ -23,10 +23,7 @@ class DurationAndBeatPositionCritic < Critic
 
   def get_expectations
     r = @markov_chain.get_expectations
-    r.transform_outcomes lambda { |x| 
-        [ DurationAndBeatPositionSymbol.new(x).to_object.duration, 
-          DurationAndBeatPositionSymbol.new(x).to_object.beat_position ] } 
-
+    r.transform_outcomes lambda { |x| DurationAndBeatPositionSymbol.new(x).to_object.val }
     return r
   end
 end
