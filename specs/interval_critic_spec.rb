@@ -17,12 +17,17 @@ describe IntervalCritic do
     it "should reset to the state in which no notes have been heard yet" do
       order = 1
       ic = IntervalCritic.new(order)
-      ic.listen(Note.new(Pitch.new(0), Duration.new(0)))
-      ic.listen(Note.new(Pitch.new(1), Duration.new(0)))
+
+      base_note = (rand*50).floor + 25
+      interval  = (rand*10).floor - 10
+      ic.listen(Note.new(Pitch.new(base_note),            Duration.new(0)))
+      ic.listen(Note.new(Pitch.new(base_note + interval), Duration.new(0)))
       ic.reset
-      ic.listen(Note.new(Pitch.new(1), Duration.new(0)))
+
+      base_note = (rand*50).floor + 25
+      ic.listen(Note.new(Pitch.new(base_note), Duration.new(0)))
       x = ic.get_expectations
-      Interval.new(x.choose_outcome).val.should == 1
+      Pitch.new(x.choose_outcome).val.should == (base_note + interval)
     end
   end
 
@@ -68,17 +73,23 @@ describe IntervalCritic do
       ic.reset
       ic.listen(Note.new(Pitch.new(0), Duration.new(0)))
       x = ic.get_expectations
-      x.get_surprise(Interval.new(1).val).should be < x.get_surprise(Interval.new(0).val)
+      x.get_surprise(Pitch.new(1).val).should be < x.get_surprise(Pitch.new(0).val)
     end
     it "returns a random variable that only chooses states observed" do
       order = 1
       ic = IntervalCritic.new(order)
-      ic.listen(Note.new(Pitch.new(0), Duration.new(0)))
-      ic.listen(Note.new(Pitch.new(1), Duration.new(0)))
+
+      base_note = (rand*50).floor + 25
+      interval  = (rand*10).floor - 5
+      ic.listen(Note.new(Pitch.new(base_note),            Duration.new(0)))
+      ic.listen(Note.new(Pitch.new(base_note + interval), Duration.new(0)))
       ic.reset
-      ic.listen(Note.new(Pitch.new(1), Duration.new(0)))
+
+      base_note = (rand*50).floor + 25
+      ic.listen(Note.new(Pitch.new(base_note), Duration.new(0)))
+
       x = ic.get_expectations
-      Interval.new(x.choose_outcome).val.should == Interval.new(1).val
+      Pitch.new(x.choose_outcome).val.should == (base_note + interval)
     end
     it "returns a random variable that only chooses states observed (higher order)" do
       order = 2
@@ -100,7 +111,9 @@ describe IntervalCritic do
       ic.listen(Note.new(Pitch.new(6), Duration.new(0))) # 1
       ic.listen(Note.new(Pitch.new(7), Duration.new(0))) # 1
       x = ic.get_expectations
-      Interval.new(x.choose_outcome).val.should == Interval.new(1).val
+      last_note = 7
+      expected_interval = 1
+      Pitch.new(x.choose_outcome).val.should == (last_note + expected_interval)
     end
   end
 

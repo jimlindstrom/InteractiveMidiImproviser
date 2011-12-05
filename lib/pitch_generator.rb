@@ -32,6 +32,15 @@ class PitchGenerator
     interval_exp = @interval_critic.get_expectations
     expectations += interval_exp if !interval_exp.nil?
 
-    return Pitch.new(expectations.choose_outcome)
+    x = expectations.choose_outcome
+    return Pitch.new(x) if !x.nil?
+
+    reset # we got to a point where we have no data.  reset, to get back to some stat we know about
+
+    pitch_exp = @pitch_critic.get_expectations
+    x = pitch_exp.choose_outcome
+    return Pitch.new(x) if !x.nil?
+
+    raise RuntimeError.new("Failed to choose a pitch")
   end
 end

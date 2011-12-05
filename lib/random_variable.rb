@@ -49,6 +49,7 @@ class RandomVariable
 
   def choose_outcome
     # we can't generate anything w/o any observations
+    #puts "no observations" if @num_observations == 0
     return nil if @num_observations == 0
 
     # generate a outcome, based on the CDF
@@ -61,6 +62,7 @@ class RandomVariable
     end
     raise RuntimeError.new("outcome out of bounds") if outcome > @cdf.length # is this even possible??
 
+    #puts "choosing #{outcome} => #{@outcome_transformer.call(outcome)}"
     return @outcome_transformer.call(outcome)
   end
 
@@ -68,10 +70,12 @@ class RandomVariable
     return 0.5 if @num_observations == 0
 
     outcome = nil
-    (0..(@num_outcomes-1)).each do |cur_outcome|
-      if @outcome_transformer.call(cur_outcome) == transformed_outcome # this assumes that 'cur_outcome' is an IntervalSymbol
+    cur_outcome = 0
+    while (cur_outcome < @num_outcomes) and outcome.nil?
+      if @outcome_transformer.call(cur_outcome) == transformed_outcome 
         outcome = cur_outcome
       end
+      cur_outcome += 1
     end
     raise RuntimeError.new("outcome #{transformed_outcome.inspect} not found.  first outcome = #{@outcome_transformer.call(0).inspect}") if outcome.nil?
 

@@ -1,22 +1,12 @@
-New Critic: tactus/meter/time sig
-	Communicate through:
-		- an 'analysis' hash on each note
-		- a 'context' member on each note that points to shared context hash
-			- this could be different for different phrases
-			- it could contain harmonic info, intended surprise levels, etc.
-	This would let:
-		- Critics communicate in a pseudo-pub/sub way
-		- MeterCritic could patch in a meter if there isn't one
-			- alternatively, it could be hard-coded as a response to the stimulus
-	This would avoid:
-		- having to make the various generators and listeners know what members of critics to call
-	
-	In progress:
-		- Trying to modify duration critic to make it look at {beat position (symbol), duration (symbol)}
-			- It needs to know the meter, and it (or something) needs to track the beat position (prev + new)
-		- with the hope that this would cause more rhythmically intelligible improv.
-		- Need to figure out a place to invoke the meter detection.  A bulk critic?
-		- Need to modify duration critic
+Put a 'context' member on each note that points to shared context hash (***)
+	- this could be different for different phrases
+	- it could contain harmonic info, intended surprise levels, etc.
+
+Refactor beat_position to just point to / contain a meter
+
+Need to figure out a better place to invoke the meter detection.  A bulk critic? (***)
+
+New Critic: meter
 
 New Critic: phrase length
 New Critic: tempo

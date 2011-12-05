@@ -27,9 +27,8 @@ class DurationGenerator
     # try generating with knowledge of the beat position
     duration_and_beat_position_exp = @duration_and_beat_position_critic.get_expectations
     if !duration_and_beat_position_exp.nil?
-      x = duration_and_beat_position_exp.choose_outcome
-      puts "x: #{x.inspect}"
-      return DurationAndBeatPosition.new(x).duration
+      x = duration_and_beat_position_exp.choose_outcome # x can be nil if no observations
+      return DurationAndBeatPosition.new(*x).duration if !x.nil?
     end
 
     # if that doens't work, initialize a random variable, ...
@@ -39,6 +38,15 @@ class DurationGenerator
     duration_exp = @duration_critic.get_expectations
     expectations += duration_exp if !duration_exp.nil?
 
-    return Duration.new(expectations.choose_outcome)
+    x = expectations.choose_outcome
+    return Duration.new(x) if !x.nil?
+
+    reset # we hit a space where we have no data.  reset and try a fallback plan
+
+    duration_exp = @duration_critic.get_expectations
+    x = duration_exp.choose_outcome
+    return Duration.new(x) if !x.nil?
+
+    raise "Failed to generate a duration"
   end
 end
