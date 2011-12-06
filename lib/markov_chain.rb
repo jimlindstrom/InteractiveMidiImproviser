@@ -52,8 +52,7 @@ class MarkovChain
     num_outcomes = @num_states
     x = RandomVariable.new(num_outcomes)
     k = state_history_to_key
-    (@observations[k] || {}).keys.each do |next_state|
-      num_observations = @observations[k][next_state]
+    (@observations[k] || {}).each do |next_state, num_observations|
       x.add_possible_outcome(next_state, num_observations)
     end
     return x

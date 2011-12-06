@@ -16,7 +16,7 @@ describe InteractiveImprovisor do
         nq.detect_meter
       end
       result = RubyProf.stop
-      printer = RubyProf::FlatPrinter.new(result)
+      printer = RubyProf::GraphPrinter.new(result)
       printer.print(STDOUT, :min_percent => 0, :mode=>RubyProf::CPU_TIME)
     end
   end
