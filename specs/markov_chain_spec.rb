@@ -1,6 +1,6 @@
 #!/usr/bin/env ruby
 
-require "markov_chain"
+require "spec_helper"
 
 # I'd love to have a version of this that works for future states instead of history 
 # states.  E.g., if you know that the phrase is ending in 2 notes, you should be able to say,

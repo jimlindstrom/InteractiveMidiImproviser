@@ -21,7 +21,8 @@ class MarkovChain
   end
 
   def reset
-    @state_history = [nil]*@num_states
+    @state_history        = [ nil ]*@num_states
+    @state_history_string = ["nil"]*@num_states
   end
 
   def observe(next_state)
@@ -42,6 +43,9 @@ class MarkovChain
 
     @state_history.push next_state
     @state_history.shift
+
+    @state_history_string.push String(next_state || "nil")
+    @state_history_string.shift
   end
 
   def get_expectations
@@ -58,7 +62,7 @@ class MarkovChain
 private
 
   def state_history_to_key
-    @state_history.map{|x| String(x || "nil")}.join(',')
+    @state_history_string.join(',')
   end
 
 end

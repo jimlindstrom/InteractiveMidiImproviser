@@ -25,7 +25,9 @@ describe RandomVariable do
       num_observations = 10
       x.add_possible_outcome(outcome, num_observations)
 
-      x.transform_outcomes lambda { |y| y*10 }
+      symbol_to_outcome = lambda { |y| y*10 }
+      outcome_to_symbol = lambda { |y| y/10 }
+      x.transform_outcomes(symbol_to_outcome, outcome_to_symbol)
 
       x.choose_outcome.should == 30
     end
@@ -35,7 +37,11 @@ describe RandomVariable do
       outcome = 1
       num_observations = 1
       x.add_possible_outcome(outcome, num_observations)
-      x.transform_outcomes lambda { |y| y*10 }
+
+      symbol_to_outcome = lambda { |y| y*10 }
+      outcome_to_symbol = lambda { |y| y/10 }
+      x.transform_outcomes(symbol_to_outcome, outcome_to_symbol)
+
       x.get_surprise(10).should be_within(0.01).of(0.0)
     end
   end
@@ -67,12 +73,16 @@ describe RandomVariable do
       [3, 4].include?(@x1.choose_outcome).should be_true
     end
     it "combines the random variables, even if the first one is transformed" do
-      @x1.transform_outcomes lambda {|y| y+1}
+      symbol_to_outcome = lambda {|y| y+1}
+      outcome_to_symbol = lambda {|y| y-1}
+      @x1.transform_outcomes(symbol_to_outcome, outcome_to_symbol)
       @x1 = @x1 + @x2
       @x1.choose_outcome.should == 4
     end
     it "combines the random variables, even if the second one is transformed" do
-      @x2.transform_outcomes lambda {|y| y-1}
+      symbol_to_outcome = lambda {|y| y-1}
+      outcome_to_symbol = lambda {|y| y+1}
+      @x2.transform_outcomes(symbol_to_outcome, outcome_to_symbol)
       @x1 = @x1 + @x2
       @x1.choose_outcome.should == 3
     end
@@ -82,14 +92,18 @@ describe RandomVariable do
       outcome = 4
       num_observations = 10
       x1.add_possible_outcome(outcome, num_observations)
-      x1.transform_outcomes lambda {|y| y+21}
+      symbol_to_outcome = lambda {|y| y+21}
+      outcome_to_symbol = lambda {|y| y-21}
+      x1.transform_outcomes(symbol_to_outcome, outcome_to_symbol)
 
       num_outcomes = 2
       x2 = RandomVariable.new(num_outcomes)
       outcome = 0
       num_observations = 1
       x2.add_possible_outcome(outcome, num_observations)
-      x2.transform_outcomes lambda {|y| y-1}
+      symbol_to_outcome = lambda {|y| y-1}
+      outcome_to_symbol = lambda {|y| y+1}
+      x2.transform_outcomes(symbol_to_outcome, outcome_to_symbol)
 
       x1 = x1 + x2
 
