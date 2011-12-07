@@ -4,6 +4,8 @@ require 'specs/vectors/fake_sensor_vectors'
 
 class InteractiveImprovisor
 
+  LOGGING = true
+
   def initialize
     @improvisor = Improvisor.new
 
@@ -29,21 +31,28 @@ class InteractiveImprovisor
   def run(use_real_midi=true)
     setup(use_real_midi)
 
+    puts "Listening..." if LOGGING
     until (stimulus_events = @sensor.get_stimulus).nil?
       stimulus_notes = stimulus_events.to_note_queue
 
       if stimulus_notes.detect_meter # FIXME: feels like this should be in a critic
-        puts "meter: #{stimulus_notes.meter.inspect}"
+        puts "\tmeter: #{stimulus_notes.meter.inspect}" if LOGGING
         @listener.listen stimulus_notes
       else
-        puts "failed to detect meter. ignoring stimulus."
+        puts "\tfailed to detect meter. ignoring stimulus." if LOGGING
       end
 
+      puts "Improvising..." if LOGGING
       response_notes = @improvisor.generate
 
-      response_notes.tempo = 400
+      max_tempo = 400
+      min_tempo = 250
+      response_notes.tempo = min_tempo + (rand*(max_tempo-min_tempo)).round
+      puts "\ttempo: #{response_notes.tempo}" if LOGGING
       response_events = response_notes.to_event_queue
       @performer.perform response_events
+
+      puts "Listening..." if LOGGING
     end
 
     teardown

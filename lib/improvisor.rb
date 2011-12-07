@@ -3,6 +3,8 @@
 #require 'interactive_improvisor_lib'
 
 class Improvisor
+  LOGGING = true
+
   def initialize
     @note_generator = NoteGenerator.new
   end
@@ -18,10 +20,12 @@ class Improvisor
     # FIXME: replace this with a critic / random variable
     meter = Meter.random
     beat_position = meter.initial_beat_position
+    puts "\tmeter: #{meter.inspect}"
 
     # FIXME: replace this with a critic / random variable
-    max_num_notes = 8
-    num_notes = (rand*max_num_notes).round
+    max_num_notes = 12
+    min_num_notes = 6
+    num_notes = min_num_notes + (rand*(max_num_notes-min_num_notes)).round
 
     num_notes.times do 
       # generate another note

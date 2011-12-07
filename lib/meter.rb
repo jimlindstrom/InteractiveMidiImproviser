@@ -16,9 +16,16 @@ class Meter
   end
 
   def self.random
-    beats_per_measure = Array(2..12)[(rand*10.0).round]
-    beat_unit         = [2, 4, 8][(rand*2.0).round]
-    subdivs_per_beat  = [1, 2, 4][(rand*2.0).round]
+    # this is the whole set of possibilities
+    #beats_per_measure = Array(2..12).sample
+    #beat_unit         = [2, 4, 8].sample
+    #subdivs_per_beat  = [1, 2, 4].sample
+    #return Meter.new(beats_per_measure, beat_unit, subdivs_per_beat)
+
+    # this is a more common, constrained set of possibilities
+    beats_per_measure = [3, 4].sample
+    beat_unit         = [4].sample
+    subdivs_per_beat  = [1, 2].sample
     return Meter.new(beats_per_measure, beat_unit, subdivs_per_beat)
   end
 
