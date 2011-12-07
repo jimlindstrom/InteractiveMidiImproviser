@@ -107,7 +107,8 @@ describe RandomVariable do
 
       x1 = x1 + x2
 
-      [25, -1].include?(x1.choose_outcome).should be_true
+      a = x1.choose_outcome
+      [25, -1].include?(a).should be_true
     end
   end
 

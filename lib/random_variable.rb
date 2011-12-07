@@ -11,7 +11,6 @@ class RandomVariable
     @num_outcomes          = num_outcomes
     @num_observations      = 0
     @observations          = [0]*num_outcomes
-    @cdf                   = [0]*num_outcomes
     @outcome_transformer   = lambda { |x| x } 
     @outcome_untransformer = lambda { |x| x } 
   end
@@ -45,11 +44,6 @@ class RandomVariable
 
     @observations[outcome] += num_observations
     @num_observations      += num_observations
-
-    # update the CDF
-    (outcome..(@cdf.length-1)).each do |idx|
-      @cdf[idx] += num_observations
-    end
   end
 
   def choose_outcome
@@ -58,12 +52,22 @@ class RandomVariable
     return nil if @num_observations == 0
 
     # generate a outcome, based on the CDF
-    r = (rand*(@num_observations-1)).round + 1 # I have some doubt about the final "+ 1"...
-    outcome = find(r)
-    raise RuntimeError.new("outcome out of bounds") if outcome.nil? # is this even possible??
+    orig_r = r = (rand*(@num_observations-1.0)).round
 
-    puts "choosing #{outcome} => #{@outcome_transformer.call(outcome)}" if LOGGING
-    return @outcome_transformer.call(outcome)
+    outcome = 0
+    while outcome < @num_outcomes
+      if @observations[outcome] > 0
+        if r < @observations[outcome]
+          puts "choosing #{outcome} => #{@outcome_transformer.call(outcome)}" if LOGGING
+          return @outcome_transformer.call(outcome)
+        end
+        r -= @observations[outcome]
+      end
+
+      outcome += 1
+    end
+
+    raise RuntimeError.new("RandomVariable couldn't choose outcome for orig_r=#{orig_r}, num_outcomes=#{@num_outcomes}") if LOGGING
   end
 
   def get_surprise(transformed_outcome)
@@ -87,34 +91,6 @@ class RandomVariable
       end
     end
     return o
-  end
-
-  def find(goal_val)
-    outcome = find_inner(goal_val, 0, @cdf.length-1, nil)
-    outcome = 0 if goal_val>=0 and @cdf[0]>goal_val # accomplish this by using 0 instead of nil, in prev. line?
-    return nil if outcome.nil?
-    while (outcome>0) and (@cdf[outcome-1] == @cdf[outcome])
-      outcome -= 1
-    end
-    return outcome
-  end
-
-  def find_inner(goal_val, idx_low, idx_high, idx_best=nil)
-    return idx_best if idx_high < idx_low
-
-    idx_mid = (idx_low + idx_high) / 2
-
-    if ((idx_best.nil?) or (@cdf[idx_mid] > @cdf[idx_best])) and (@cdf[idx_mid] <= goal_val)
-      idx_best = idx_mid
-    end
-
-    if @cdf[idx_mid] > goal_val
-      return find_inner(goal_val, idx_low, idx_mid-1, idx_best)
-    elsif @cdf[idx_mid] < goal_val
-      return find_inner(goal_val, idx_mid+1, idx_high, idx_best)
-    else
-      return idx_mid
-    end
   end
 
 end
