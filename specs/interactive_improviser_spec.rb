@@ -38,14 +38,14 @@ describe InteractiveImprovisor do
     end
     it "should generate metrically-intelligable improvisations >70% of the time" do
       correct_detections = 0
-      100.times do
+      10.times do
         nq = @i.get_single_improvisation
         if nq.detect_meter
           # an even better test would be to see if the detected meter is the same as the planned meter
           correct_detections += 1
         end
       end
-      correct_detections.should be > 70
+      correct_detections.should be > 7
     end
   end
 end
