@@ -2,7 +2,7 @@
 
 require 'spec_helper'
 
-describe MidiPerformer do
+describe MidiPerformer, :midi_tests => true do
   before(:each) do
     Midi::Loopback.create
 

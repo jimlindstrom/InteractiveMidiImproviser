@@ -1,6 +1,8 @@
 # midi_out_port_spec.rb
 
-describe Midi::OutPort do
+require 'spec_helper'
+
+describe Midi::OutPort, :midi_tests => true do
 
   before(:each) do
     Midi::Loopback.create
