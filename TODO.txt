@@ -2,7 +2,9 @@ Duration_And_Beat_Position_Critic ran out of memory.  How to be more efficient??
 
 Let users of Fake Sensor control how many of the training vectors it uses
 
-Training now takes forever.  Save/Load markov chains so we can do training offline
+Training now takes forever.  
+    - Save/Load markov chains so we can do training offline
+    - Make training multi-threaded (at least 2-threaded) to take advantage of SMP?
 
 Put a 'context' member on each note that points to shared context hash (***)
 	- this could be different for different phrases
