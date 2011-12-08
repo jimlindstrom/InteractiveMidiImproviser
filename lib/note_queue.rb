@@ -93,11 +93,11 @@ private
       n.analysis[:beat_position] = beat_pos.dup
 
       beat_pos.subbeat += n.duration.val
-      while beat_pos.subbeat > beat_pos.subbeats_per_beat
+      while beat_pos.subbeat >= beat_pos.subbeats_per_beat
         beat_pos.beat   += 1
         beat_pos.subbeat -= beat_pos.subbeats_per_beat
       end
-      while beat_pos.beat > beat_pos.beats_per_measure
+      while beat_pos.beat >= beat_pos.beats_per_measure
         beat_pos.measure += 1
         beat_pos.beat    -= beat_pos.beats_per_measure
       end
