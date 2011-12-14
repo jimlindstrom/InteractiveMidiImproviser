@@ -13,8 +13,8 @@ class InteractiveImprovisor
     @improvisor.get_critics.each { |c| @listener.add_critic(c) }
   end
 
-  def train
-    @sensor = FakeSensor.new($fake_sensor_vectors)
+  def train(num_vectors = $fake_sensor_vectors.length)
+    @sensor = FakeSensor.new($fake_sensor_vectors, num_vectors)
 
     until (stimulus_events = @sensor.get_stimulus).nil?
       stimulus_notes = NoteQueue.from_event_queue(stimulus_events)
@@ -69,7 +69,7 @@ class InteractiveImprovisor
       #@performer = MidiPerformer.new("VMPK Input")
       @performer = MidiPerformer.new("TiMidity port 0")
     else
-      @sensor = FakeSensor.new($fake_sensor_vectors)
+      @sensor = FakeSensor.new($fake_sensor_vectors, 10)
       @performer = FakePerformer.new
     end
   end

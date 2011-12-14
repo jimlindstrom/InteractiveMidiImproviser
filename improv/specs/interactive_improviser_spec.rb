@@ -16,7 +16,8 @@ describe InteractiveImprovisor do
   context ".train" do
     it "should listen for stimuli and play responses" do
       i = InteractiveImprovisor.new
-      i.train
+      num_training_vectors = 20
+      i.train(num_training_vectors)
       pending("still need to test side effects")
     end
   end
@@ -24,7 +25,8 @@ describe InteractiveImprovisor do
   context ".run" do
     it "should listen for stimuli and play responses" do
       i = InteractiveImprovisor.new
-      i.train
+      num_training_vectors = 20
+      i.train(num_training_vectors)
       use_real_midi=false
       i.run(use_real_midi)
       pending("still need to test side effects")
@@ -34,7 +36,8 @@ describe InteractiveImprovisor do
   context ".get_single_improvisation" do
     before(:all) do
       @i = InteractiveImprovisor.new
-      @i.train
+      num_training_vectors = 20
+      @i.train(num_training_vectors)
     end
     it "should generate metrically-intelligable improvisations >70% of the time" do
       correct_detections = 0
