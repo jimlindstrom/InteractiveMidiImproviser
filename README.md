@@ -46,8 +46,11 @@ improvisor to generate much more interesting output.
 
 ## Usage
 
+     cd improv   # move into the improv sub-project
      vmpk &      # start 'Virtual Midi Piano Keyboard', which you use to interact with the program
-     ./test.rb   # now begin playing.  When you don't do anything for a few seconds, it times out and exits
+     ./improv.rb 
+     # Wait for the improv'er to finish training
+     # Then, begin playing in VPMK.  When you don't do anything for a few seconds, it times out and exits
 
 ## Some dependencies:
 
