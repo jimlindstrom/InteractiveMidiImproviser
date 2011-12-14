@@ -1,4 +1,9 @@
 Duration_And_Beat_Position_Critic ran out of memory.  How to be more efficient??
+	- Only load the meter that's needed.  Leave the other ones on disk.
+	- Look into lossiness, compression, many-to-one transforms. e.g., only store
+		whether notes were short, medium, or long, rather than remembering the whole
+		duration.  This will help with memory issues AND with generalization.
+		- This may call for some framework other than object and symbol 
 
 Let users of Fake Sensor control how many of the training vectors it uses
 
