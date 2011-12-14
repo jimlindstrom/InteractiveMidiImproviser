@@ -1,6 +1,10 @@
 require 'thread'
 require 'portmidi'
 
+$LOAD_PATH.unshift(File.join(File.dirname(__FILE__), '..', 'midi'))
+
+require 'rubymusic_midi'
+
 $LOAD_PATH.unshift(File.join(File.dirname(__FILE__), 'lib'))
 
 require File.join(File.dirname(__FILE__), 'lib', 'pitch')
@@ -25,5 +29,3 @@ require File.join(File.dirname(__FILE__), 'lib', 'meter_symbol')
 require File.join(File.dirname(__FILE__), 'lib', 'beat_position_symbol')
 require File.join(File.dirname(__FILE__), 'lib', 'duration_and_beat_position_symbol')
 
-#require File.join(File.dirname(__FILE__), 'lib', 'random_variable')
-#require File.join(File.dirname(__FILE__), 'lib', 'markov_chain')

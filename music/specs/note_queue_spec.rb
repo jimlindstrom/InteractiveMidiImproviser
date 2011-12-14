@@ -169,4 +169,52 @@ describe NoteQueue do
 
   end
 
+  describe ".from_event_queue" do
+    before (:each) do
+      @test_events = [
+        Midi::Event.new({:message   => Midi::Event::NOTE_ON,
+                         :pitch     => 40,
+                         :velocity  => 100,
+                         :timestamp => 1000 }),
+        Midi::Event.new({:message   => Midi::Event::NOTE_OFF,
+                         :pitch     => 40,
+                         :velocity  => 100,
+                         :timestamp => 2000 }),
+  
+        Midi::Event.new({:message   => Midi::Event::NOTE_ON,
+                         :pitch     => 42,
+                         :velocity  => 100,
+                         :timestamp => 2000 }),
+        Midi::Event.new({:message   => Midi::Event::NOTE_OFF,
+                         :pitch     => 42,
+                         :velocity  => 100,
+                         :timestamp => 3000 }),
+  
+        Midi::Event.new({:message   => Midi::Event::NOTE_ON,
+                         :pitch     => 44,
+                         :velocity  => 100,
+                         :timestamp => 3000 }),
+        Midi::Event.new({:message   => Midi::Event::NOTE_OFF,
+                         :pitch     => 44,
+                         :velocity  => 100,
+                         :timestamp => 4000 }) ]
+      @evq = Midi::EventQueue.new
+      @test_events.each { |e| @evq.enqueue e }
+      @nq = NoteQueue.from_event_queue(@evq)
+    end
+
+    it "returns a NoteQueue" do
+      @nq.class.should == NoteQueue
+    end
+    it "converts the event queue into notes with the correct pitches" do
+      @nq.map { |x| x.pitch.val }.should == [40, 42, 44]
+    end
+    it "converts the event queue into notes with the correct quantized duration" do
+      @nq.map { |x| x.duration.val }.should == [1, 1, 1]
+    end
+    it "calculates tempo" do
+      @nq.tempo.should == 1000
+    end
+  end
+
 end

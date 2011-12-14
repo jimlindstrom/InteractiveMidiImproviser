@@ -5,6 +5,19 @@
 class NoteQueue < Array
   attr_accessor :tempo, :meter
 
+  def self.from_event_queue(evq)
+    iois = Midi::IOIArray.new( evq.get_interonset_intervals + [ evq.get_last_duration ] )
+    q_ret = iois.quantize!
+
+    notes = NoteQueue.new
+    notes.tempo = q_ret[:q]
+    iois.zip(evq.get_pitches).each do |ioi, pitch|
+      notes.push Note.new(Pitch.new(pitch), Duration.new(ioi))
+    end
+    
+    return notes
+  end
+
   def to_event_queue
     raise ArgumentError.new("tempo must be set") if @tempo.nil? 
 
@@ -105,3 +118,5 @@ private
   end
 
 end
+
+
