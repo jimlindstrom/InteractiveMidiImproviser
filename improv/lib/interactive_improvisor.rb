@@ -17,7 +17,7 @@ class InteractiveImprovisor
     @sensor = FakeSensor.new($fake_sensor_vectors)
 
     until (stimulus_events = @sensor.get_stimulus).nil?
-      stimulus_notes = stimulus_events.to_note_queue
+      stimulus_notes = NoteQueue.from_event_queue(stimulus_events)
       if stimulus_notes.detect_meter # FIXME: feels like this should be in a critic...
         #puts "meter: #{stimulus_notes.meter.inspect}" if LOGGING
         @listener.listen stimulus_notes # FIXME: figure out a way to listen with only partial info (no meter)
@@ -34,7 +34,7 @@ class InteractiveImprovisor
 
     puts "Listening..." if LOGGING
     until (stimulus_events = @sensor.get_stimulus).nil?
-      stimulus_notes = stimulus_events.to_note_queue
+      stimulus_notes = NoteQueue.from_event_queue(stimulus_events)
 
       if stimulus_notes.detect_meter # FIXME: feels like this should be in a critic
         puts "\tmeter: #{stimulus_notes.meter.inspect}" if LOGGING
