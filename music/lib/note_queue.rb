@@ -3,6 +3,8 @@
 #require 'interactive_improvisor_lib'
 
 class NoteQueue < Array
+  LOGGING = false
+
   attr_accessor :tempo, :meter
 
   def self.from_event_queue(evq)
@@ -70,8 +72,8 @@ class NoteQueue < Array
     subbeats_per_beat = bsm_diags[0][:beat]
     beats_per_measure = bsm_diags[1][:beat] / subbeats_per_beat
     beat_unit         = 4
-    #puts "bsm_diags: #{bsm_diags.inspect}"
-    #puts "Meter.new(#{beats_per_measure}, #{beat_unit}, #{subbeats_per_beat})"
+    puts "bsm_diags: #{bsm_diags.inspect}" if LOGGING
+    puts "Meter.new(#{beats_per_measure}, #{beat_unit}, #{subbeats_per_beat})" if LOGGING
     begin
       @meter = Meter.new(beats_per_measure, beat_unit, subbeats_per_beat)
     rescue ArgumentError
@@ -94,7 +96,7 @@ class NoteQueue < Array
     confidence = confidences.inject(:*)
     confidence = 0.0 if (confidence.infinite? != nil)
     is_confident = (confidence > 1.5)
-    #puts "#{confidences.inspect} -> #{confidence.inspect} -> #{is_confident.inspect}"
+    puts "#{confidences.inspect} -> #{confidence.inspect} -> #{is_confident.inspect}" if LOGGING
     return is_confident
   end
 
