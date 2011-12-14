@@ -2,14 +2,14 @@
 
 require 'spec_helper'
 
-describe NoteQueue do
+describe Music::NoteQueue do
 
   before(:each) do
   end
 
   describe ".tempo" do
     it "can be read and written" do
-      nq = NoteQueue.new
+      nq = Music::NoteQueue.new
       nq.tempo = 250
       nq.tempo.should == 250
     end
@@ -17,38 +17,38 @@ describe NoteQueue do
      
   describe ".to_event_queue" do
     it "raises an error if tempo has not been set" do
-      nq = NoteQueue.new
+      nq = Music::NoteQueue.new
       expect { nq.to_event_queue }.to raise_error(ArgumentError)
     end
     it "returns a EventQueue" do
-      nq = NoteQueue.new
+      nq = Music::NoteQueue.new
       nq.tempo = 100
       nq.to_event_queue.should be_an_instance_of Midi::EventQueue
     end
     it "converts each note into a note_on / note_off pair" do
-      nq = NoteQueue.new
+      nq = Music::NoteQueue.new
       nq.tempo = 100
-      nq.push Note.new(Pitch.new(1), Duration.new(1))
-      nq.push Note.new(Pitch.new(2), Duration.new(4))
-      nq.push Note.new(Pitch.new(3), Duration.new(2))
+      nq.push Music::Note.new(Music::Pitch.new(1), Music::Duration.new(1))
+      nq.push Music::Note.new(Music::Pitch.new(2), Music::Duration.new(4))
+      nq.push Music::Note.new(Music::Pitch.new(3), Music::Duration.new(2))
       eq = nq.to_event_queue
       eq.map{ |x| x.message }.should == [Midi::Event::NOTE_ON, Midi::Event::NOTE_OFF]*3
     end
     it "correctly sets the pitches" do
-      nq = NoteQueue.new
+      nq = Music::NoteQueue.new
       nq.tempo = 100
-      nq.push Note.new(Pitch.new(1), Duration.new(1))
-      nq.push Note.new(Pitch.new(2), Duration.new(4))
-      nq.push Note.new(Pitch.new(3), Duration.new(2))
+      nq.push Music::Note.new(Music::Pitch.new(1), Music::Duration.new(1))
+      nq.push Music::Note.new(Music::Pitch.new(2), Music::Duration.new(4))
+      nq.push Music::Note.new(Music::Pitch.new(3), Music::Duration.new(2))
       eq = nq.to_event_queue
       eq.map{ |x| x.pitch }.should == [1,1, 2,2, 3,3]
     end
     it "correctly sets the durations (with 100% duty cycle), with the given tempo" do
-      nq = NoteQueue.new
+      nq = Music::NoteQueue.new
       nq.tempo = 100
-      nq.push Note.new(Pitch.new(1), Duration.new(1))
-      nq.push Note.new(Pitch.new(2), Duration.new(4))
-      nq.push Note.new(Pitch.new(3), Duration.new(2))
+      nq.push Music::Note.new(Music::Pitch.new(1), Music::Duration.new(1))
+      nq.push Music::Note.new(Music::Pitch.new(2), Music::Duration.new(4))
+      nq.push Music::Note.new(Music::Pitch.new(3), Music::Duration.new(2))
       eq = nq.to_event_queue
       eq.map{ |x| x.timestamp }.should == [0,100, 100,500, 500,700]
     end
@@ -56,11 +56,11 @@ describe NoteQueue do
 
   describe "beat_array" do
     before(:each) do
-      @nq = NoteQueue.new
+      @nq = Music::NoteQueue.new
       @nq.tempo = 100
-      @nq.push Note.new(Pitch.new(1), Duration.new(1))
-      @nq.push Note.new(Pitch.new(2), Duration.new(4))
-      @nq.push Note.new(Pitch.new(3), Duration.new(2))
+      @nq.push Music::Note.new(Music::Pitch.new(1), Music::Duration.new(1))
+      @nq.push Music::Note.new(Music::Pitch.new(2), Music::Duration.new(4))
+      @nq.push Music::Note.new(Music::Pitch.new(3), Music::Duration.new(2))
     end
     it "returns an array containing one element per beat" do
       @nq.beat_array.length.should == (1+4+2)
@@ -200,11 +200,11 @@ describe NoteQueue do
                          :timestamp => 4000 }) ]
       @evq = Midi::EventQueue.new
       @test_events.each { |e| @evq.enqueue e }
-      @nq = NoteQueue.from_event_queue(@evq)
+      @nq = Music::NoteQueue.from_event_queue(@evq)
     end
 
     it "returns a NoteQueue" do
-      @nq.class.should == NoteQueue
+      @nq.class.should == Music::NoteQueue
     end
     it "converts the event queue into notes with the correct pitches" do
       @nq.map { |x| x.pitch.val }.should == [40, 42, 44]

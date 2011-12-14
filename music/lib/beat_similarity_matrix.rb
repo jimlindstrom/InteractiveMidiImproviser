@@ -1,111 +1,116 @@
 #!/usr/bin/env ruby
 
-class BeatSimilarityMatrix
-  :width
-
-  def initialize(beat_array)
-    @width = beat_array.size
-    @matrix = []
-    (0..(beat_array.size-1)).each do |x|
-      @matrix[x] = []
-      (0..x).each do |y|
-        if beat_array[x].nil?
-          @matrix[x][y] = 0.0
-        else
-          @matrix[x][y] = beat_array[x].similarity_to beat_array[y] 
+module Music
+  
+  class BeatSimilarityMatrix
+    :width
+  
+    def initialize(beat_array)
+      @width = beat_array.size
+      @matrix = []
+      (0..(beat_array.size-1)).each do |x|
+        @matrix[x] = []
+        (0..x).each do |y|
+          if beat_array[x].nil?
+            @matrix[x][y] = 0.0
+          else
+            @matrix[x][y] = beat_array[x].similarity_to beat_array[y] 
+          end
         end
       end
     end
-  end
-
-  def val(x,y)
-    return val(y, x) if x < y
-    return @matrix[x][y]
-  end
-
-  def mean_of_diag(i)
-    x = i
-    y = 0
-    prod = 1.0
-    while x < @width
-      prod = prod * (1.0 + val(x, y))
-      x += 1
-      y += 1
+  
+    def val(x,y)
+      return val(y, x) if x < y
+      return @matrix[x][y]
     end
-    return prod
-  end
-
-  def autocorrel_of_main_diag(len)
-    correls = [0.0]*len
-    (0..(@width-1)).each do |i|
-      correls[len - 1 - ((len -1 + i) % len)] += @matrix[i][i]
-    end
-    return correls
-  end
-
-  def save(filename, expected, meter_idx, offset_idx)
-    f = File.new("html/"+filename+".html", "w")
-    f.puts "<html>"
-    f.puts "<body>"
-
-    f.puts "expected: #{expected}<br />"  
-
-    meter = save_meter_candidates(f, meter_idx)
-    save_offset_candidates(f, meter, offset_idx)
-    save_similarity_matrix(f)
-
-    f.puts "</body>"
-    f.puts "</html>"
-    f.close
-  end
-
-private
-
-  def save_meter_candidates(f, marker_idx)
-    data = (1..20).map{ |i| mean_of_diag(i) }
-    m = data.max
-    data.map!{|x| x / m }
-    data.map!{|x| (x*80.0).round }
-    f.puts "<br/>"
-    f.puts "<img style='border: 1px solid #a0a0a0;' src=\"https://chart.googleapis.com/chart?cht=ls&chd=s:underp&chm=N,000000,0,-1,11|s,3399CC,0,#{marker_idx-1}.0,11.0&chxt=x&chxr=0,1,20,1&chd=t:#{data.join(',')}&chs=500x200\">"
-    f.puts "<br/>"
-
-    return (1..20).map{ |i| {:offset=>i,:score=>mean_of_diag(i) } }.sort{|x,y| y[:score]<=>x[:score]}[1][:offset]
-  end
-
-  def save_offset_candidates(f, meter, marker_idx)
-    scores = [0.0]*meter
-    (0..(@width-1)).each do |i|
-      #scores[            (i % meter)] += @matrix[i][i]
-      scores[meter - 1 - ((meter -1 + i) % meter)] += @matrix[i][i]
-    end
-    m = scores.max
-    scores.map!{|x| 80.0*x/m }
-    puts "scores: #{scores}"
-
-    f.puts "<br/>"
-    f.puts "<img style='border: 1px solid #a0a0a0;' src=\"https://chart.googleapis.com/chart?cht=lc&chxt=x&chxr=0,0,#{meter-1},1&chd=s:underp&chm=N,000000,0,-1,11|s,3399CC,0,#{marker_idx}.0,11.0&chd=t:#{scores.join(',')}&chs=500x200\">"
-    f.puts "<br/>"
-  end
-
-  def save_similarity_matrix(f)
-    f.puts "<table cellspacing=\"0\" cellpadding=\"0\" style='padding:0;margin:0;border:0;'>"
-    (0..(@width-1)).each do |x|
-      f.puts "<tr style='padding:0;margin:0;border:0;'>"
-      (0..(@width-1)).each do |y|
-        f.puts "<td style=\"border:0;width:4px;height:4px;background:#{val_to_color(val(x,y))};\">"
-        f.puts "</td>"
+  
+    def mean_of_diag(i)
+      x = i
+      y = 0
+      prod = 1.0
+      while x < @width
+        prod = prod * (1.0 + val(x, y))
+        x += 1
+        y += 1
       end
-      f.puts "</tr>"
+      return prod
     end
-    f.puts "</table>"
+  
+    def autocorrel_of_main_diag(len)
+      correls = [0.0]*len
+      (0..(@width-1)).each do |i|
+        correls[len - 1 - ((len -1 + i) % len)] += @matrix[i][i]
+      end
+      return correls
+    end
+  
+    def save(filename, expected, meter_idx, offset_idx)
+      f = File.new("html/"+filename+".html", "w")
+      f.puts "<html>"
+      f.puts "<body>"
+  
+      f.puts "expected: #{expected}<br />"  
+  
+      meter = save_meter_candidates(f, meter_idx)
+      save_offset_candidates(f, meter, offset_idx)
+      save_similarity_matrix(f)
+  
+      f.puts "</body>"
+      f.puts "</html>"
+      f.close
+    end
+  
+  private
+  
+    def save_meter_candidates(f, marker_idx)
+      data = (1..20).map{ |i| mean_of_diag(i) }
+      m = data.max
+      data.map!{|x| x / m }
+      data.map!{|x| (x*80.0).round }
+      f.puts "<br/>"
+      f.puts "<img style='border: 1px solid #a0a0a0;' src=\"https://chart.googleapis.com/chart?cht=ls&chd=s:underp&chm=N,000000,0,-1,11|s,3399CC,0,#{marker_idx-1}.0,11.0&chxt=x&chxr=0,1,20,1&chd=t:#{data.join(',')}&chs=500x200\">"
+      f.puts "<br/>"
+  
+      return (1..20).map{ |i| {:offset=>i,:score=>mean_of_diag(i) } }.sort{|x,y| y[:score]<=>x[:score]}[1][:offset]
+    end
+  
+    def save_offset_candidates(f, meter, marker_idx)
+      scores = [0.0]*meter
+      (0..(@width-1)).each do |i|
+        #scores[            (i % meter)] += @matrix[i][i]
+        scores[meter - 1 - ((meter -1 + i) % meter)] += @matrix[i][i]
+      end
+      m = scores.max
+      scores.map!{|x| 80.0*x/m }
+      puts "scores: #{scores}"
+  
+      f.puts "<br/>"
+      f.puts "<img style='border: 1px solid #a0a0a0;' src=\"https://chart.googleapis.com/chart?cht=lc&chxt=x&chxr=0,0,#{meter-1},1&chd=s:underp&chm=N,000000,0,-1,11|s,3399CC,0,#{marker_idx}.0,11.0&chd=t:#{scores.join(',')}&chs=500x200\">"
+      f.puts "<br/>"
+    end
+  
+    def save_similarity_matrix(f)
+      f.puts "<table cellspacing=\"0\" cellpadding=\"0\" style='padding:0;margin:0;border:0;'>"
+      (0..(@width-1)).each do |x|
+        f.puts "<tr style='padding:0;margin:0;border:0;'>"
+        (0..(@width-1)).each do |y|
+          f.puts "<td style=\"border:0;width:4px;height:4px;background:#{val_to_color(val(x,y))};\">"
+          f.puts "</td>"
+        end
+        f.puts "</tr>"
+      end
+      f.puts "</table>"
+    end
+  
+    def val_to_color(v) # v in [0, 1]; returns something like '#f0f0f0'
+      return $html_spectrum[(v*Float($html_spectrum.length-1.0)).round]
+    end
   end
-
-  def val_to_color(v) # v in [0, 1]; returns something like '#f0f0f0'
-    return $html_spectrum[(v*Float($html_spectrum.length-1.0)).round]
-  end
+  
 end
 
+# FIXME: This is terrible 
 
 $html_spectrum = []
 

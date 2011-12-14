@@ -1,1 +1,1 @@
-Move everything into a module to namespace it.
+Move the symbol-ology into the Improv class
