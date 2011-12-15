@@ -22,10 +22,6 @@ module Music
       return @val
     end
   
-    def to_symbol
-      return PitchSymbol.new(@val)
-    end
-  
     def similarity_to(p)
       return 0.00 if p.nil?
       delta = Float(p.val - @val)

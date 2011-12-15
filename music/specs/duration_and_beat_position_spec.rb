@@ -21,21 +21,6 @@ describe Music::DurationAndBeatPosition do
     end
   end
 
-  context "to_symbol" do
-    it "should return a DurationAndBeatPositionSymbol" do
-      dbp = Music::DurationAndBeatPosition.new(@d, @bp)
-      dbp.to_symbol.should be_an_instance_of Music::DurationAndBeatPositionSymbol
-    end
-    it "should return a DurationAndBeatPositionSymbol whose duration corresponds to the DurationAndBeatPosition's duration" do
-      dbp = Music::DurationAndBeatPosition.new(@d, @bp)
-      dbp.to_symbol.to_object.duration.val.should == dbp.duration.val
-    end
-    it "should return a DurationAndBeatPositionSymbol whose beat position corresponds to the DurationAndBeatPosition's beat position" do
-      dbp = Music::DurationAndBeatPosition.new(@d, @bp)
-      dbp.to_symbol.to_object.beat_position.to_hash.should == dbp.beat_position.to_hash
-    end
-  end
-
   context "beat_position" do
     it "should return whatever you set it to" do
       dbp = Music::DurationAndBeatPosition.new(@d, @bp)

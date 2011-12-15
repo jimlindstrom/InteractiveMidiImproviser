@@ -22,10 +22,6 @@ module Music
       return @val
     end
   
-    def to_symbol
-      return DurationSymbol.new(@val)
-    end
-  
     def similarity_to(d)
       return 0.00 if d.nil?
       delta = Float(d.val - @val)

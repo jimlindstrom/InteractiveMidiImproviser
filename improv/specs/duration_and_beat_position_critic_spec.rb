@@ -27,7 +27,7 @@ describe DurationAndBeatPositionCritic do
       dc.listen(@nq1.first)
       dc.reset
       x = dc.get_expectations
-      DurationAndBeatPosition.new(*x.choose_outcome).duration.val.should == @nq1.first.duration.val
+      Music::DurationAndBeatPosition.new(*x.choose_outcome).duration.val.should == @nq1.first.duration.val
     end
   end
 
@@ -35,7 +35,7 @@ describe DurationAndBeatPositionCritic do
     it "should raise an error if the note has no meter analysis" do
       order = 1
       dc = DurationAndBeatPositionCritic.new(order)
-      expect{ dc.listen(Note.new(Pitch.new(0), Duration.new(1))) }.to raise_error(ArgumentError)
+      expect{ dc.listen(Music::Note.new(Music::Pitch.new(0), Music::Duration.new(1))) }.to raise_error(ArgumentError)
     end
     it "should return the surprise associated with the given note" do
       order = 1
@@ -62,8 +62,8 @@ describe DurationAndBeatPositionCritic do
       dc.reset
       x = dc.get_expectations
 
-      dbps1 = DurationAndBeatPosition.new(@nq1.first.duration, @nq1.first.analysis[:beat_position])
-      dbps2 = DurationAndBeatPosition.new(@nq2.first.duration, @nq2.first.analysis[:beat_position])
+      dbps1 = Music::DurationAndBeatPosition.new(@nq1.first.duration, @nq1.first.analysis[:beat_position])
+      dbps2 = Music::DurationAndBeatPosition.new(@nq2.first.duration, @nq2.first.analysis[:beat_position])
 
       x.get_surprise(dbps1.val).should be < x.get_surprise(dbps2.val)
     end
@@ -73,9 +73,8 @@ describe DurationAndBeatPositionCritic do
       dc.listen(@nq1.first)
       dc.reset
       x = dc.get_expectations
-      DurationAndBeatPosition.new(*x.choose_outcome).duration.val.should == 1
+      Music::DurationAndBeatPosition.new(*x.choose_outcome).duration.val.should == 1
     end
   end
-
 
 end

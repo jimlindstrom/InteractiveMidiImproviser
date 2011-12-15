@@ -28,24 +28,24 @@ class DurationGenerator
     duration_and_beat_position_exp = @duration_and_beat_position_critic.get_expectations
     if !duration_and_beat_position_exp.nil?
       x = duration_and_beat_position_exp.choose_outcome # x can be nil if no observations
-      return DurationAndBeatPosition.new(*x).duration if !x.nil?
+      return Music::DurationAndBeatPosition.new(*x).duration if !x.nil?
     end
 
     # if that doens't work, initialize a random variable, ...
-    expectations = RandomVariable.new(Duration.num_values)
+    expectations = RandomVariable.new(Music::Duration.num_values)
 
     # and try adding duration stats to it
     duration_exp = @duration_critic.get_expectations
     expectations += duration_exp if !duration_exp.nil?
 
     x = expectations.choose_outcome
-    return Duration.new(x) if !x.nil?
+    return Music::Duration.new(x) if !x.nil?
 
     reset # we hit a space where we have no data.  reset and try a fallback plan
 
     duration_exp = @duration_critic.get_expectations
     x = duration_exp.choose_outcome
-    return Duration.new(x) if !x.nil?
+    return Music::Duration.new(x) if !x.nil?
 
     raise "Failed to generate a duration"
   end

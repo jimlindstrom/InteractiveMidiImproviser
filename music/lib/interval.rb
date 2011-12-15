@@ -26,10 +26,6 @@ module Music
       return @val
     end
   
-    def to_symbol
-      return IntervalSymbol.new(@val+127)
-    end
-  
     def simplified_val
       new_val =  8 if (@val >   8)
       new_val =  4 if (@val >   4) and (@val <= 8)

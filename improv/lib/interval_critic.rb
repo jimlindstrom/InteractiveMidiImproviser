@@ -1,10 +1,8 @@
 #!/usr/bin/env ruby
 
-#require 'interactive_improvisor_lib'
-
 class IntervalCritic < Critic
   def initialize(order)
-    @markov_chain = MarkovChain.new(order, Interval.num_values)
+    @markov_chain = MarkovChain.new(order, Music::Interval.num_values)
     @note_history = []
   end
 
@@ -14,11 +12,11 @@ class IntervalCritic < Critic
   end
 
   def listen(note)
-    raise ArgumentError.new("not a note.  is a #{note.class}") if note.class != Note
+    raise ArgumentError.new("not a note.  is a #{note.class}") if note.class != Music::Note
 
     @note_history.unshift note
     if @note_history.length >= 2
-      interval = Interval.calculate(@note_history[-1].pitch, @note_history[-2].pitch)
+      interval = Music::Interval.calculate(@note_history[-1].pitch, @note_history[-2].pitch)
       @note_history.pop
       next_symbol = interval.to_symbol
 
@@ -34,8 +32,8 @@ class IntervalCritic < Critic
     return nil if @note_history.empty?
 
     r = @markov_chain.get_expectations
-    symbol_to_outcome = lambda { |x| IntervalSymbol.new(x).to_object.val + @note_history[-1].pitch.val }
-    outcome_to_symbol = lambda { |x| Interval.new(x - @note_history[-1].pitch.val).to_symbol.val }
+    symbol_to_outcome = lambda { |x| Music::IntervalSymbol.new(x).to_object.val + @note_history[-1].pitch.val }
+    outcome_to_symbol = lambda { |x| Music::Interval.new(x - @note_history[-1].pitch.val).to_symbol.val }
     r.transform_outcomes(symbol_to_outcome, outcome_to_symbol)
     return r
   end

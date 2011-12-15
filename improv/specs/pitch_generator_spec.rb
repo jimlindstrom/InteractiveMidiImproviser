@@ -26,8 +26,8 @@ describe PitchGenerator do
       pg = PitchGenerator.new
       critics = pg.get_critics
       critics.each do |critic|
-        critic.listen(Note.new(Pitch.new(50), Duration.new(1)))
-        critic.listen(Note.new(Pitch.new(55), Duration.new(1)))
+        critic.listen(Music::Note.new(Music::Pitch.new(50), Music::Duration.new(1)))
+        critic.listen(Music::Note.new(Music::Pitch.new(55), Music::Duration.new(1)))
       end
       pg.reset
       pg.generate.val.should == 50
@@ -39,11 +39,11 @@ describe PitchGenerator do
       pg = PitchGenerator.new
       critics = pg.get_critics
       critics.each do |critic|
-        critic.listen(Note.new(Pitch.new(50), Duration.new(1)))
-        critic.listen(Note.new(Pitch.new(55), Duration.new(1)))
+        critic.listen(Music::Note.new(Music::Pitch.new(50), Music::Duration.new(1)))
+        critic.listen(Music::Note.new(Music::Pitch.new(55), Music::Duration.new(1)))
       end
       pg.reset
-      pg.generate.should be_an_instance_of Pitch
+      pg.generate.should be_an_instance_of Music::Pitch
     end
   end
 end

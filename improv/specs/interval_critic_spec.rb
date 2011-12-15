@@ -20,14 +20,14 @@ describe IntervalCritic do
 
       base_note = (rand*50).floor + 25
       interval  = (rand*10).floor - 10
-      ic.listen(Note.new(Pitch.new(base_note),            Duration.new(0)))
-      ic.listen(Note.new(Pitch.new(base_note + interval), Duration.new(0)))
+      ic.listen(Music::Note.new(Music::Pitch.new(base_note),            Music::Duration.new(0)))
+      ic.listen(Music::Note.new(Music::Pitch.new(base_note + interval), Music::Duration.new(0)))
       ic.reset
 
       base_note = (rand*50).floor + 25
-      ic.listen(Note.new(Pitch.new(base_note), Duration.new(0)))
+      ic.listen(Music::Note.new(Music::Pitch.new(base_note), Music::Duration.new(0)))
       x = ic.get_expectations
-      Pitch.new(x.choose_outcome).val.should == (base_note + interval)
+      Music::Pitch.new(x.choose_outcome).val.should == (base_note + interval)
     end
   end
 
@@ -35,14 +35,14 @@ describe IntervalCritic do
     it "should return nil if zero or one notes have been heard" do
       order = 1
       ic = IntervalCritic.new(order)
-      surprise = ic.listen(Note.new(Pitch.new(1), Duration.new(0)))
+      surprise = ic.listen(Music::Note.new(Music::Pitch.new(1), Music::Duration.new(0)))
       surprise.should be nil
     end
     it "should return the surprise associated with the given note" do
       order = 1
       ic = IntervalCritic.new(order)
-      ic.listen(Note.new(Pitch.new(1), Duration.new(0)))
-      surprise = ic.listen(Note.new(Pitch.new(1), Duration.new(0)))
+      ic.listen(Music::Note.new(Music::Pitch.new(1), Music::Duration.new(0)))
+      surprise = ic.listen(Music::Note.new(Music::Pitch.new(1), Music::Duration.new(0)))
       surprise.should be_within(0.01).of(0.5)
     end
   end
@@ -56,24 +56,24 @@ describe IntervalCritic do
     it "returns a random variable" do
       order = 1
       ic = IntervalCritic.new(order)
-      ic.listen(Note.new(Pitch.new(0), Duration.new(0)))
+      ic.listen(Music::Note.new(Music::Pitch.new(0), Music::Duration.new(0)))
       ic.get_expectations.should be_an_instance_of RandomVariable
     end
     it "returns a random variable that is less surprised about states observed more often" do
       order = 1
       ic = IntervalCritic.new(order)
-      ic.listen(Note.new(Pitch.new(0), Duration.new(0)))
-      ic.listen(Note.new(Pitch.new(1), Duration.new(0)))
+      ic.listen(Music::Note.new(Music::Pitch.new(0), Music::Duration.new(0)))
+      ic.listen(Music::Note.new(Music::Pitch.new(1), Music::Duration.new(0)))
       ic.reset
-      ic.listen(Note.new(Pitch.new(0), Duration.new(0)))
-      ic.listen(Note.new(Pitch.new(1), Duration.new(0)))
+      ic.listen(Music::Note.new(Music::Pitch.new(0), Music::Duration.new(0)))
+      ic.listen(Music::Note.new(Music::Pitch.new(1), Music::Duration.new(0)))
       ic.reset
-      ic.listen(Note.new(Pitch.new(0), Duration.new(0)))
-      ic.listen(Note.new(Pitch.new(0), Duration.new(0)))
+      ic.listen(Music::Note.new(Music::Pitch.new(0), Music::Duration.new(0)))
+      ic.listen(Music::Note.new(Music::Pitch.new(0), Music::Duration.new(0)))
       ic.reset
-      ic.listen(Note.new(Pitch.new(0), Duration.new(0)))
+      ic.listen(Music::Note.new(Music::Pitch.new(0), Music::Duration.new(0)))
       x = ic.get_expectations
-      x.get_surprise(Pitch.new(1).val).should be < x.get_surprise(Pitch.new(0).val)
+      x.get_surprise(Music::Pitch.new(1).val).should be < x.get_surprise(Music::Pitch.new(0).val)
     end
     it "returns a random variable that only chooses states observed" do
       order = 1
@@ -81,39 +81,39 @@ describe IntervalCritic do
 
       base_note = (rand*50).floor + 25
       interval  = (rand*10).floor - 5
-      ic.listen(Note.new(Pitch.new(base_note),            Duration.new(0)))
-      ic.listen(Note.new(Pitch.new(base_note + interval), Duration.new(0)))
+      ic.listen(Music::Note.new(Music::Pitch.new(base_note),            Music::Duration.new(0)))
+      ic.listen(Music::Note.new(Music::Pitch.new(base_note + interval), Music::Duration.new(0)))
       ic.reset
 
       base_note = (rand*50).floor + 25
-      ic.listen(Note.new(Pitch.new(base_note), Duration.new(0)))
+      ic.listen(Music::Note.new(Music::Pitch.new(base_note), Music::Duration.new(0)))
 
       x = ic.get_expectations
-      Pitch.new(x.choose_outcome).val.should == (base_note + interval)
+      Music::Pitch.new(x.choose_outcome).val.should == (base_note + interval)
     end
     it "returns a random variable that only chooses states observed (higher order)" do
       order = 2
       ic = IntervalCritic.new(order)
-      ic.listen(Note.new(Pitch.new(0), Duration.new(0)))
-      ic.listen(Note.new(Pitch.new(1), Duration.new(0))) # 1
-      ic.listen(Note.new(Pitch.new(2), Duration.new(0))) # 1
-      ic.listen(Note.new(Pitch.new(3), Duration.new(0))) # 1
-      ic.listen(Note.new(Pitch.new(6), Duration.new(0))) # 3
+      ic.listen(Music::Note.new(Music::Pitch.new(0), Music::Duration.new(0)))
+      ic.listen(Music::Note.new(Music::Pitch.new(1), Music::Duration.new(0))) # 1
+      ic.listen(Music::Note.new(Music::Pitch.new(2), Music::Duration.new(0))) # 1
+      ic.listen(Music::Note.new(Music::Pitch.new(3), Music::Duration.new(0))) # 1
+      ic.listen(Music::Note.new(Music::Pitch.new(6), Music::Duration.new(0))) # 3
       ic.reset
-      ic.listen(Note.new(Pitch.new(0), Duration.new(0)))
-      ic.listen(Note.new(Pitch.new(5), Duration.new(0))) # 5
-      ic.listen(Note.new(Pitch.new(6), Duration.new(0))) # 1
-      ic.listen(Note.new(Pitch.new(7), Duration.new(0))) # 1
-      ic.listen(Note.new(Pitch.new(8), Duration.new(0))) # 1
+      ic.listen(Music::Note.new(Music::Pitch.new(0), Music::Duration.new(0)))
+      ic.listen(Music::Note.new(Music::Pitch.new(5), Music::Duration.new(0))) # 5
+      ic.listen(Music::Note.new(Music::Pitch.new(6), Music::Duration.new(0))) # 1
+      ic.listen(Music::Note.new(Music::Pitch.new(7), Music::Duration.new(0))) # 1
+      ic.listen(Music::Note.new(Music::Pitch.new(8), Music::Duration.new(0))) # 1
       ic.reset
-      ic.listen(Note.new(Pitch.new(0), Duration.new(0)))
-      ic.listen(Note.new(Pitch.new(5), Duration.new(0))) # 5
-      ic.listen(Note.new(Pitch.new(6), Duration.new(0))) # 1
-      ic.listen(Note.new(Pitch.new(7), Duration.new(0))) # 1
+      ic.listen(Music::Note.new(Music::Pitch.new(0), Music::Duration.new(0)))
+      ic.listen(Music::Note.new(Music::Pitch.new(5), Music::Duration.new(0))) # 5
+      ic.listen(Music::Note.new(Music::Pitch.new(6), Music::Duration.new(0))) # 1
+      ic.listen(Music::Note.new(Music::Pitch.new(7), Music::Duration.new(0))) # 1
       x = ic.get_expectations
       last_note = 7
       expected_interval = 1
-      Pitch.new(x.choose_outcome).val.should == (last_note + expected_interval)
+      Music::Pitch.new(x.choose_outcome).val.should == (last_note + expected_interval)
     end
   end
 

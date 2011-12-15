@@ -21,10 +21,3 @@ require File.join(File.dirname(__FILE__), 'lib', 'beat_similarity_matrix')
 
 require File.join(File.dirname(__FILE__), 'lib', 'note_queue')
 
-require File.join(File.dirname(__FILE__), 'lib', 'duration_symbol')
-require File.join(File.dirname(__FILE__), 'lib', 'interval_symbol')
-require File.join(File.dirname(__FILE__), 'lib', 'pitch_symbol')
-require File.join(File.dirname(__FILE__), 'lib', 'meter_symbol')
-require File.join(File.dirname(__FILE__), 'lib', 'beat_position_symbol')
-require File.join(File.dirname(__FILE__), 'lib', 'duration_and_beat_position_symbol')
-

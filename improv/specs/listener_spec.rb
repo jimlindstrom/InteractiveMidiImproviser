@@ -1,14 +1,5 @@
 #!/usr/bin/env ruby 
 
-# Listener
-# 	Listen(NoteQueue) # a completed stimulus
-# 		Takes a NoteQueue
-# 		Resets all critics
-# 		For each Note in NoteQueue
-# 			Cause each critics to listen
-# 	AddCritic
-# 		Adds the critic to the internal list of critics who will listen to each note
-
 require 'spec_helper'
 
 describe Listener do
@@ -24,13 +15,13 @@ describe Listener do
 
       c.should_receive(:listen)
 
-      l.listen [Note.new(Pitch.new(0), Duration.new(1))]
+      l.listen [Music::Note.new(Music::Pitch.new(0), Music::Duration.new(1))]
     end
   end
 
   context ".listen" do
     it "should reset all critics and then cause them to listen to a sequence of notes" do
-      notes = [Note.new(Pitch.new(0), Duration.new(1)), Note.new(Pitch.new(0), Duration.new(1)), Note.new(Pitch.new(0), Duration.new(1))]
+      notes = [Music::Note.new(Music::Pitch.new(0), Music::Duration.new(1)), Music::Note.new(Music::Pitch.new(0), Music::Duration.new(1)), Music::Note.new(Music::Pitch.new(0), Music::Duration.new(1))]
 
       l = Listener.new
 

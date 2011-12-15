@@ -1,7 +1,5 @@
 #!/usr/bin/env ruby
 
-#require 'interactive_improvisor_lib'
-
 class MidiSensor
   def initialize(port_name, clock)
     @inport = Midi::InPort.new(port_name, clock)

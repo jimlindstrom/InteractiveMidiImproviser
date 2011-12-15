@@ -1,7 +1,5 @@
 #!/usr/bin/env ruby
 
-#require 'interactive_improvisor_lib'
-
 class FakeSensor
   LOGGING = false
 

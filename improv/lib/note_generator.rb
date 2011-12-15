@@ -1,7 +1,5 @@
 #!/usr/bin/env ruby
 
-#require 'interactive_improvisor_lib'
-
 class NoteGenerator
   def initialize
     @pitch_generator = PitchGenerator.new
@@ -20,6 +18,6 @@ class NoteGenerator
   end
 
   def generate
-    return Note.new(@pitch_generator.generate, @duration_generator.generate)
+    return Music::Note.new(@pitch_generator.generate, @duration_generator.generate)
   end
 end

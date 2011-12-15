@@ -1,7 +1,5 @@
 #!/usr/bin/env ruby
 
-#require 'interactive_improvisor_lib'
-
 class MidiPerformer < Performer
   def initialize(port_name)
     @outport = Midi::OutPort.new(port_name)

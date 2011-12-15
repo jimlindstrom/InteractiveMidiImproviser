@@ -23,19 +23,19 @@ describe Improvisor do
 
   context ".generate" do
     before(:each) do
-      m = Meter.new(4, 4, 1)
+      m = Music::Meter.new(4, 4, 1)
   
-      @notes = NoteQueue.new
+      @notes = Music::NoteQueue.new
   
-      n = Note.new(Pitch.new(100), Duration.new(1))
+      n = Music::Note.new(Music::Pitch.new(100), Music::Duration.new(1))
       n.analysis[:beat_position] = m.initial_beat_position
       @notes.push n
    
-      n = Note.new(Pitch.new(102), Duration.new(2))
+      n = Music::Note.new(Music::Pitch.new(102), Music::Duration.new(2))
       n.analysis[:beat_position] = @notes.last.analysis[:beat_position] + @notes.last.duration
       @notes.push n
 
-      n = Note.new(Pitch.new(104), Duration.new(4))
+      n = Music::Note.new(Music::Pitch.new(104), Music::Duration.new(4))
       n.analysis[:beat_position] = @notes.last.analysis[:beat_position] + @notes.last.duration
       @notes.push n
 
@@ -50,7 +50,7 @@ describe Improvisor do
     end
     it "should return an array of notes" do
       response = @i.generate
-      response.should be_an_instance_of NoteQueue
+      response.should be_an_instance_of Music::NoteQueue
     end
   end
 end

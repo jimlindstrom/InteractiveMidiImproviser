@@ -1,7 +1,5 @@
 #!/usr/bin/env ruby
 
-#require 'interactive_improvisor_lib'
-
 class PitchGenerator
   def initialize
     @critics = []
@@ -24,7 +22,7 @@ class PitchGenerator
   end
 
   def generate
-    expectations = RandomVariable.new(Pitch.num_values)
+    expectations = RandomVariable.new(Music::Pitch.num_values)
     
     pitch_exp = @pitch_critic.get_expectations
     expectations += pitch_exp if !pitch_exp.nil?
@@ -33,13 +31,13 @@ class PitchGenerator
     expectations += interval_exp if !interval_exp.nil?
 
     x = expectations.choose_outcome
-    return Pitch.new(x) if !x.nil?
+    return Music::Pitch.new(x) if !x.nil?
 
     reset # we got to a point where we have no data.  reset, to get back to some stat we know about
 
     pitch_exp = @pitch_critic.get_expectations
     x = pitch_exp.choose_outcome
-    return Pitch.new(x) if !x.nil?
+    return Music::Pitch.new(x) if !x.nil?
 
     raise RuntimeError.new("Failed to choose a pitch")
   end

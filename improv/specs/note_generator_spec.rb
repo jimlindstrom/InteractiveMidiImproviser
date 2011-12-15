@@ -4,15 +4,15 @@ require 'spec_helper'
 	
 describe NoteGenerator do
   before(:each) do
-    m = Meter.new(3, 4, 1)
+    m = Music::Meter.new(3, 4, 1)
 
-    @notes = NoteQueue.new
+    @notes = Music::NoteQueue.new
 
-    n = Note.new(Pitch.new(50), Duration.new(1))
+    n = Music::Note.new(Music::Pitch.new(50), Music::Duration.new(1))
     n.analysis[:beat_position] = m.initial_beat_position
     @notes.push n
 
-    n = Note.new(Pitch.new(55), Duration.new(2))
+    n = Music::Note.new(Music::Pitch.new(55), Music::Duration.new(2))
     n.analysis[:beat_position] = @notes.first.analysis[:beat_position] + @notes.first.duration
     @notes.push n
   end
@@ -67,7 +67,7 @@ describe NoteGenerator do
         end
       end
       ng.reset
-      ng.generate.should be_an_instance_of Note
+      ng.generate.should be_an_instance_of Music::Note
     end
   end
 end

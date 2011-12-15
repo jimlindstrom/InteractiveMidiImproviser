@@ -1,7 +1,5 @@
 #!/usr/bin/env ruby
 
-#require 'interactive_improvisor_lib'
-
 class Improvisor
   LOGGING = true
 
@@ -15,10 +13,10 @@ class Improvisor
 
   def generate
     @note_generator.reset
-    response = NoteQueue.new
+    response = Music::NoteQueue.new
 
     # FIXME: replace this with a critic / random variable
-    meter = Meter.random
+    meter = Music::Meter.random
     beat_position = meter.initial_beat_position
     puts "\tmeter: #{meter.inspect}"
 

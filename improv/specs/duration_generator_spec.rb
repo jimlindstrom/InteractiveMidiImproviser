@@ -4,15 +4,15 @@ require 'spec_helper'
 
 describe DurationGenerator do
   before(:each) do
-    m = Meter.new(3, 4, 1)
+    m = Music::Meter.new(3, 4, 1)
 
-    @notes = NoteQueue.new
+    @notes = Music::NoteQueue.new
 
-    n = Note.new(Pitch.new(0), Duration.new(1))
+    n = Music::Note.new(Music::Pitch.new(0), Music::Duration.new(1))
     n.analysis[:beat_position] = m.initial_beat_position
     @notes.push n
 
-    n = Note.new(Pitch.new(0), Duration.new(2))
+    n = Music::Note.new(Music::Pitch.new(0), Music::Duration.new(2))
     n.analysis[:beat_position] = @notes.first.analysis[:beat_position] + @notes.first.duration
     @notes.push n
   end
@@ -57,7 +57,7 @@ describe DurationGenerator do
         end
       end
       dg.reset
-      dg.generate.should be_an_instance_of Duration
+      dg.generate.should be_an_instance_of Music::Duration
     end
   end
 end

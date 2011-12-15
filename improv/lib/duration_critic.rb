@@ -1,10 +1,8 @@
 #!/usr/bin/env ruby
 
-#require 'interactive_improvisor_lib'
-
 class DurationCritic < Critic
   def initialize(order)
-    @markov_chain = MarkovChain.new(order, Duration.num_values)
+    @markov_chain = MarkovChain.new(order, Music::Duration.num_values)
   end
 
   def reset
@@ -12,7 +10,7 @@ class DurationCritic < Critic
   end
 
   def listen(note)
-    raise ArgumentError.new("not a note.  is a #{note.class}") if note.class != Note
+    raise ArgumentError.new("not a note.  is a #{note.class}") if note.class != Music::Note
     next_symbol = note.duration.to_symbol
     surprise = @markov_chain.get_expectations.get_surprise(next_symbol.val)
     @markov_chain.observe(next_symbol.val)
@@ -22,8 +20,8 @@ class DurationCritic < Critic
 
   def get_expectations
     r = @markov_chain.get_expectations
-    symbol_to_outcome = lambda { |x| DurationSymbol.new(x).to_object.val }
-    outcome_to_symbol = lambda { |x| Duration.new(x).to_symbol.val }
+    symbol_to_outcome = lambda { |x| Music::DurationSymbol.new(x).to_object.val }
+    outcome_to_symbol = lambda { |x| Music::Duration.new(x).to_symbol.val }
     r.transform_outcomes(symbol_to_outcome, outcome_to_symbol)
     return r
   end
