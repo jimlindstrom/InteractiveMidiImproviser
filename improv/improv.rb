@@ -1,7 +1,7 @@
 #!/usr/bin/env ruby
 
 $LOAD_PATH << '.'
-require 'improvisor'
+require 'rubymusic_improv'
 
 puts "Training..."
 i = InteractiveImprovisor.new
