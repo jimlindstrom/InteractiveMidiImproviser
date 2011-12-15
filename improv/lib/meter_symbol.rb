@@ -9,7 +9,7 @@ module Music
   
     def set_val(new_val)
       raise ArgumentError.new("value cannot be negative") if new_val < 0
-      raise ArgumentError.new("value cannot be > 98") if new_val > 98
+      raise ArgumentError.new("value cannot be > 44") if new_val > 44
   
       @val = new_val
     end
@@ -27,7 +27,7 @@ module Music
       beat_unit = [2, 4, 8][v % [2, 4, 8].length]
       v = Float(v / [2, 4, 8].length).floor
   
-      beats_per_measure = Array(2..12)[v % Array(2..12).length]
+      beats_per_measure = Array(2..6)[v % Array(2..6).length]
   
       return Meter.new(beats_per_measure, beat_unit, subdivs_per_beat)
     end

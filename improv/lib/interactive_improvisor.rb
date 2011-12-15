@@ -15,6 +15,7 @@ class InteractiveImprovisor
 
   def train(num_vectors = $fake_sensor_vectors.length)
     @sensor = FakeSensor.new($fake_sensor_vectors, num_vectors)
+    puts "\ttraining over #{num_vectors} vectors" if LOGGING
 
     until (stimulus_events = @sensor.get_stimulus).nil?
       stimulus_notes = Music::NoteQueue.from_event_queue(stimulus_events)

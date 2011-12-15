@@ -7,9 +7,9 @@ module Music
   
     def self.num_values
       ranges = []
-      ranges.push Array(0..11).length # beat
+      ranges.push Array(0..5).length # beat
       ranges.push [1, 2, 3, 4].length # subbeat
-      ranges.push Array(2..12).length # beats_per_measure
+      ranges.push Array(2..6).length # beats_per_measure
       ranges.push [1, 2, 4].length # subbeats_per_beat
       return ranges.inject(:*)
     end
@@ -40,9 +40,9 @@ module Music
     end
   
     def validate
-      raise RuntimeError.new("invalid beat: #{@beat}")                           if Array(0..11).index(@beat).nil?
+      raise RuntimeError.new("invalid beat: #{@beat}")                           if Array(0..5).index(@beat).nil?
       raise RuntimeError.new("invalid subbeat: #{@subbeat}")                     if [0, 1, 2, 3].index(@subbeat).nil?
-      raise RuntimeError.new("invalid beats_per_measure: #{@beats_per_measure}") if Array(2..12).index(@beats_per_measure).nil?
+      raise RuntimeError.new("invalid beats_per_measure: #{@beats_per_measure}") if Array(2..6).index(@beats_per_measure).nil?
       raise RuntimeError.new("invalid subbeats_per_beat: #{@subbeats_per_beat}") if [1, 2, 4].index(@subbeats_per_beat).nil?
     end
   end

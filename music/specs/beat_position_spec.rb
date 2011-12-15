@@ -8,8 +8,8 @@ describe Music::BeatPosition do
   end
 
   context "num_values" do
-    it "should return 1584" do
-      Music::BeatPosition.num_values.should == 1584
+    it "should return 360" do
+      Music::BeatPosition.num_values.should == 360
     end
   end
 

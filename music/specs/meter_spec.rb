@@ -16,12 +16,12 @@ describe Music::Meter do
       Music::Meter.new(@beats_per_measure, @beat_unit, @subdivs_per_beat).should be_an_instance_of Music::Meter
     end
 
-    it "should take beats/measure of 2 through 12" do
+    it "should take beats/measure of 2 through 6" do
       @beats_per_measure = 2 # 3/4 time
       Music::Meter.new(@beats_per_measure, @beat_unit, @subdivs_per_beat).should be_an_instance_of Music::Meter
     end
-    it "should take beats/measure of 2 through 12" do
-      @beats_per_measure = 12 # 12/4 time
+    it "should take beats/measure of 2 through 6" do
+      @beats_per_measure = 6 # 6/4 time
       Music::Meter.new(@beats_per_measure, @beat_unit, @subdivs_per_beat).should be_an_instance_of Music::Meter
     end
 
@@ -50,7 +50,7 @@ describe Music::Meter do
     it "raise an error on invalid parameters" do
       lambdas = []
       lambdas.push lambda { Music::Meter.new(1,                  @beat_unit, @subdivs_per_beat) }
-      lambdas.push lambda { Music::Meter.new(13,                 @beat_unit, @subdivs_per_beat) }
+      lambdas.push lambda { Music::Meter.new(7,                  @beat_unit, @subdivs_per_beat) }
       lambdas.push lambda { Music::Meter.new(@beats_per_measure, 1,          @subdivs_per_beat) }
       lambdas.push lambda { Music::Meter.new(@beats_per_measure, 3,          @subdivs_per_beat) }
       lambdas.push lambda { Music::Meter.new(@beats_per_measure, 5,          @subdivs_per_beat) }
@@ -67,8 +67,8 @@ describe Music::Meter do
   end
 
   context "num_values" do
-    it "should return 99" do # Array(2..12).length * [2, 4, 8].length * [1, 2, 4].length
-      Music::Meter.num_values.should == 99
+    it "should return 45" do # Array(2..6).length * [2, 4, 8].length * [1, 2, 4].length
+      Music::Meter.num_values.should == 45
     end
   end
 

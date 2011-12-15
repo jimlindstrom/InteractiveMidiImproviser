@@ -7,17 +7,17 @@ describe Music::MeterSymbol do
   end
 
   context "new" do
-    it "should take an integer from 0 to 98" do
+    it "should take an integer from 0 to 44" do
       Music::MeterSymbol.new(0).should be_an_instance_of Music::MeterSymbol
     end
-    it "should take an integer from 0 to 98" do
-      Music::MeterSymbol.new(98).should be_an_instance_of Music::MeterSymbol
+    it "should take an integer from 0 to 44" do
+      Music::MeterSymbol.new(44).should be_an_instance_of Music::MeterSymbol
     end
     it "raise an error on integers < 0" do
       expect { Music::MeterSymbol.new(-1) }.to raise_error(ArgumentError)
     end
-    it "raise an error on integers > 98" do
-      expect { Music::MeterSymbol.new(99) }.to raise_error(ArgumentError)
+    it "raise an error on integers > 44" do
+      expect { Music::MeterSymbol.new(45) }.to raise_error(ArgumentError)
     end
   end
 

@@ -38,7 +38,13 @@ module Midi
       qs=[q1.to_f]
       (num_segs-1).times { qs.push(qs.last+delta) }
     
+      begin
       abs_errs  = qs.collect{|q| evaluate_quantizer(q).abs}
+      rescue # there's a bug in here, and I don't know where.  print out some diagnostic info
+        puts "quantize_helper(#{q1}, #{q2}, #{num_segs}, #{max_depth})"
+        puts "qs: #{qs.inspect}"
+        raise
+      end
       min_err   = abs_errs.min
       min_idx   = abs_errs.index(min_err)
       min_err_q = qs[min_idx]

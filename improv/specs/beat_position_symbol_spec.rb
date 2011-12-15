@@ -7,17 +7,17 @@ describe Music::BeatPositionSymbol do
   end
 
   context "new" do
-    it "should take an integer from 0 to 1583" do
+    it "should take an integer from 0 to 359" do
       Music::BeatPositionSymbol.new(0).should be_an_instance_of Music::BeatPositionSymbol
     end
-    it "should take an integer from 0 to 1583" do
-      Music::BeatPositionSymbol.new(1583).should be_an_instance_of Music::BeatPositionSymbol
+    it "should take an integer from 0 to 359" do
+      Music::BeatPositionSymbol.new(359).should be_an_instance_of Music::BeatPositionSymbol
     end
     it "raise an error on integers < 0" do
       expect { Music::BeatPositionSymbol.new(-1) }.to raise_error(ArgumentError)
     end
-    it "raise an error on integers > 1583" do
-      expect { Music::BeatPositionSymbol.new(1584) }.to raise_error(ArgumentError)
+    it "raise an error on integers > 359" do
+      expect { Music::BeatPositionSymbol.new(360) }.to raise_error(ArgumentError)
     end
   end
 
@@ -27,7 +27,7 @@ describe Music::BeatPositionSymbol do
       b.to_object.should be_an_instance_of Music::BeatPosition
     end
     it "should return a BeatPosition whose value corresponds to the BeatPositionSymbol's value" do
-      b = Music::BeatPositionSymbol.new(1102)
+      b = Music::BeatPositionSymbol.new(102)
       b.to_object.to_symbol.val.should == b.val
     end
   end

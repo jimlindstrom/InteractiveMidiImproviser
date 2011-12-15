@@ -9,7 +9,7 @@ module Music
   
     def set_val(new_val)
       raise ArgumentError.new("value cannot be negative") if new_val < 0
-      raise ArgumentError.new("value cannot be > 202751") if new_val > 202751
+      raise ArgumentError.new("value cannot be > 46079") if new_val > 46079
   
       @val = new_val
     end

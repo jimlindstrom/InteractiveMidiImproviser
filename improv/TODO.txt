@@ -1,5 +1,5 @@
 ###############################################################################
-# FUNDAMENTAL FLAWS WITH THIS ARCHITECTURE
+# ARCHITECTURE FUNDAMENTALS
 ###############################################################################
 
 Duration_And_Beat_Position_Critic ran out of memory.  How to be more efficient??
@@ -8,6 +8,8 @@ Duration_And_Beat_Position_Critic ran out of memory.  How to be more efficient??
 		whether notes were short, medium, or long, rather than remembering the whole
 		duration.  This will help with memory issues AND with generalization.
 		- This may call for some framework other than object and symbol 
+	- Try caching newly observed stimuli and only actually SAVING them if you see
+		the same input >1x in some window of time.  STM and LTM.
 
 Training now takes forever.  
     - Save/Load markov chains so we can do training offline

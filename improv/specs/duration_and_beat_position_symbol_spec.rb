@@ -7,17 +7,17 @@ describe Music::DurationAndBeatPositionSymbol do
   end
 
   context "new" do
-    it "should take an integer from 0 to 202751" do
+    it "should take an integer from 0 to 46079" do
       Music::DurationAndBeatPositionSymbol.new(0).should be_an_instance_of Music::DurationAndBeatPositionSymbol
     end
-    it "should take an integer from 0 to 202751" do
-      Music::DurationAndBeatPositionSymbol.new(202751).should be_an_instance_of Music::DurationAndBeatPositionSymbol
+    it "should take an integer from 0 to 46079" do
+      Music::DurationAndBeatPositionSymbol.new(46079).should be_an_instance_of Music::DurationAndBeatPositionSymbol
     end
     it "raise an error on integers < 0" do
       expect { Music::DurationAndBeatPositionSymbol.new(-1) }.to raise_error(ArgumentError)
     end
-    it "raise an error on integers > 202751" do
-      expect { Music::DurationAndBeatPositionSymbol.new(202752) }.to raise_error(ArgumentError)
+    it "raise an error on integers > 46079" do
+      expect { Music::DurationAndBeatPositionSymbol.new(46080) }.to raise_error(ArgumentError)
     end
   end
 
@@ -27,7 +27,7 @@ describe Music::DurationAndBeatPositionSymbol do
       dbps.to_object.should be_an_instance_of Music::DurationAndBeatPosition
     end
     it "should return a DurationAndBeatPosition whose value corresponds to the DurationAndBeatPositionSymbol's value" do
-      dbps = Music::DurationAndBeatPositionSymbol.new(110232)
+      dbps = Music::DurationAndBeatPositionSymbol.new(21231)
       dbps.to_object.to_symbol.val.should == dbps.val
     end
   end
