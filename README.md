@@ -1,11 +1,8 @@
 ## Overview
 
-This is a project for testing out ideas on computer music generation.  It uses the ruby portmidi library
-to interface with Linux midi tools such as Timidity, VPMK, etc.  
-
-After training the improvisor, it begins listening for real-time stimuli from the user (via VPMK).  After
-a completed stimulus is heard, the improvisor learns what it can from the stimulus, and then generates
-a response which is plays back via Timidity.  
+RubyMidi lets you interact with a computer improvisor.  After training itself, it listens for stimuli
+from you (over MIDI) and then generates responses of its own.  It uses the ruby portmidi library to 
+interface with Linux midi tools such as Timidity, VPMK, etc.  
 
 ## Ideas I'm exploring
 
@@ -21,6 +18,8 @@ thereby generate notes that correspond to the expectations of all critics.
 
 There's a lot more work I'd like to do on adding higher-order critics that know about scales, chords, 
 position within a phrase, etc.  
+
+This is inspired by the architectures of Douglass Hofstadter's FARG group.
 
 ### Beat Detection
 
