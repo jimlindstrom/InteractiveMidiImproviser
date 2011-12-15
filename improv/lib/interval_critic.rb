@@ -2,7 +2,7 @@
 
 class IntervalCritic < Critic
   def initialize(order)
-    @markov_chain = MarkovChain.new(order, Music::Interval.num_values)
+    @markov_chain = Math::MarkovChain.new(order, Music::Interval.num_values)
     @note_history = []
   end
 

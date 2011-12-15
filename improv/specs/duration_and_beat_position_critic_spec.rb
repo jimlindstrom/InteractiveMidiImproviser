@@ -49,7 +49,7 @@ describe DurationAndBeatPositionCritic do
     it "returns a random variable" do
       order = 1
       dc = DurationAndBeatPositionCritic.new(order)
-      dc.get_expectations.should be_an_instance_of RandomVariable
+      dc.get_expectations.should be_an_instance_of Math::RandomVariable
     end
     it "returns a random variable that is less surprised about states observed more often" do
       order = 1

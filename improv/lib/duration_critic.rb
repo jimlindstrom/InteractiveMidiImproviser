@@ -2,7 +2,7 @@
 
 class DurationCritic < Critic
   def initialize(order)
-    @markov_chain = MarkovChain.new(order, Music::Duration.num_values)
+    @markov_chain = Math::MarkovChain.new(order, Music::Duration.num_values)
   end
 
   def reset

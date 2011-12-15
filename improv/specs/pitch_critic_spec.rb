@@ -37,7 +37,7 @@ describe PitchCritic do
     it "returns a random variable" do
       order = 1
       pc = PitchCritic.new(order)
-      pc.get_expectations.should be_an_instance_of RandomVariable
+      pc.get_expectations.should be_an_instance_of Math::RandomVariable
     end
     it "returns a random variable that is less surprised about states observed more often" do
       order = 1

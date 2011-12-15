@@ -2,25 +2,25 @@
 
 require 'random_variable'
 
-describe RandomVariable do
+describe Math::RandomVariable do
   before do
   end
 
   context "new" do
     it "creates a blank random variable with a fixed number of outcomes" do
       num_outcomes = 5
-      RandomVariable.new(num_outcomes).should be_an_instance_of RandomVariable
+      Math::RandomVariable.new(num_outcomes).should be_an_instance_of Math::RandomVariable
     end
     it "raises an error if the number of outcomes is less than 1" do
       num_outcomes = 0
-      expect{ RandomVariable.new(num_outcomes) }.to raise_error(ArgumentError)
+      expect{ Math::RandomVariable.new(num_outcomes) }.to raise_error(ArgumentError)
     end
   end
 
   context "transform_outcomes" do
     it "runs a transform on each outcome" do
       num_outcomes = 5
-      x = RandomVariable.new(num_outcomes)
+      x = Math::RandomVariable.new(num_outcomes)
       outcome = 3
       num_observations = 10
       x.add_possible_outcome(outcome, num_observations)
@@ -33,7 +33,7 @@ describe RandomVariable do
     end
     it "causes 'get_surprise' to reverse-transform the given outcome" do
       num_outcomes = 5
-      x = RandomVariable.new(num_outcomes)
+      x = Math::RandomVariable.new(num_outcomes)
       outcome = 1
       num_observations = 1
       x.add_possible_outcome(outcome, num_observations)
@@ -49,13 +49,13 @@ describe RandomVariable do
   context "+" do
     before (:each) do
       @num_outcomes = 5
-      @x1 = RandomVariable.new(@num_outcomes)
+      @x1 = Math::RandomVariable.new(@num_outcomes)
       @outcome = 3
       @num_observations = 10
       @x1.add_possible_outcome(@outcome, @num_observations)
 
       @num_outcomes = 5
-      @x2 = RandomVariable.new(@num_outcomes)
+      @x2 = Math::RandomVariable.new(@num_outcomes)
       @outcome = 4
       @num_observations = 1
       @x2.add_possible_outcome(@outcome, @num_observations)
@@ -88,7 +88,7 @@ describe RandomVariable do
     end
     it "combines the random variables, even the two have different numbers of outcomes and are transformed" do
       num_outcomes = 5
-      x1 = RandomVariable.new(num_outcomes)
+      x1 = Math::RandomVariable.new(num_outcomes)
       outcome = 4
       num_observations = 10
       x1.add_possible_outcome(outcome, num_observations)
@@ -97,7 +97,7 @@ describe RandomVariable do
       x1.transform_outcomes(symbol_to_outcome, outcome_to_symbol)
 
       num_outcomes = 2
-      x2 = RandomVariable.new(num_outcomes)
+      x2 = Math::RandomVariable.new(num_outcomes)
       outcome = 0
       num_observations = 1
       x2.add_possible_outcome(outcome, num_observations)
@@ -117,7 +117,7 @@ describe RandomVariable do
       outcome = 3
       num_observations = 1
       num_outcomes = 5
-      x = RandomVariable.new(num_outcomes)
+      x = Math::RandomVariable.new(num_outcomes)
       x.add_possible_outcome(outcome, num_observations)
       x.choose_outcome.should == 3
     end
@@ -125,7 +125,7 @@ describe RandomVariable do
       outcome = 3
       num_observations = -1
       num_outcomes = 5
-      x = RandomVariable.new(num_outcomes)
+      x = Math::RandomVariable.new(num_outcomes)
       expect{ x.add_possible_outcome(outcome, num_observations) }.to raise_error(ArgumentError)
     end
   end
@@ -133,12 +133,12 @@ describe RandomVariable do
   context "choose_outcome" do
     it "returns nil if no possibilities have been added" do
       num_outcomes = 5
-      x = RandomVariable.new(num_outcomes)
+      x = Math::RandomVariable.new(num_outcomes)
       x.choose_outcome.should be_nil
     end
     it "returns one of the possible outcomes" do
       num_outcomes = 5
-      x = RandomVariable.new(num_outcomes)
+      x = Math::RandomVariable.new(num_outcomes)
       outcome = 1
       num_observations = 1
       x.add_possible_outcome(outcome, num_observations)
@@ -152,12 +152,12 @@ describe RandomVariable do
   context "get_surprise" do
     it "returns 0.5 if no observations have been made" do
       num_outcomes = 5
-      x = RandomVariable.new(num_outcomes)
+      x = Math::RandomVariable.new(num_outcomes)
       x.get_surprise(0).should be_within(0.01).of(0.5)
     end
     it "returns a value between 0.0 and 1.0" do
       num_outcomes = 5
-      x = RandomVariable.new(num_outcomes)
+      x = Math::RandomVariable.new(num_outcomes)
       outcome = 1
       num_observations = 1
       x.add_possible_outcome(outcome, num_observations)
@@ -168,7 +168,7 @@ describe RandomVariable do
     end
     it "returns 1.0 for outcomes that have never been observed" do
       num_outcomes = 5
-      x = RandomVariable.new(num_outcomes)
+      x = Math::RandomVariable.new(num_outcomes)
       outcome = 1
       num_observations = 1
       x.add_possible_outcome(outcome, num_observations)
@@ -179,7 +179,7 @@ describe RandomVariable do
     end
     it "returns 0.0 for an outcome that is the only one observed" do
       num_outcomes = 5
-      x = RandomVariable.new(num_outcomes)
+      x = Math::RandomVariable.new(num_outcomes)
       outcome = 1
       num_observations = 1
       x.add_possible_outcome(outcome, num_observations)
@@ -187,7 +187,7 @@ describe RandomVariable do
     end
     it "returns higher values (more surprise) for outcomes that have been observed less" do
       num_outcomes = 5
-      x = RandomVariable.new(num_outcomes)
+      x = Math::RandomVariable.new(num_outcomes)
       outcome = 1
       num_observations = 1
       x.add_possible_outcome(outcome, num_observations)

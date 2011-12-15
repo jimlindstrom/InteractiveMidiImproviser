@@ -32,7 +32,7 @@ class DurationGenerator
     end
 
     # if that doens't work, initialize a random variable, ...
-    expectations = RandomVariable.new(Music::Duration.num_values)
+    expectations = Math::RandomVariable.new(Music::Duration.num_values)
 
     # and try adding duration stats to it
     duration_exp = @duration_critic.get_expectations

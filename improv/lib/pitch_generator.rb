@@ -22,7 +22,7 @@ class PitchGenerator
   end
 
   def generate
-    expectations = RandomVariable.new(Music::Pitch.num_values)
+    expectations = Math::RandomVariable.new(Music::Pitch.num_values)
     
     pitch_exp = @pitch_critic.get_expectations
     expectations += pitch_exp if !pitch_exp.nil?

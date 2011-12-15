@@ -57,7 +57,7 @@ describe IntervalCritic do
       order = 1
       ic = IntervalCritic.new(order)
       ic.listen(Music::Note.new(Music::Pitch.new(0), Music::Duration.new(0)))
-      ic.get_expectations.should be_an_instance_of RandomVariable
+      ic.get_expectations.should be_an_instance_of Math::RandomVariable
     end
     it "returns a random variable that is less surprised about states observed more often" do
       order = 1

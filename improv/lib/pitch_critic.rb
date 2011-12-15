@@ -2,7 +2,7 @@
 
 class PitchCritic < Critic
   def initialize(order)
-    @markov_chain = MarkovChain.new(order, Music::Pitch.num_values)
+    @markov_chain = Math::MarkovChain.new(order, Music::Pitch.num_values)
   end
 
   def reset

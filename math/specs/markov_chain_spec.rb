@@ -9,7 +9,7 @@ require "spec_helper"
 
 # FIXME: Need to add a bunch more tests to show tha the higher-order versions work, too
 
-describe MarkovChain do
+describe Math::MarkovChain do
   before do
   end
 
@@ -17,22 +17,22 @@ describe MarkovChain do
     it "builds a chain with an order (# of current/past states used to predict the future) of 1 or greater" do
       order      = 1
       num_states = 5
-      MarkovChain.new(order, num_states).should be_an_instance_of MarkovChain
+      Math::MarkovChain.new(order, num_states).should be_an_instance_of Math::MarkovChain
     end
     it "raises an error for an order of 0 or lower" do
       order      = 0
       num_states = 5
-      expect{ MarkovChain.new(order, num_states) }.to raise_error(ArgumentError)
+      expect{ Math::MarkovChain.new(order, num_states) }.to raise_error(ArgumentError)
     end
     it "builds a chain with two or more states" do
       order      = 1
       num_states = 2
-      MarkovChain.new(order, num_states).should be_an_instance_of MarkovChain
+      Math::MarkovChain.new(order, num_states).should be_an_instance_of Math::MarkovChain
     end
     it "raises an error for fewer than 2 states" do
       order      = 1
       num_states = 1
-      expect{ MarkovChain.new(order, num_states) }.to raise_error(ArgumentError)
+      expect{ Math::MarkovChain.new(order, num_states) }.to raise_error(ArgumentError)
     end
   end
 
@@ -40,13 +40,13 @@ describe MarkovChain do
     it "returns nil if in the initial state" do
       order      = 1
       num_states = 2
-      mc = MarkovChain.new(order, num_states)
+      mc = Math::MarkovChain.new(order, num_states)
       mc.current_state.should equal nil
     end
     it "returns the current state" do
       order      = 1
       num_states = 2
-      mc = MarkovChain.new(order, num_states)
+      mc = Math::MarkovChain.new(order, num_states)
       mc.transition(0)
       mc.current_state.should equal 0
     end
@@ -56,7 +56,7 @@ describe MarkovChain do
     it "resets the state back to the initial state (undoes do_transitions)" do
       order      = 1
       num_states = 2
-      mc = MarkovChain.new(order, num_states)
+      mc = Math::MarkovChain.new(order, num_states)
       mc.transition(0)
       mc.reset
       mc.current_state.should be_nil
@@ -67,20 +67,20 @@ describe MarkovChain do
     it "raises an error if the state is outside the 0..(num_states-1) range" do
       order      = 1
       num_states = 2
-      mc = MarkovChain.new(order, num_states)
+      mc = Math::MarkovChain.new(order, num_states)
       expect{ mc.observe(num_states) }.to raise_error(ArgumentError)
     end
     it "adds an observation of the next symbol" do
       order      = 1
       num_states = 2
-      mc = MarkovChain.new(order, num_states)
+      mc = Math::MarkovChain.new(order, num_states)
       mc.observe(0)
       mc.current_state.should equal nil
     end
     it "does not update state" do
       order      = 1
       num_states = 2
-      mc = MarkovChain.new(order, num_states)
+      mc = Math::MarkovChain.new(order, num_states)
       mc.transition(1)
       mc.observe(0)
       mc.current_state.should equal 1
@@ -91,13 +91,13 @@ describe MarkovChain do
     it "raises an error if the state is outside the 0..(num_states-1) range" do
       order      = 1
       num_states = 2
-      mc = MarkovChain.new(order, num_states)
+      mc = Math::MarkovChain.new(order, num_states)
       expect{ mc.transition(num_states) }.to raise_error(ArgumentError)
     end
     it "does not add an observation of the next symbol" do
       order      = 1
       num_states = 2
-      mc = MarkovChain.new(order, num_states)
+      mc = Math::MarkovChain.new(order, num_states)
       mc.transition(1)
       mc.reset
       mc.get_expectations.choose_outcome.should be_nil
@@ -105,7 +105,7 @@ describe MarkovChain do
     it "changes the state" do
       order      = 1
       num_states = 2
-      mc = MarkovChain.new(order, num_states)
+      mc = Math::MarkovChain.new(order, num_states)
       mc.transition(1)
       mc.current_state.should equal 1
     end
@@ -115,13 +115,13 @@ describe MarkovChain do
     it "returns a random variable" do
       order      = 1
       num_states = 2
-      mc = MarkovChain.new(order, num_states)
-      mc.get_expectations.should be_an_instance_of RandomVariable
+      mc = Math::MarkovChain.new(order, num_states)
+      mc.get_expectations.should be_an_instance_of Math::RandomVariable
     end
     it "returns a random variable that is less surprised about states observed more often" do
       order      = 1
       num_states = 2
-      mc = MarkovChain.new(order, num_states)
+      mc = Math::MarkovChain.new(order, num_states)
       mc.observe(1)
       mc.observe(1)
       mc.observe(0)
@@ -131,7 +131,7 @@ describe MarkovChain do
     it "returns a random variable that only chooses states observed" do
       order      = 1
       num_states = 2
-      mc = MarkovChain.new(order, num_states)
+      mc = Math::MarkovChain.new(order, num_states)
       mc.observe(1)
       x = mc.get_expectations
       x.choose_outcome.should equal 1
@@ -139,7 +139,7 @@ describe MarkovChain do
     it "returns a random variable that only chooses states observed (higher order)" do
       order      = 2
       num_states = 5
-      mc = MarkovChain.new(order, num_states)
+      mc = Math::MarkovChain.new(order, num_states)
       mc.observe(1)
       mc.transition(1)
       mc.observe(2)
