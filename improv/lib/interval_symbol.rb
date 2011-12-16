@@ -2,6 +2,12 @@
 
 module Music
   
+  class Interval
+    def to_symbol
+      return IntervalSymbol.new(@val+127)
+    end
+  end
+
   class IntervalSymbol
     def initialize(new_val)
       set_val(new_val)

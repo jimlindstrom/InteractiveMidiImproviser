@@ -1,7 +1,13 @@
 #!/usr/bin/env ruby
 
 module Music
-  
+   
+  class Pitch
+    def to_symbol
+      return PitchSymbol.new(@val)
+    end
+  end
+ 
   class PitchSymbol
     def initialize(new_val)
       set_val(new_val)
