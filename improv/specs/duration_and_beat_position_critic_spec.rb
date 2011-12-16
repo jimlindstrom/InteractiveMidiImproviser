@@ -31,6 +31,19 @@ describe DurationAndBeatPositionCritic do
     end
   end
 
+  context ".save" do
+    it "should save a file, named <folder>/duration_and_beat_position_critic_<order>.yml" do
+      order = 1
+      dc = DurationAndBeatPositionCritic.new(order)
+      dc.listen(@nq1.first)
+      dc.listen(@nq2.first)
+      filename = "data/test/duration_and_beat_position_critic_#{order}.yml"
+      File.delete filename if FileTest.exists? filename
+      dc.save "data/test"
+      FileTest.exists?(filename).should == true
+    end
+  end
+
   context ".listen" do
     it "should raise an error if the note has no meter analysis" do
       order = 1

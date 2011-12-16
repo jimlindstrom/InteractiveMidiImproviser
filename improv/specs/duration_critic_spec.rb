@@ -24,6 +24,19 @@ describe DurationCritic do
     end
   end
 
+  context ".save" do
+    it "should save a file, named <folder>/duration_critic_<order>.yml" do
+      order = 1
+      dc = DurationCritic.new(order)
+      dc.listen(Music::Note.new(Music::Pitch.new(0), Music::Duration.new(2)))
+      dc.listen(Music::Note.new(Music::Pitch.new(0), Music::Duration.new(1)))
+      filename = "data/test/duration_critic_#{order}.yml"
+      File.delete filename if FileTest.exists? filename
+      dc.save "data/test"
+      FileTest.exists?(filename).should == true
+    end
+  end
+
   context ".listen" do
     it "should return the surprise associated with the given note" do
       order = 1

@@ -9,6 +9,11 @@ class DurationCritic < Critic
     @markov_chain.reset
   end
 
+  def save(folder)
+    filename = "#{folder}/duration_critic_#{@markov_chain.order}.yml"
+    @markov_chain.save(filename)
+  end
+
   def listen(note)
     raise ArgumentError.new("not a note.  is a #{note.class}") if note.class != Music::Note
     next_symbol = note.duration.to_symbol

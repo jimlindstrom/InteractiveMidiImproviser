@@ -11,6 +11,11 @@ class IntervalCritic < Critic
     @note_history = []
   end
 
+  def save(folder)
+    filename = "#{folder}/interval_critic_#{@markov_chain.order}.yml"
+    @markov_chain.save(filename)
+  end
+
   def listen(note)
     raise ArgumentError.new("not a note.  is a #{note.class}") if note.class != Music::Note
 

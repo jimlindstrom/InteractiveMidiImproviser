@@ -31,6 +31,21 @@ describe IntervalCritic do
     end
   end
 
+  context ".save" do
+    it "should save a file, named <folder>/interval_critic_<order>.yml" do
+      order = 1
+      ic = IntervalCritic.new(order)
+      ic.listen(Music::Note.new(Music::Pitch.new(4), Music::Duration.new(1)))
+      ic.listen(Music::Note.new(Music::Pitch.new(2), Music::Duration.new(1)))
+      ic.listen(Music::Note.new(Music::Pitch.new(4), Music::Duration.new(1)))
+      ic.listen(Music::Note.new(Music::Pitch.new(2), Music::Duration.new(1)))
+      filename = "data/test/interval_critic_#{order}.yml"
+      File.delete filename if FileTest.exists? filename
+      ic.save "data/test"
+      FileTest.exists?(filename).should == true
+    end
+  end
+
   context ".listen" do
     it "should return nil if zero or one notes have been heard" do
       order = 1

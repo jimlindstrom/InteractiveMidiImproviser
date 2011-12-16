@@ -38,8 +38,10 @@ describe PitchCritic do
       order = 1
       pc = PitchCritic.new(order)
       surprise = pc.listen(Music::Note.new(Music::Pitch.new(1), Music::Duration.new(0)))
+      filename = "data/test/pitch_critic_#{order}.yml"
+      File.delete filename if FileTest.exists? filename
       pc.save "data/test"
-      FileTest.exists?("data/test/pitch_critic_#{order}.yml").should == true
+      FileTest.exists?(filename).should == true
     end
   end
 
