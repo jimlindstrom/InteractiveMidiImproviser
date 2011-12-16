@@ -22,6 +22,17 @@ describe InteractiveImprovisor do
     end
   end
 
+  context ".save" do
+    it "should all the critices to <folder>/*critic*.yml" do
+      i = InteractiveImprovisor.new
+      num_training_vectors = 20
+      i.train(num_training_vectors)
+      Dir[File.expand_path(File.join(File.dirname(__FILE__),"..","data","test",'*yml'))].each { |f| File.delete(f) }
+      i.save "data/test"
+      Dir[File.expand_path(File.join(File.dirname(__FILE__),"..","data","test",'*yml'))].length.should > 1
+    end
+  end
+
   context ".run" do
     it "should listen for stimuli and play responses" do
       i = InteractiveImprovisor.new

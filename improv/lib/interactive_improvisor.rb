@@ -26,6 +26,10 @@ class InteractiveImprovisor
     end
   end
 
+  def save(folder)
+    @improvisor.get_critics.each { |c| c.save(folder) }
+  end
+
   def get_single_improvisation
     @improvisor.generate
   end
