@@ -63,6 +63,20 @@ describe Math::MarkovChain do
     end
   end
 
+  context "save" do
+    it "saves the markov chain to a file" do
+      order      = 1
+      num_states = 2
+      mc = Math::MarkovChain.new(order, num_states)
+      mc.observe(1)
+      mc.observe(1)
+      mc.observe(0)
+      filename = "/tmp/rubymidi_markov_chain.yml"
+      mc.save filename
+      File.exists?(filename).should == true
+    end
+  end
+
   context "observe" do
     it "raises an error if the state is outside the 0..(num_states-1) range" do
       order      = 1

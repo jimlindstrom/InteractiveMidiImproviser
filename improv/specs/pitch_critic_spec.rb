@@ -33,6 +33,16 @@ describe PitchCritic do
     end
   end
 
+  context ".save" do
+    it "should save a file, named <folder>/pitch_critic_<order>.yml" do
+      order = 1
+      pc = PitchCritic.new(order)
+      surprise = pc.listen(Music::Note.new(Music::Pitch.new(1), Music::Duration.new(0)))
+      pc.save "data/test"
+      FileTest.exists?("data/test/pitch_critic_#{order}.yml").should == true
+    end
+  end
+
   context ".get_expectations" do
     it "returns a random variable" do
       order = 1

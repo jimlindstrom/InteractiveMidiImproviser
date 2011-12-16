@@ -1,8 +1,11 @@
 #!/usr/bin/env ruby
 
+require 'yaml'
+
 module Math
   
   class MarkovChain
+    attr_reader :order
   
     def initialize(order, num_states)
       raise ArgumentError.new("order must be positive") if order < 1
@@ -19,10 +22,20 @@ module Math
     def current_state
       return @state_history.last
     end
-  
+   
     def reset
       @state_history        = [ nil ]*@num_states
       @state_history_string = ["nil"]*@num_states
+    end
+ 
+    def save(filename)
+      File.open(filename, 'w') do |f| 
+        f.puts YAML::dump @order
+        f.puts YAML::dump @num_states
+        f.puts YAML::dump @observations
+        f.puts YAML::dump @state_history
+        f.puts YAML::dump @state_history_string
+      end
     end
   
     def observe(next_state)
