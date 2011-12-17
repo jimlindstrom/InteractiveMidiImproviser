@@ -1,4 +1,10 @@
 ###############################################################################
+# BUGS
+###############################################################################
+
+why do all the songs devolve into 0.5*4?  Not dequeue'ing history?
+
+###############################################################################
 # ARCHITECTURE FUNDAMENTALS
 ###############################################################################
 
@@ -10,10 +16,6 @@ Duration_And_Beat_Position_Critic ran out of memory.  How to be more efficient??
 		- This may call for some framework other than object and symbol 
 	- Try caching newly observed stimuli and only actually SAVING them if you see
 		the same input >1x in some window of time.  STM and LTM.
-
-Training now takes forever.  
-    - Save/Load markov chains so we can do training offline
-    - Make training multi-threaded (at least 2-threaded) to take advantage of SMP?
 
 ###############################################################################
 # REFACTORING

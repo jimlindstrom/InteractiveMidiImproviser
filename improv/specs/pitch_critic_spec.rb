@@ -28,8 +28,17 @@ describe PitchCritic do
     it "should return the surprise associated with the given note" do
       order = 1
       pc = PitchCritic.new(order)
-      surprise = pc.listen(Music::Note.new(Music::Pitch.new(1), Music::Duration.new(0)))
-      surprise.should be_within(0.01).of(0.5)
+	  surprise = pc.listen(Music::Note.new(Music::Pitch.new(1), Music::Duration.new(0)))
+	  surprise.should be_within(0.01).of(0.5)
+	end
+	it "should not return 0.5 when it has heard a sequence several times" do
+      order = 2
+      pc = PitchCritic.new(order)
+      pitches = [64, 71, 71, 69, 76, 74, 73, 71, 74, 73, 71, 73, 74, 73, 71, 73, 71] #, 73
+      pitches.each do |p|
+        pc.listen(Music::Note.new(Music::Pitch.new(p), Music::Duration.new(1)))
+      end
+      pc.listen(Music::Note.new(Music::Pitch.new(73), Music::Duration.new(1))).should < 0.25
     end
   end
 
@@ -98,7 +107,7 @@ describe PitchCritic do
       Music::Pitch.new(x.choose_outcome).val.should == 1
     end
     it "returns a random variable that only chooses states observed (higher order)" do
-      order = 2
+      order = 3
       pc = PitchCritic.new(order)
       pc.listen(Music::Note.new(Music::Pitch.new(1), Music::Duration.new(0)))
       pc.listen(Music::Note.new(Music::Pitch.new(2), Music::Duration.new(0)))

@@ -9,8 +9,22 @@ class Listener
     @critics.push c
   end
 
-  def listen(notes)
+  def listen(notes, logging=false)
     @critics.each { |c| c.reset }
-    notes.each { |n| @critics.each { |c| c.listen(n) } }
+
+    if logging
+      str = "\t"
+      @critics.each { |c| str += "\t#{c.class}" }
+      puts str
+    end
+
+    notes.each do |n| 
+      str = "#{n.pitch.val}, #{n.duration.val}\t" if logging
+      @critics.each do |c| 
+        surprise = c.listen(n) 
+        str += "#{surprise}\t" if logging
+      end
+      puts str if logging
+    end
   end
 end

@@ -97,7 +97,7 @@ describe DurationCritic do
       Music::Duration.new(x.choose_outcome).val.should == 1
     end
     it "returns a random variable that only chooses states observed (higher order)" do
-      order = 2
+      order = 3
       dc = DurationCritic.new(order)
       dc.listen(Music::Note.new(Music::Pitch.new(0), Music::Duration.new(1)))
       dc.listen(Music::Note.new(Music::Pitch.new(0), Music::Duration.new(2)))

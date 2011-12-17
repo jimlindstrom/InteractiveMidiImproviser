@@ -24,8 +24,8 @@ module Math
     end
    
     def reset
-      @state_history        = [ nil ]*@num_states
-      @state_history_string = ["nil"]*@num_states
+      @state_history        = [ nil ]*@order
+      @state_history_string = ["nil"]*@order
     end
  
     def save(filename)

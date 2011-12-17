@@ -35,7 +35,8 @@ class InteractiveImprovisor
         stimulus_notes = Music::NoteQueue.from_event_queue(stimulus_events)
         if stimulus_notes.detect_meter # FIXME: feels like this should be in a critic...
           #puts "meter: #{stimulus_notes.meter.inspect}" if LOGGING
-          @listener.listen stimulus_notes # FIXME: figure out a way to listen with only partial info (no meter)
+          do_logging = true
+          @listener.listen(stimulus_notes, do_logging) # FIXME: figure out a way to listen with only partial info (no meter)
         end
       end
     end

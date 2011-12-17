@@ -7,8 +7,6 @@ require "spec_helper"
 # I'm in state <X>, I'm looking for state <Y>, and then there's going to be some state <Z> that
 # is terminal.  Given that, what are your expectations about state Y?
 
-# FIXME: Need to add a bunch more tests to show tha the higher-order versions work, too
-
 describe Math::MarkovChain do
   before do
   end
@@ -172,6 +170,17 @@ describe Math::MarkovChain do
       mc.transition(2)
       x = mc.get_expectations
       x.choose_outcome.should equal 3
+    end
+    it "isn't surprised by repeated substrings in a long string" do
+      order      = 2
+      num_states = 100
+      mc = Math::MarkovChain.new(order, num_states)
+      pitches = [64, 71, 71, 69, 76, 74, 73, 71, 74, 73, 71, 73, 74, 73, 71, 73, 71] #, 73
+      pitches.each do |pitch|
+        mc.observe(pitch)
+      end
+      x = mc.get_expectations
+      x.get_surprise(73).should be < 0.5
     end
   end
 
