@@ -46,6 +46,32 @@ describe IntervalCritic do
     end
   end
 
+  context ".cumulative_surprise" do
+    it "should return zero initially" do
+      order = 1
+      ic = IntervalCritic.new(order)
+      ic.cumulative_surprise.should be_within(0.0001).of(0.0)
+    end
+    it "should return the sum of all listening surprise" do
+      order = 1
+      ic = IntervalCritic.new(order)
+      cum_surprise = 0.0
+      cum_surprise += ic.listen(Music::Note.new(Music::Pitch.new(1), Music::Duration.new(1))) || 0.0
+      cum_surprise += ic.listen(Music::Note.new(Music::Pitch.new(2), Music::Duration.new(3)))
+      cum_surprise += ic.listen(Music::Note.new(Music::Pitch.new(4), Music::Duration.new(2)))
+      cum_surprise += ic.listen(Music::Note.new(Music::Pitch.new(3), Music::Duration.new(2)))
+      ic.cumulative_surprise.should be_within(0.0001).of(cum_surprise)
+    end
+    it "should return zero after calling reset_cumulative_surprise" do
+      order = 1
+      ic = IntervalCritic.new(order)
+      ic.listen(Music::Note.new(Music::Pitch.new(1), Music::Duration.new(1)))
+      ic.listen(Music::Note.new(Music::Pitch.new(3), Music::Duration.new(2)))
+      ic.reset_cumulative_surprise
+      ic.cumulative_surprise.should be_within(0.0001).of(0.0)
+    end
+  end
+
   context ".listen" do
     it "should return nil if zero or one notes have been heard" do
       order = 1

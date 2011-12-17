@@ -2,6 +2,7 @@
 
 class DurationAndBeatPositionCritic < Critic
   def initialize(order)
+    reset_cumulative_surprise
     @markov_chain = Math::MarkovChain.new(order, Music::DurationAndBeatPosition.num_values)
   end
 
@@ -19,6 +20,7 @@ class DurationAndBeatPositionCritic < Critic
     raise ArgumentError.new("note must have meter analysis") if note.analysis[:beat_position].nil?
     next_symbol = Music::DurationAndBeatPosition.new(note.duration, note.analysis[:beat_position]).to_symbol
     surprise = @markov_chain.get_expectations.get_surprise(next_symbol.val)
+    add_to_cumulative_surprise surprise
     @markov_chain.observe(next_symbol.val)
     @markov_chain.transition(next_symbol.val)
     return surprise

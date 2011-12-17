@@ -2,6 +2,7 @@
 
 class PitchCritic < Critic
   def initialize(order)
+    reset_cumulative_surprise
     @markov_chain = Math::MarkovChain.new(order, Music::Pitch.num_values)
   end
 
@@ -18,6 +19,7 @@ class PitchCritic < Critic
     raise ArgumentError.new("not a note.  is a #{note.class}") if note.class != Music::Note
     next_symbol = note.pitch.to_symbol
     surprise = @markov_chain.get_expectations.get_surprise(next_symbol.val)
+    add_to_cumulative_surprise surprise
     @markov_chain.observe(next_symbol.val)
     @markov_chain.transition(next_symbol.val)
     return surprise

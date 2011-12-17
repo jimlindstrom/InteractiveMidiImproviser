@@ -14,19 +14,33 @@ describe InteractiveImprovisor do
   end
 
   context ".train" do
-    it "should listen for stimuli and play responses" do
+    it "should return a hash of each critic and it's cumulative surprise over the testing vectors" do
       i = InteractiveImprovisor.new
-      num_training_vectors = 20
-      i.train(num_training_vectors)
-      pending("still need to test side effects")
+      num_training_vectors = 2
+      num_testing_vectors  = 2
+      i.train(num_training_vectors, num_testing_vectors).first.keys.should == [:critic, :cum_surprise]
+    end
+    it "should cause critics to get smarter and have lower cumulative surprise over testing vectors" do
+      i = InteractiveImprovisor.new
+      num_training_vectors = 5
+      num_testing_vectors  = 10
+      cum_error_less_training = i.train(num_training_vectors, num_testing_vectors)
+
+      i = InteractiveImprovisor.new
+      num_training_vectors = 10
+      num_testing_vectors  = 10
+      cum_error_more_training = i.train(num_training_vectors, num_testing_vectors)
+
+      cum_error_more_training.first[:cum_surprise].should < cum_error_less_training.first[:cum_surprise]
     end
   end
 
   context ".save" do
     it "should all the critices to <folder>/*critic*.yml" do
       i = InteractiveImprovisor.new
-      num_training_vectors = 20
-      i.train(num_training_vectors)
+      num_training_vectors = 5
+      num_testing_vectors  = 0
+      i.train(num_training_vectors, num_testing_vectors)
       Dir[File.expand_path(File.join(File.dirname(__FILE__),"..","data","test",'*yml'))].each { |f| File.delete(f) }
       i.save "data/test"
       Dir[File.expand_path(File.join(File.dirname(__FILE__),"..","data","test",'*yml'))].length.should > 1
@@ -36,8 +50,9 @@ describe InteractiveImprovisor do
   context ".run" do
     it "should listen for stimuli and play responses" do
       i = InteractiveImprovisor.new
-      num_training_vectors = 20
-      i.train(num_training_vectors)
+      num_training_vectors = 10
+      num_testing_vectors  = 0
+      i.train(num_training_vectors, num_testing_vectors)
       use_real_midi=false
       i.run(use_real_midi)
       pending("still need to test side effects")
@@ -47,8 +62,9 @@ describe InteractiveImprovisor do
   context ".get_single_improvisation" do
     before(:all) do
       @i = InteractiveImprovisor.new
-      num_training_vectors = 20
-      @i.train(num_training_vectors)
+      num_training_vectors = 10
+      num_testing_vectors  = 0
+      @i.train(num_training_vectors, num_testing_vectors)
     end
     it "should generate metrically-intelligable improvisations >70% of the time" do
       correct_detections = 0

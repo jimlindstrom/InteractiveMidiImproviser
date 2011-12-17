@@ -37,6 +37,30 @@ describe DurationCritic do
     end
   end
 
+  context ".cumulative_surprise" do
+    it "should return zero initially" do
+      order = 1
+      dc = DurationCritic.new(order)
+      dc.cumulative_surprise.should be_within(0.0001).of(0.0)
+    end
+    it "should return the sum of all listening surprise" do
+      order = 1
+      dc = DurationCritic.new(order)
+      cum_surprise = 0.0
+      cum_surprise += dc.listen(Music::Note.new(Music::Pitch.new(1), Music::Duration.new(1)))
+      cum_surprise += dc.listen(Music::Note.new(Music::Pitch.new(2), Music::Duration.new(3)))
+      cum_surprise += dc.listen(Music::Note.new(Music::Pitch.new(4), Music::Duration.new(2)))
+      cum_surprise += dc.listen(Music::Note.new(Music::Pitch.new(3), Music::Duration.new(2)))
+      dc.cumulative_surprise.should be_within(0.0001).of(cum_surprise)
+    end
+    it "should return zero after calling reset_cumulative_surprise" do
+      order = 1
+      dc = DurationCritic.new(order)
+      dc.listen(Music::Note.new(Music::Pitch.new(1), Music::Duration.new(1)))
+      dc.reset_cumulative_surprise
+      dc.cumulative_surprise.should be_within(0.0001).of(0.0)
+    end
+  end
   context ".listen" do
     it "should return the surprise associated with the given note" do
       order = 1

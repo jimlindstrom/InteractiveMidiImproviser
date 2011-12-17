@@ -45,6 +45,32 @@ describe PitchCritic do
     end
   end
 
+  context ".cumulative_surprise" do
+    it "should return zero initially" do
+      order = 1
+      pc = PitchCritic.new(order)
+      pc.cumulative_surprise.should be_within(0.0001).of(0.0)
+    end
+    it "should return the sum of all listening surprise" do
+      order = 1
+      pc = PitchCritic.new(order)
+      cum_surprise = 0.0
+      cum_surprise += pc.listen(Music::Note.new(Music::Pitch.new(1), Music::Duration.new(1)))
+      cum_surprise += pc.listen(Music::Note.new(Music::Pitch.new(2), Music::Duration.new(3)))
+      cum_surprise += pc.listen(Music::Note.new(Music::Pitch.new(4), Music::Duration.new(2)))
+      cum_surprise += pc.listen(Music::Note.new(Music::Pitch.new(3), Music::Duration.new(2)))
+      pc.cumulative_surprise.should be_within(0.0001).of(cum_surprise)
+    end
+
+    it "should return zero after calling reset_cumulative_surprise" do
+      order = 1
+      pc = PitchCritic.new(order)
+      pc.listen(Music::Note.new(Music::Pitch.new(1), Music::Duration.new(1)))
+      pc.reset_cumulative_surprise
+      pc.cumulative_surprise.should be_within(0.0001).of(0.0)
+    end
+  end
+
   context ".get_expectations" do
     it "returns a random variable" do
       order = 1

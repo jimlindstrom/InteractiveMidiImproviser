@@ -44,6 +44,31 @@ describe DurationAndBeatPositionCritic do
     end
   end
 
+  context ".cumulative_surprise" do
+    it "should return zero initially" do
+      order = 1
+      dc = DurationAndBeatPositionCritic.new(order)
+      dc.cumulative_surprise.should be_within(0.0001).of(0.0)
+    end
+    it "should return the sum of all listening surprise" do
+      order = 1
+      dc = DurationAndBeatPositionCritic.new(order)
+      cum_surprise = 0.0
+      cum_surprise += dc.listen(@nq1[0])
+      cum_surprise += dc.listen(@nq1[1])
+      cum_surprise += dc.listen(@nq1[2])
+      cum_surprise += dc.listen(@nq1[3])
+      dc.cumulative_surprise.should be_within(0.0001).of(cum_surprise)
+    end
+    it "should return zero after calling reset_cumulative_surprise" do
+      order = 1
+      dc = DurationAndBeatPositionCritic.new(order)
+      dc.listen(@nq1[0])
+      dc.reset_cumulative_surprise
+      dc.cumulative_surprise.should be_within(0.0001).of(0.0)
+    end
+  end
+
   context ".listen" do
     it "should raise an error if the note has no meter analysis" do
       order = 1

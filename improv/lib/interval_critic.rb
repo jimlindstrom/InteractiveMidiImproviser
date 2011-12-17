@@ -2,6 +2,7 @@
 
 class IntervalCritic < Critic
   def initialize(order)
+    reset_cumulative_surprise
     @markov_chain = Math::MarkovChain.new(order, Music::Interval.num_values)
     @note_history = []
   end
@@ -26,6 +27,7 @@ class IntervalCritic < Critic
       next_symbol = interval.to_symbol
 
       surprise = @markov_chain.get_expectations.get_surprise(next_symbol.val)
+      add_to_cumulative_surprise surprise
       @markov_chain.observe(next_symbol.val)
       @markov_chain.transition(next_symbol.val)
       return surprise

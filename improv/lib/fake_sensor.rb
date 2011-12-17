@@ -6,7 +6,7 @@ class FakeSensor
   def initialize(vectors, num_responses)
     @vectors = vectors
     @vector_keys = @vectors.keys[0..(num_responses-1)]
-    @vectors.keep_if{|k,v| @vector_keys.include? k}
+    @vectors = @vectors.select{|k,v| @vector_keys.include? k}
   end
 
   def get_stimulus

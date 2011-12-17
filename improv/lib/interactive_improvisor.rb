@@ -13,10 +13,10 @@ class InteractiveImprovisor
     @improvisor.get_critics.each { |c| @listener.add_critic(c) }
   end
 
-  def train(num_vectors = $fake_sensor_vectors.length)
-    @sensor = FakeSensor.new($fake_sensor_vectors, num_vectors)
-    puts "\ttraining over #{num_vectors} vectors" if LOGGING
-
+  #def train(num_training_vectors = $fake_sensor_vectors.length, num_testing_vectors = 0)
+  def train(num_training_vectors, num_testing_vectors)
+    @sensor = FakeSensor.new($fake_sensor_vectors, num_training_vectors)
+    puts "\ttraining over #{num_training_vectors} vectors" if LOGGING
     until (stimulus_events = @sensor.get_stimulus).nil?
       stimulus_notes = Music::NoteQueue.from_event_queue(stimulus_events)
       if stimulus_notes.detect_meter # FIXME: feels like this should be in a critic...
@@ -24,6 +24,23 @@ class InteractiveImprovisor
         @listener.listen stimulus_notes # FIXME: figure out a way to listen with only partial info (no meter)
       end
     end
+
+    if num_testing_vectors > 0
+      @improvisor.get_critics.each { |c| c.reset_cumulative_surprise }
+  
+      @sensor = FakeSensor.new($fake_sensor_vectors, num_training_vectors+num_testing_vectors)
+      puts "\ttesting over #{num_testing_vectors} vectors" if LOGGING
+      num_training_vectors.times { @sensor.get_stimulus } # throw away the ones we already trained on
+      until (stimulus_events = @sensor.get_stimulus).nil?
+        stimulus_notes = Music::NoteQueue.from_event_queue(stimulus_events)
+        if stimulus_notes.detect_meter # FIXME: feels like this should be in a critic...
+          #puts "meter: #{stimulus_notes.meter.inspect}" if LOGGING
+          @listener.listen stimulus_notes # FIXME: figure out a way to listen with only partial info (no meter)
+        end
+      end
+    end
+
+    return @improvisor.get_critics.map { |c| { :critic=>c, :cum_surprise=>c.cumulative_surprise } }
   end
 
   def save(folder)
