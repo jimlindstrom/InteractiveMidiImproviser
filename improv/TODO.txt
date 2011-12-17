@@ -1,23 +1,4 @@
 ###############################################################################
-# BUGS
-###############################################################################
-
-why do all the songs devolve into 0.5*4?  Not dequeue'ing history?
-
-###############################################################################
-# ARCHITECTURE FUNDAMENTALS
-###############################################################################
-
-Duration_And_Beat_Position_Critic ran out of memory.  How to be more efficient??
-	- Only load the meter that's needed.  Leave the other ones on disk.
-	- Look into lossiness, compression, many-to-one transforms. e.g., only store
-		whether notes were short, medium, or long, rather than remembering the whole
-		duration.  This will help with memory issues AND with generalization.
-		- This may call for some framework other than object and symbol 
-	- Try caching newly observed stimuli and only actually SAVING them if you see
-		the same input >1x in some window of time.  STM and LTM.
-
-###############################################################################
 # REFACTORING
 ###############################################################################
 
@@ -29,10 +10,7 @@ Put a 'context' member on each note that points to shared context hash (***)
 # MAKING BETTER IMPROVS
 ###############################################################################
 
-New Critic: meter
-
-New Critic: phrase length
-New Critic: tempo
+New Critic: pitch class (midi pitch modulo 12)
 
 New Critic: chord/scale (w/ underlying chord generation too)
 New Critic: key sig (look at prevalence of all notes so far. match to existing schemes)
@@ -40,6 +18,16 @@ New Critic: overall shape of line
 
 Some sort of ending prediction
 	- factor oracle
-	- markov chain based on [cur note; # notes left] to predict [next note]
+	- markov chain based on [cur note; num notes left] to predict [next note]
 
-Change to planning based on time, vs. # notes
+Change to planning based on time or number of beats (vs. number of notes)
+
+###############################################################################
+# MAKING IT MORE RESPONSIVE / INTERACTIVE
+###############################################################################
+
+New Critic: meter
+
+New Critic: phrase length
+New Critic: tempo
+

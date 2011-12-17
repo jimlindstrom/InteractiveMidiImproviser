@@ -75,6 +75,27 @@ describe Math::MarkovChain do
     end
   end
 
+  context "load" do
+    it "loads the markov chain to a file" do
+      order      = 1
+      num_states = 20
+      mc = Math::MarkovChain.new(order, num_states)
+      mc.observe(1)
+      mc.transition(1)
+      mc.observe(2)
+      mc.transition(2)
+      mc.observe(3)
+      mc.transition(3)
+      mc.reset
+      mc.transition(2)
+      filename = "/tmp/rubymidi_markov_chain.yml"
+      mc.save filename
+      mc2 = Math::MarkovChain.load filename
+      x = mc2.get_expectations
+      x.choose_outcome.should == 3
+    end
+  end
+
   context "observe" do
     it "raises an error if the state is outside the 0..(num_states-1) range" do
       order      = 1

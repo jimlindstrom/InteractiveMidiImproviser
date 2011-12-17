@@ -52,7 +52,7 @@ module Midi
                                     })
             #puts "{:message => #{raw_event[:message].inspect}, :timestamp => #{raw_event[:timestamp]}"
           else
-            raise RuntimeError.new("Can't handle event type yet...") 
+            raise RuntimeError.new("Can't handle event type yet: #{raw_event.inspect}") 
           end
         end
       end

@@ -54,6 +54,23 @@ describe PitchCritic do
     end
   end
 
+  context ".load" do
+    it "should load a file, named <folder>/pitch_critic_<order>.yml, and act just like the saved critic" do
+      order = 1
+      pc = PitchCritic.new(order)
+      pc.listen(Music::Note.new(Music::Pitch.new(1), Music::Duration.new(1)))
+      pc.listen(Music::Note.new(Music::Pitch.new(2), Music::Duration.new(2)))
+      pc.listen(Music::Note.new(Music::Pitch.new(3), Music::Duration.new(3)))
+      pc.reset
+      pc.listen(Music::Note.new(Music::Pitch.new(2), Music::Duration.new(2)))
+      pc.save "data/test"
+      pc2 = PitchCritic.new(order)
+      pc2.load "data/test"
+      x = pc2.get_expectations
+      Music::Pitch.new(x.choose_outcome).val.should == 3
+    end
+  end
+
   context ".cumulative_surprise" do
     it "should return zero initially" do
       order = 1

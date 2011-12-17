@@ -15,6 +15,17 @@ class IntervalCritic < Critic
   def save(folder)
     filename = "#{folder}/interval_critic_#{@markov_chain.order}.yml"
     @markov_chain.save(filename)
+
+    filename = "#{folder}/interval_critic_#{@markov_chain.order}_note_history.yml"
+    File.open(filename, 'w') { |f| f.puts YAML::dump @note_history }
+  end
+
+  def load(folder)
+    filename = "#{folder}/interval_critic_#{@markov_chain.order}.yml"
+    @markov_chain = Math::MarkovChain.load(filename)
+
+    filename = "#{folder}/interval_critic_#{@markov_chain.order}_note_history.yml"
+    File.open(filename, 'r') { |f| @note_history = YAML::load(f) }
   end
 
   def listen(note)

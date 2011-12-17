@@ -36,7 +36,7 @@ describe InteractiveImprovisor do
   end
 
   context ".save" do
-    it "should all the critices to <folder>/*critic*.yml" do
+    it "should save all the critices to <folder>/*critic*.yml" do
       i = InteractiveImprovisor.new
       num_training_vectors = 5
       num_testing_vectors  = 0
@@ -44,6 +44,14 @@ describe InteractiveImprovisor do
       Dir[File.expand_path(File.join(File.dirname(__FILE__),"..","data","test",'*yml'))].each { |f| File.delete(f) }
       i.save "data/test"
       Dir[File.expand_path(File.join(File.dirname(__FILE__),"..","data","test",'*yml'))].length.should > 1
+    end
+  end
+
+  context ".load" do
+    it "should load all the critices from <folder>/*critic*.yml" do
+      i = InteractiveImprovisor.new
+      i.load "data/test"
+      pending
     end
   end
 

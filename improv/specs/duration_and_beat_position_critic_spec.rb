@@ -44,6 +44,25 @@ describe DurationAndBeatPositionCritic do
     end
   end
 
+  context ".load" do
+    it "should load a file, named <folder>/duration_and_beat_position_critic_<order>.yml, and act just like the saved critic" do
+      order = 1
+      dc = DurationAndBeatPositionCritic.new(order)
+      dc.listen(@nq1[0])
+      dc.listen(@nq1[1])
+      dc.listen(@nq1[2])
+      dc.reset
+      dc.listen(@nq1[0])
+      dc.listen(@nq1[1])
+      dc.save "data/test"
+      dc2 = DurationAndBeatPositionCritic.new(order)
+      dc2.load "data/test"
+      x = dc.get_expectations
+      x2 = dc2.get_expectations
+      x.choose_outcome.should == x2.choose_outcome
+    end
+  end
+
   context ".cumulative_surprise" do
     it "should return zero initially" do
       order = 1

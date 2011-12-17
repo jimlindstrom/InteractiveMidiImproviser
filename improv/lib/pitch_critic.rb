@@ -15,6 +15,11 @@ class PitchCritic < Critic
     @markov_chain.save(filename)
   end
 
+  def load(folder)
+    filename = "#{folder}/pitch_critic_#{@markov_chain.order}.yml"
+    @markov_chain = Math::MarkovChain.load(filename)
+  end
+
   def listen(note)
     raise ArgumentError.new("not a note.  is a #{note.class}") if note.class != Music::Note
     next_symbol = note.pitch.to_symbol

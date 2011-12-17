@@ -48,6 +48,10 @@ class InteractiveImprovisor
     @improvisor.get_critics.each { |c| c.save(folder) }
   end
 
+  def load(folder)
+    @improvisor.get_critics.each { |c| c.load(folder) }
+  end
+
   def get_single_improvisation
     @improvisor.generate
   end

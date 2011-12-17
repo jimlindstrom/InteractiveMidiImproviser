@@ -46,6 +46,27 @@ describe IntervalCritic do
     end
   end
 
+  context ".load" do
+    it "should load a file, named <folder>/interval_critic_<order>.yml, and act just like the saved critic" do
+      order = 1
+      ic = IntervalCritic.new(order)
+      ic.listen(Music::Note.new(Music::Pitch.new(1), Music::Duration.new(1)))
+      ic.listen(Music::Note.new(Music::Pitch.new(2), Music::Duration.new(2)))
+      ic.listen(Music::Note.new(Music::Pitch.new(3), Music::Duration.new(3)))
+      ic.listen(Music::Note.new(Music::Pitch.new(5), Music::Duration.new(5)))
+      ic.reset
+      ic.listen(Music::Note.new(Music::Pitch.new(1), Music::Duration.new(1)))
+      ic.listen(Music::Note.new(Music::Pitch.new(2), Music::Duration.new(2)))
+      ic.listen(Music::Note.new(Music::Pitch.new(3), Music::Duration.new(3)))
+      ic.save "data/test"
+      ic2 = IntervalCritic.new(order)
+      ic2.load "data/test"
+      x = ic.get_expectations
+      x2 = ic2.get_expectations
+      x.choose_outcome.should == x2.choose_outcome
+    end
+  end
+
   context ".cumulative_surprise" do
     it "should return zero initially" do
       order = 1

@@ -37,6 +37,24 @@ describe DurationCritic do
     end
   end
 
+  context ".load" do
+    it "should load a file, named <folder>/duration_critic_<order>.yml, and act just like the saved critic" do
+      order = 1
+      dc = DurationCritic.new(order)
+      dc.listen(Music::Note.new(Music::Pitch.new(1), Music::Duration.new(1)))
+      dc.listen(Music::Note.new(Music::Pitch.new(2), Music::Duration.new(2)))
+      dc.listen(Music::Note.new(Music::Pitch.new(3), Music::Duration.new(3)))
+      dc.reset
+      dc.listen(Music::Note.new(Music::Pitch.new(2), Music::Duration.new(2)))
+      dc.save "data/test"
+      dc2 = DurationCritic.new(order)
+      dc2.load "data/test"
+      x = dc.get_expectations
+      x2 = dc2.get_expectations
+      x.choose_outcome.should == x2.choose_outcome
+    end
+  end
+
   context ".cumulative_surprise" do
     it "should return zero initially" do
       order = 1

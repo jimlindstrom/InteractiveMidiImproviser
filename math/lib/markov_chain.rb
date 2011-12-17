@@ -6,7 +6,7 @@ module Math
   
   class MarkovChain
     attr_reader :order
-  
+
     def initialize(order, num_states)
       raise ArgumentError.new("order must be positive") if order < 1
       raise ArgumentError.new("must have two or more states") if num_states < 2
@@ -27,7 +27,7 @@ module Math
       @state_history        = [ nil ]*@order
       @state_history_string = ["nil"]*@order
     end
- 
+  
     def save(filename)
       File.open(filename, 'w') do |f| 
         f.puts YAML::dump @order
@@ -36,6 +36,19 @@ module Math
         f.puts YAML::dump @state_history
         f.puts YAML::dump @state_history_string
       end
+    end
+
+    def self.load(filename)
+      docs = []
+      File.open(filename, 'r') do |f|
+        YAML.each_document(f) { |d| docs.push d }
+      end
+      raise RuntimeError.new("bad markov file") if docs.length != 5
+
+      m = MarkovChain.new(docs[0], docs[1])
+      m.set_internals(docs[2], docs[3], docs[4])
+
+      return m
     end
   
     def observe(next_state)
@@ -70,9 +83,15 @@ module Math
       end
       return x
     end
-  
+
+  # FIXME: This is terrible.  How else can (only) self.load set these though?
+    def set_internals(o, sh, shs)
+      @observations         = o
+      @state_history        = sh
+      @state_history_string = shs
+    end
+
   private
-  
     def state_history_to_key
       @state_history_string.join(',')
     end
