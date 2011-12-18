@@ -19,6 +19,11 @@ New Critic: overall shape of line
 Some sort of ending prediction
 	- factor oracle
 	- markov chain based on [cur note; num notes left] to predict [next note]
+	- or... begin to introduce FARG functioanlity.  Just introduce a terminal 
+	  symbol; use backward-looking markov chains; try to get each generator to
+	  end on a terminal.
+		- This sounds unlikely to work since it's all-or-nothing.  Need a way
+		  (like in actual FARG) to get there incrementally.
 
 Change to planning based on time or number of beats (vs. number of notes)
 
