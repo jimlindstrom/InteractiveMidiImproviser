@@ -2,11 +2,6 @@
 
 require "spec_helper"
 
-# I'd love to have a version of this that works for future states instead of history 
-# states.  E.g., if you know that the phrase is ending in 2 notes, you should be able to say,
-# I'm in state <X>, I'm looking for state <Y>, and then there's going to be some state <Z> that
-# is terminal.  Given that, what are your expectations about state Y?
-
 describe Math::MarkovChain do
   before do
   end
