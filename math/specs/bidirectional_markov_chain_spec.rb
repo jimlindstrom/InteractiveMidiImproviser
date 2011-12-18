@@ -53,6 +53,20 @@ describe Math::BidirectionalMarkovChain do
     end
   end
 
+  context "order" do
+    it "returns the number of historical states the chain uses to predict future states" do
+      mc = Math::BidirectionalMarkovChain.new(order=1, lookahead=2, num_states=3)
+      mc.order.should == 1
+    end
+  end
+
+  context "lookahead" do
+    it "returns the number of steps the chain will look ahead to plan for the terminal state" do
+      mc = Math::BidirectionalMarkovChain.new(order=1, lookahead=2, num_states=3)
+      mc.lookahead.should == 2
+    end
+  end
+
   context "reset" do
     it "resets the state back to the initial state (undoes do_transitions)" do
       mc = Math::BidirectionalMarkovChain.new(order=1, lookahead=1, num_states=2)

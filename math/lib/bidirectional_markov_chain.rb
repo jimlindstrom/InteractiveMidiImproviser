@@ -6,6 +6,7 @@ module Math
   
   class BidirectionalMarkovChain
     attr_reader :order
+    attr_reader :lookahead
 
     LOGGING = false
 

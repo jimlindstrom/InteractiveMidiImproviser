@@ -33,6 +33,9 @@ class Improvisor
       response.last.analysis[:beat_position] = beat_position
       beat_position += response.last.duration
 
+      # update the lat note with the number of notes left
+      response.last.analysis[:notes_left] = num_notes - response.length
+
       # FIXME: there needs to be a test around this. It was missing
       get_critics.each { |critic| critic.listen response.last } 
     end

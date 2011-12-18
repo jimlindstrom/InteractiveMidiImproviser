@@ -51,19 +51,21 @@ describe IntervalCritic do
       order = 1
       ic = IntervalCritic.new(order)
       ic.listen(Music::Note.new(Music::Pitch.new(1), Music::Duration.new(1)))
-      ic.listen(Music::Note.new(Music::Pitch.new(2), Music::Duration.new(2)))
+      ic.listen(Music::Note.new(Music::Pitch.new(9), Music::Duration.new(2)))
       ic.listen(Music::Note.new(Music::Pitch.new(3), Music::Duration.new(3)))
       ic.listen(Music::Note.new(Music::Pitch.new(5), Music::Duration.new(5)))
       ic.reset
       ic.listen(Music::Note.new(Music::Pitch.new(1), Music::Duration.new(1)))
-      ic.listen(Music::Note.new(Music::Pitch.new(2), Music::Duration.new(2)))
+      ic.listen(Music::Note.new(Music::Pitch.new(9), Music::Duration.new(2)))
       ic.listen(Music::Note.new(Music::Pitch.new(3), Music::Duration.new(3)))
       ic.save "data/test"
       ic2 = IntervalCritic.new(order)
       ic2.load "data/test"
-      x = ic.get_expectations
-      x2 = ic2.get_expectations
-      x.choose_outcome.should == x2.choose_outcome
+      10.times do # it's probabalistic, so let's try it a few times
+        x = ic.get_expectations
+        x2 = ic2.get_expectations
+        x.choose_outcome.should == x2.choose_outcome
+      end
     end
   end
 
@@ -154,7 +156,7 @@ describe IntervalCritic do
       Music::Pitch.new(x.choose_outcome).val.should == (base_note + interval)
     end
     it "returns a random variable that only chooses states observed (higher order)" do
-      order = 2
+      order = 3
       ic = IntervalCritic.new(order)
       ic.listen(Music::Note.new(Music::Pitch.new(0), Music::Duration.new(0)))
       ic.listen(Music::Note.new(Music::Pitch.new(1), Music::Duration.new(0))) # 1
@@ -172,10 +174,12 @@ describe IntervalCritic do
       ic.listen(Music::Note.new(Music::Pitch.new(5), Music::Duration.new(0))) # 5
       ic.listen(Music::Note.new(Music::Pitch.new(6), Music::Duration.new(0))) # 1
       ic.listen(Music::Note.new(Music::Pitch.new(7), Music::Duration.new(0))) # 1
-      x = ic.get_expectations
-      last_note = 7
-      expected_interval = 1
-      Music::Pitch.new(x.choose_outcome).val.should == (last_note + expected_interval)
+      10.times do # it's probabalistic, so let's try it a few times
+        x = ic.get_expectations
+        last_note = 7
+        expected_interval = 1
+        Music::Pitch.new(x.choose_outcome).val.should == (last_note + expected_interval)
+      end
     end
   end
 

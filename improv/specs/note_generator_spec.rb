@@ -15,6 +15,8 @@ describe NoteGenerator do
     n = Music::Note.new(Music::Pitch.new(55), Music::Duration.new(2))
     n.analysis[:beat_position] = @notes.first.analysis[:beat_position] + @notes.first.duration
     @notes.push n
+
+    @notes.tag_with_notes_left
   end
 
   context ".get_critics" do

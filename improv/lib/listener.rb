@@ -1,6 +1,8 @@
 #!/usr/bin/env ruby
 
 class Listener
+  LOGGING = true
+
   def initialize
     @critics = []
   end
@@ -10,6 +12,8 @@ class Listener
   end
 
   def listen(notes, logging=false)
+    return if !analyze_note_queue(notes)
+
     @critics.each { |c| c.reset }
 
     if logging
@@ -37,6 +41,17 @@ class Listener
     end
     s += " "*pad_len
     return s
+  end
+
+  def analyze_note_queue(notes)
+    if notes.detect_meter
+      puts "\tmeter: #{notes.meter.inspect}" if LOGGING
+    else
+      puts "\tfailed to detect meter. ignoring stimulus." if LOGGING
+      return false # FIXME: figure out a way to listen with only partial info (no meter)
+    end
+    notes.tag_with_notes_left
+    return true
   end
 
 end

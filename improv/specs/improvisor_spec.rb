@@ -39,6 +39,8 @@ describe Improvisor do
       n.analysis[:beat_position] = @notes.last.analysis[:beat_position] + @notes.last.duration
       @notes.push n
 
+      @notes.tag_with_notes_left
+
       @i = Improvisor.new
       critics = @i.get_critics
       critics.each do |critic|

@@ -15,6 +15,8 @@ describe DurationGenerator do
     n = Music::Note.new(Music::Pitch.new(0), Music::Duration.new(2))
     n.analysis[:beat_position] = @notes.first.analysis[:beat_position] + @notes.first.duration
     @notes.push n
+
+    @notes.tag_with_notes_left
   end
 
   context ".get_critics" do
@@ -34,7 +36,6 @@ describe DurationGenerator do
 
   context ".reset" do
     it "should cause the next duration (the first in a seq) to be an observed starting duration" do
-
       dg = DurationGenerator.new
       critics = dg.get_critics
       critics.each do |critic|

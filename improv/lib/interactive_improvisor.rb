@@ -13,16 +13,12 @@ class InteractiveImprovisor
     @improvisor.get_critics.each { |c| @listener.add_critic(c) }
   end
 
-  #def train(num_training_vectors = $fake_sensor_vectors.length, num_testing_vectors = 0)
   def train(num_training_vectors, num_testing_vectors)
     @sensor = FakeSensor.new($fake_sensor_vectors, num_training_vectors)
     puts "\ttraining over #{num_training_vectors} vectors" if LOGGING
     until (stimulus_events = @sensor.get_stimulus).nil?
       stimulus_notes = Music::NoteQueue.from_event_queue(stimulus_events)
-      if stimulus_notes.detect_meter # FIXME: feels like this should be in a critic...
-        #puts "meter: #{stimulus_notes.meter.inspect}" if LOGGING
-        @listener.listen stimulus_notes # FIXME: figure out a way to listen with only partial info (no meter)
-      end
+      @listener.listen stimulus_notes 
     end
 
     if num_testing_vectors > 0
@@ -33,11 +29,7 @@ class InteractiveImprovisor
       num_training_vectors.times { @sensor.get_stimulus } # throw away the ones we already trained on
       until (stimulus_events = @sensor.get_stimulus).nil?
         stimulus_notes = Music::NoteQueue.from_event_queue(stimulus_events)
-        if stimulus_notes.detect_meter # FIXME: feels like this should be in a critic...
-          #puts "meter: #{stimulus_notes.meter.inspect}" if LOGGING
-          do_logging = true
-          @listener.listen(stimulus_notes, do_logging) # FIXME: figure out a way to listen with only partial info (no meter)
-        end
+        @listener.listen(stimulus_notes, do_logging=true)
       end
     end
 
@@ -62,13 +54,7 @@ class InteractiveImprovisor
     puts "Listening..." if LOGGING
     until (stimulus_events = @sensor.get_stimulus).nil?
       stimulus_notes = Music::NoteQueue.from_event_queue(stimulus_events)
-
-      if stimulus_notes.detect_meter # FIXME: feels like this should be in a critic
-        puts "\tmeter: #{stimulus_notes.meter.inspect}" if LOGGING
-        @listener.listen stimulus_notes
-      else
-        puts "\tfailed to detect meter. ignoring stimulus." if LOGGING
-      end
+      @listener.listen stimulus_notes
 
       puts "Improvising..." if LOGGING
       response_notes = @improvisor.generate

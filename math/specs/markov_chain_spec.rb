@@ -33,6 +33,13 @@ describe Math::MarkovChain do
     end
   end
 
+  context "order" do
+    it "returns the number of historical states the chain uses to predict future states" do
+      mc = Math::MarkovChain.new(order=1, num_states=3)
+      mc.order.should == 1
+    end
+  end
+
   context "reset" do
     it "resets the state back to the initial state (undoes do_transitions)" do
       mc = Math::MarkovChain.new(order=1, num_states=2)

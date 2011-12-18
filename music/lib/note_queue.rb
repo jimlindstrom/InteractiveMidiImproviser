@@ -42,7 +42,13 @@ module Music
       return eq
     end
   
-    def beat_array
+    def tag_with_notes_left
+      self.each_with_index do |item, idx|
+        item.analysis[:notes_left] = self.length - 1 - idx
+      end
+    end
+
+    def beat_array # FIXME: does this need to be public?
       beats = []
       prev = nil
       self.each do |note|

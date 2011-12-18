@@ -1,9 +1,9 @@
 #!/usr/bin/env ruby
 
 class DurationAndBeatPositionCritic < Critic
-  def initialize(order)
+  def initialize(order, lookahead)
     reset_cumulative_surprise
-    @markov_chain = Math::MarkovChain.new(order, Music::DurationAndBeatPosition.num_values)
+    @markov_chain = Math::BidirectionalMarkovChain.new(order, lookahead, Music::DurationAndBeatPosition.num_values)
   end
 
   def reset
@@ -11,23 +11,24 @@ class DurationAndBeatPositionCritic < Critic
   end
 
   def save(folder)
-    filename = "#{folder}/duration_and_beat_position_critic_#{@markov_chain.order}.yml"
+    filename = "#{folder}/duration_and_beat_position_critic_#{@markov_chain.order}_#{@markov_chain.lookahead}.yml"
     @markov_chain.save(filename)
   end
 
   def load(folder)
-    filename = "#{folder}/duration_and_beat_position_critic_#{@markov_chain.order}.yml"
-    @markov_chain = Math::MarkovChain.load(filename)
+    filename = "#{folder}/duration_and_beat_position_critic_#{@markov_chain.order}_#{@markov_chain.lookahead}.yml"
+    @markov_chain = Math::BidirectionalMarkovChain.load(filename)
   end
 
   def listen(note)
     raise ArgumentError.new("not a note.  is a #{note.class}") if note.class != Music::Note
     raise ArgumentError.new("note must have meter analysis") if note.analysis[:beat_position].nil?
+    raise ArgumentError.new("note must have notes_left analysis") if note.analysis[:notes_left].nil?
     next_symbol = Music::DurationAndBeatPosition.new(note.duration, note.analysis[:beat_position]).to_symbol
     surprise = @markov_chain.get_expectations.get_surprise(next_symbol.val)
     add_to_cumulative_surprise surprise
-    @markov_chain.observe(next_symbol.val)
-    @markov_chain.transition(next_symbol.val)
+    @markov_chain.observe(next_symbol.val, note.analysis[:notes_left])
+    @markov_chain.transition(next_symbol.val, note.analysis[:notes_left])
     return surprise
   end
 
