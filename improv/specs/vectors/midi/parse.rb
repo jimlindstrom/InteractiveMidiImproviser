@@ -16,6 +16,25 @@ end
 
 puts "\t\"File: #{ARGV[0]}\" =>"
 puts "\t{"
+
+majorkeys = ['c flat', 'g flat', 'd flat', 'a flat', 'e flat', 'b flat', 'f', 'c', 'g', 'd', 'a', 'e', 'b', 'f sharp', 'c sharp']
+minorkeys = ['a flat', 'e flat', 'b flat', 'f', 'c', 'g', 'd', 'a', 'e', 'b', 'f sharp', 'c sharp', 'g sharp', 'd sharp', 'a sharp']
+
+seq.tracks[0].events.each do |e|
+  if e.respond_to?(:minor_key?) # what if there are two of these??
+    is_major = (e.major_key?)     ? "true" : "false"
+    is_sharp = (e.sharpflat >= 0) ? "true" : "false"
+
+    if e.major_key?
+      pitch_class = majorkeys[e.sharpflat + 7]
+    else
+      pitch_class = minorkeys[e.sharpflat + 7]
+    end
+
+    puts "\t\t:key_sig => Music::KeySignature.new(is_major=#{is_major}, is_sharp=#{is_sharp}, pitch_class=\"#{pitch_class}\"),"
+  end
+end
+
 puts "\t\t:events =>"
 puts "\t\t["
 

@@ -40,15 +40,15 @@ describe Midi::OutPort, :midi_tests => true do
           sleep 0.1 
         end
         sleep 0.05
-        @event = Midi::Event.new({:message=>Midi::Event::NOTE_ON,  :pitch=>100, :velocity=>100, :timestamp=>0})
+        @event = Midi::NoteOnEvent.new({:pitch=>100, :velocity=>100, :timestamp=>0})
         @outport.write(@event)
         sleep 0.05
-        @event = Midi::Event.new({:message=>Midi::Event::NOTE_OFF, :pitch=>100, :velocity=>100, :timestamp=>0})
+        @event = Midi::NoteOffEvent.new({:pitch=>100, :velocity=>100, :timestamp=>0})
         @outport.write(@event)
       end
       @reading=true
       @evt = @inport.blocking_read
-      @evt.class.should == Midi::Event
+      @evt.is_a?(Midi::Event).should == true
       @thread_id.join
     end
   end

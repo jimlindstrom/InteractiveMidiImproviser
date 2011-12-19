@@ -26,16 +26,16 @@ module Music
       eq = Midi::EventQueue.new
       timestamp = 0
       self.each do |note|
-        eq.enqueue Midi::Event.new({:message   => Midi::Event::NOTE_ON,
-                                    :pitch     => note.pitch.val,
-                                    :velocity  => 100,
-                                    :timestamp => timestamp })
+        eq.enqueue Midi::NoteOnEvent.new({
+                     :pitch     => note.pitch.val,
+                     :velocity  => 100,
+                     :timestamp => timestamp })
   
         timestamp += note.duration.val * @tempo
-        eq.enqueue Midi::Event.new({:message   => Midi::Event::NOTE_OFF,
-                                    :pitch     => note.pitch.val,
-                                    :velocity  => 100,
-                                    :timestamp => timestamp })
+        eq.enqueue Midi::NoteOffEvent.new({
+                     :pitch     => note.pitch.val,
+                     :velocity  => 100,
+                     :timestamp => timestamp })
   
       end 
   

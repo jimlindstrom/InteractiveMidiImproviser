@@ -36,21 +36,31 @@ module Midi
           end
           case raw_event[:message][0]
           when Midi::Event::NOTE_ON
-            event = Midi::Event.new({
-                                     :message   => Midi::Event::NOTE_ON,
-                                     :pitch     => raw_event[:message][1],
-                                     :velocity  => raw_event[:message][2],
-                                     :timestamp => raw_event[:timestamp],
-                                    })
-            #puts "{:message => #{raw_event[:message].inspect}, :timestamp => #{raw_event[:timestamp]}"
+            event = Midi::NoteOnEvent.new({
+                      :pitch     => raw_event[:message][1],
+                      :velocity  => raw_event[:message][2],
+                      :timestamp => raw_event[:timestamp],
+                    })
           when Midi::Event::NOTE_OFF
-            event = Midi::Event.new({
-                                     :message   => Midi::Event::NOTE_OFF,
-                                     :pitch     => raw_event[:message][1],
-                                     :velocity  => raw_event[:message][2],
-                                     :timestamp => raw_event[:timestamp],
-                                    })
-            #puts "{:message => #{raw_event[:message].inspect}, :timestamp => #{raw_event[:timestamp]}"
+            event = Midi::NoteOffEvent.new({
+                      :pitch     => raw_event[:message][1],
+                      :velocity  => raw_event[:message][2],
+                      :timestamp => raw_event[:timestamp],
+                    })
+          when Midi::Event::META
+            case ((raw_event[:message][0]*256) + raw_event[:message][1])
+            when Midi::Event::KEY_SIG
+              raise RuntimeError.new("parsing error") if raw_event[:message][2] != 2
+              event = Midi::KeySigEvent.new({
+                        :num_flats => raw_event[:message][3],
+                        :is_major  => raw_event[:message][4],
+                        :timestamp => raw_event[:timestamp],
+                      })
+  
+            else
+              raise RuntimeError.new("Can't handle meta event type yet: #{raw_event.inspect}") 
+            end
+
           else
             raise RuntimeError.new("Can't handle event type yet: #{raw_event.inspect}") 
           end

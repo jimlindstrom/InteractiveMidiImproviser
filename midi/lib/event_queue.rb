@@ -10,7 +10,7 @@ module Midi
     end
 
     def enqueue(e)
-      raise ArgumentError, "Midi::EventQueue only accepts Midi::Event items" if e.class != Midi::Event
+      raise ArgumentError, "Midi::EventQueue only accepts Midi::Event items" if !e.is_a?(Midi::Event)
       push(e)
     end
 

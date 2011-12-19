@@ -182,32 +182,32 @@ describe Music::NoteQueue do
   describe ".from_event_queue" do
     before (:each) do
       @test_events = [
-        Midi::Event.new({:message   => Midi::Event::NOTE_ON,
-                         :pitch     => 40,
-                         :velocity  => 100,
-                         :timestamp => 1000 }),
-        Midi::Event.new({:message   => Midi::Event::NOTE_OFF,
-                         :pitch     => 40,
-                         :velocity  => 100,
-                         :timestamp => 2000 }),
+        Midi::NoteOnEvent.new({
+          :pitch     => 40,
+          :velocity  => 100,
+          :timestamp => 1000 }),
+        Midi::NoteOffEvent.new({
+          :pitch     => 40,
+          :velocity  => 100,
+          :timestamp => 2000 }),
   
-        Midi::Event.new({:message   => Midi::Event::NOTE_ON,
-                         :pitch     => 42,
-                         :velocity  => 100,
-                         :timestamp => 2000 }),
-        Midi::Event.new({:message   => Midi::Event::NOTE_OFF,
-                         :pitch     => 42,
-                         :velocity  => 100,
-                         :timestamp => 3000 }),
+        Midi::NoteOnEvent.new({
+          :pitch     => 42,
+          :velocity  => 100,
+          :timestamp => 2000 }),
+        Midi::NoteOffEvent.new({
+          :pitch     => 42,
+          :velocity  => 100,
+          :timestamp => 3000 }),
   
-        Midi::Event.new({:message   => Midi::Event::NOTE_ON,
-                         :pitch     => 44,
-                         :velocity  => 100,
-                         :timestamp => 3000 }),
-        Midi::Event.new({:message   => Midi::Event::NOTE_OFF,
-                         :pitch     => 44,
-                         :velocity  => 100,
-                         :timestamp => 4000 }) ]
+        Midi::NoteOnEvent.new({
+          :pitch     => 44,
+          :velocity  => 100,
+          :timestamp => 3000 }),
+        Midi::NoteOffEvent.new({
+          :pitch     => 44,
+          :velocity  => 100,
+          :timestamp => 4000 }) ]
       @evq = Midi::EventQueue.new
       @test_events.each { |e| @evq.enqueue e }
       @nq = Music::NoteQueue.from_event_queue(@evq)

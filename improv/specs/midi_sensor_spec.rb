@@ -22,10 +22,10 @@ describe MidiSensor, :midi_tests => true do
         puts "Writing stimulus # #{stimulus_idx}"
         notes_in_stimulus=30
         notes_in_stimulus.times do 
-          @event = Midi::Event.new({:message=>Midi::Event::NOTE_ON,  :pitch=>100, :velocity=>100, :timestamp=>0})
+          @event = Midi::NoteOnEvent.new({  :pitch=>100, :velocity=>100, :timestamp=>0})
           @outport.write(@event) if !@outport.nil?
           sleep 0.1
-          @event = Midi::Event.new({:message=>Midi::Event::NOTE_OFF, :pitch=>100, :velocity=>100, :timestamp=>0})
+          @event = Midi::NoteOffEvent.new({ :pitch=>100, :velocity=>100, :timestamp=>0})
           @outport.write(@event) if !@outport.nil?
           sleep 0.1
         end

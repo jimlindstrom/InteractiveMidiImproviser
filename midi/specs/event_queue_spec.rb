@@ -21,10 +21,10 @@ describe Midi::EventQueue do
       @evq = Midi::EventQueue.new
       @num_events=(rand*50).round
       @num_events.times do 
-        @evq.enqueue(Midi::Event.new({:message   => Midi::Event::NOTE_ON,
-                                      :pitch     => 40,
-                                      :velocity  => 100,
-                                      :timestamp => 1000 }))
+        @evq.enqueue(Midi::NoteOnEvent.new({
+                       :pitch     => 40,
+                       :velocity  => 100,
+                       :timestamp => 1000 }))
 
       end
       @evq.length.should == @num_events
@@ -36,16 +36,16 @@ describe Midi::EventQueue do
       @evq = Midi::EventQueue.new
       @num_events=(rand*50).round
       @num_events.times do 
-        @evq.enqueue(Midi::Event.new({:message   => Midi::Event::NOTE_ON,
-                                      :pitch     => 40,
-                                      :velocity  => 100,
-                                      :timestamp => 1000 }))
+        @evq.enqueue(Midi::NoteOnEvent.new({
+                       :pitch     => 40,
+                       :velocity  => 100,
+                       :timestamp => 1000 }))
       end
       @evq.clear
-      @evq.enqueue(Midi::Event.new({:message   => Midi::Event::NOTE_ON,
-                                    :pitch     => 40,
-                                    :velocity  => 100,
-                                    :timestamp => 1000 }))
+      @evq.enqueue(Midi::NoteOnEvent.new({
+                     :pitch     => 40,
+                     :velocity  => 100,
+                     :timestamp => 1000 }))
       @evq.length.should == 1
     end
   end
