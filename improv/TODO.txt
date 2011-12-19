@@ -7,32 +7,52 @@ Put a 'context' member on each note that points to shared context hash (***)
 	- it could contain harmonic info, intended surprise levels, etc.
 
 ###############################################################################
-# MAKING BETTER IMPROVS
+# BETTER IMPROVS
 ###############################################################################
 
-New Critic: pitch class (midi pitch modulo 12)
+Explore ways to make it harmonically intelligble
+	- critic for {pitch class set (scalar, last N notes context); last note}->{next note}
+		- give extra weight to those that land on beats, bars; and to longer notes
+		- need to introduce a weighted/probablistic pitch class set, and then
+		  choose some way of reducing this to discrete symbols.  maybe by keeping
+		  only those pitch classes above a certain threshold; or those that 
+		  are in the top 5.
+	- critic for {pitch class set (polyphonic, harmonic context); last note}->{next note}
+		- not sure how I'd infer this for monopohonic inputs
+		- but that may be fine.  If we have polyphonic input, we can use it. If
+		  not, we just disable this critic.  Or have it use the same context
+		  (from the whole phrase) throughout - like the keysig idea.
+	- critic for {key sig; last note}->{next note}
+		- this would suggest limiting improvs to standard major/minor keys
 
-New Critic: chord/scale (w/ underlying chord generation too)
-New Critic: key sig (look at prevalence of all notes so far. match to existing schemes)
-New Critic: overall shape of line
+How can the improvs contain repeated motifs?
+	- generate ad hoc, instead of rigidly left-to-right?
+	- add motif critic that looks for good places to insert these motifs and
+	  creates expectations for them
+	- create temporary dups of all critics and train them heavily on the motifs.
 
-Some sort of ending prediction
-	- factor oracle
-	- markov chain based on [cur note; num notes left] to predict [next note]
-	- or... begin to introduce FARG functioanlity.  Just introduce a terminal 
-	  symbol; use backward-looking markov chains; try to get each generator to
-	  end on a terminal.
-		- This sounds unlikely to work since it's all-or-nothing.  Need a way
-		  (like in actual FARG) to get there incrementally.
+Use bidirectional Markov's in more of the crtiics
 
 Change to planning based on time or number of beats (vs. number of notes)
 
+New Critic: overall shape of line (low priority. interval critic handles this well)
+
 ###############################################################################
-# MAKING IT MORE RESPONSIVE / INTERACTIVE
+# MORE RESPONSIVE / INTERACTIVE
 ###############################################################################
 
-New Critic: meter
+Mimic the stimulus's: meter
+Mimic the stimulus's: phrase length
+Mimic the stimulus's: tempo
 
-New Critic: phrase length
-New Critic: tempo
+###############################################################################
+# INTRODUCING FARG ARCHITECTURE
+###############################################################################
+
+Explore FARG architecture for improvising better endings
+
+Use rule-based FARG architectures to go apply happiness / unhappiness values
+	throughout a finished improv and rip the parts
+
+Use FARG techniques to look for structure / repeated patterns in the stimulus
 
