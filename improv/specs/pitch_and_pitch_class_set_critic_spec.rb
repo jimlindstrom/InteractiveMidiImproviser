@@ -128,31 +128,28 @@ describe PitchAndPitchClassSetCritic do
       ppcs = PitchAndPitchClassSetCritic.new(order=1)
       ppcs.current_pitch_class_set.should be_an_instance_of Music::PitchClassSet
     end
-    it "should contain the last 'order' pitch classes listened to (if they're all unique)" do
+    it "should contain no more pitch classes than the 'order'" do
       ppcs = PitchAndPitchClassSetCritic.new(order=2)
       ppcs.listen(Music::Note.new(Music::Pitch.new(0), Music::Duration.new(2)))
       ppcs.listen(Music::Note.new(Music::Pitch.new(1), Music::Duration.new(2)))
       ppcs.listen(Music::Note.new(Music::Pitch.new(2), Music::Duration.new(2)))
       ppcs.listen(Music::Note.new(Music::Pitch.new(3), Music::Duration.new(2)))
-
-      expected_pcs = Music::PitchClassSet.new
-      expected_pcs.add(Music::PitchClass.from_pitch(Music::Pitch.new(2)))
-      expected_pcs.add(Music::PitchClass.from_pitch(Music::Pitch.new(3)))
-
-      ppcs.current_pitch_class_set.vals.should == expected_pcs.vals
+      ppcs.current_pitch_class_set.vals.length.should be <= order
     end
-    it "should contain the last 'order' unique pitch classes listened to" do
+    it "should contain some subset of pitch classes listened to" do
       ppcs = PitchAndPitchClassSetCritic.new(order=2)
       ppcs.listen(Music::Note.new(Music::Pitch.new(0), Music::Duration.new(2)))
       ppcs.listen(Music::Note.new(Music::Pitch.new(1), Music::Duration.new(2)))
-      ppcs.listen(Music::Note.new(Music::Pitch.new(2), Music::Duration.new(2)))
-      ppcs.listen(Music::Note.new(Music::Pitch.new(2), Music::Duration.new(2)))
+      ppcs.listen(Music::Note.new(Music::Pitch.new(3), Music::Duration.new(2)))
+      ppcs.listen(Music::Note.new(Music::Pitch.new(4), Music::Duration.new(2)))
 
       expected_pcs = Music::PitchClassSet.new
       expected_pcs.add(Music::PitchClass.from_pitch(Music::Pitch.new(1)))
       expected_pcs.add(Music::PitchClass.from_pitch(Music::Pitch.new(2)))
+      expected_pcs.add(Music::PitchClass.from_pitch(Music::Pitch.new(3)))
+      expected_pcs.add(Music::PitchClass.from_pitch(Music::Pitch.new(4)))
 
-      ppcs.current_pitch_class_set.vals.should == expected_pcs.vals
+      (ppcs.current_pitch_class_set.vals - expected_pcs.vals).should == []
     end
   end
 

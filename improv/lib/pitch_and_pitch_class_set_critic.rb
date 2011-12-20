@@ -55,14 +55,13 @@ class PitchAndPitchClassSetCritic < Critic
   end
 
   def current_pitch_class_set
-    pcs = Music::PitchClassSet.new
-
-    note_idx = @note_history.length-1
-    while pcs.vals.length < @markov_chain.order and note_idx >= 0
-      pcs.add(Music::PitchClass.from_pitch(@note_history[note_idx].pitch))
-      note_idx -= 1
+    wpcs = Music::WeightedPitchClassSet.new()
+    weight = 1.0
+    (@note_history.length-1).downto(0) do |note_idx|
+      wpcs.add(Music::PitchClass.from_pitch(@note_history[note_idx].pitch), weight)
+      weight *= 0.9
     end
 
-    return pcs
+    return wpcs.top_n_pitch_classes(@markov_chain.order)
   end
 end

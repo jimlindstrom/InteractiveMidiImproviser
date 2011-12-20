@@ -22,9 +22,9 @@ describe Music::WeightedPitchClassSet do
   end
 
   context "weight" do
-    it "should return 0.0 if no weight has been added" do
+    it "should return nil if no weight has been added" do
       wpcs = Music::WeightedPitchClassSet.new()
-      wpcs.weight(pitch_class=Music::PitchClass.new(0)).should == 0.0
+      wpcs.weight(pitch_class=Music::PitchClass.new(0)).should == nil
     end
     it "should contain the sum of all weights added" do
       wpcs = Music::WeightedPitchClassSet.new()
@@ -65,6 +65,10 @@ describe Music::WeightedPitchClassSet do
     end
     it "should return a PitchClassSet" do
       @wpcs.top_n_pitch_classes(3).should be_an_instance_of Music::PitchClassSet
+    end
+    it "should initially return a PitchClassSet with no values" do
+      wpcs = Music::WeightedPitchClassSet.new()
+      wpcs.top_n_pitch_classes(3).vals.should == []
     end
     it "should return pitch classes with in the top N by weight" do
       pcs = @wpcs.top_n_pitch_classes(3)
