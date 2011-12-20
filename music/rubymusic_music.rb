@@ -21,6 +21,7 @@ require File.join(File.dirname(__FILE__), 'lib', 'beat_similarity_matrix')
 
 require File.join(File.dirname(__FILE__), 'lib', 'pitch_class')
 require File.join(File.dirname(__FILE__), 'lib', 'pitch_class_set')
+require File.join(File.dirname(__FILE__), 'lib', 'weighted_pitch_class_set')
 
 require File.join(File.dirname(__FILE__), 'lib', 'note_queue')
 

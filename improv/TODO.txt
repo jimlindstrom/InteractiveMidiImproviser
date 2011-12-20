@@ -1,58 +1,62 @@
-###############################################################################
-# REFACTORING
-###############################################################################
+### REFACTORING
 
 Put a 'context' member on each note that points to shared context hash (***)
-	- this could be different for different phrases
-	- it could contain harmonic info, intended surprise levels, etc.
+	   - this could be different for different phrases
+	   - it could contain harmonic info, intended surprise levels, etc.
 
-###############################################################################
-# BETTER IMPROVS
-###############################################################################
+### BETTER IMPROVS
 
-Explore ways to make it harmonically intelligble
-	- critic for {pitch class set (scalar, last N notes context); last note}->{next note}
-		- give extra weight to those that land on beats, bars; and to longer notes
-		- need to introduce a weighted/probablistic pitch class set, and then
-		  choose some way of reducing this to discrete symbols.  maybe by keeping
-		  only those pitch classes above a certain threshold; or those that 
-		  are in the top 5.
-	- critic for {pitch class set (polyphonic, harmonic context); last note}->{next note}
-		- not sure how I'd infer this for monopohonic inputs
-		- but that may be fine.  If we have polyphonic input, we can use it. If
-		  not, we just disable this critic.  Or have it use the same context
-		  (from the whole phrase) throughout - like the keysig idea.
-	- critic for {key sig; last note}->{next note}
-		- this would suggest limiting improvs to standard major/minor keys
+Explore ways to make it harmonically intelligible
+   - critic for {pitch class set (scalar, last N notes context); last note}->{next note}
+	   - give extra weight to: notes landing on beats, bars; longer notes; recent notes
+	   - need to introduce a weighted/probabilistic pitch class set, and then
+	     choose some way of reducing this to discrete symbols.  maybe by keeping
+	     only those pitch classes above a certain threshold; or those that
+	     are in the top 5.
+   - critic for {pitch class set (polyphonic, harmonic context); last note}->{next note}
+	   - this critic would be idle/mute for monophonic inputs
+	   - this is easier in 4-part choral-style midi files, because they're separated into
+	     tracks.  In the general case (live, human performer), we'd need a stream
+	     splitter.  Could be a fancier one that can parse things like Bach prelude #1. Or
+	     could just take the highest active note at any point in time.
+   - critic for {key sig; last note}->{next note}
+	   - this would suggest limiting improvs to standard major/minor keys
+   - Like duration, if we have notes from other tracks, we can use that as polyphonic
+	 context. If we don't, we could fall back on scalar context.
 
 How can the improvs contain repeated motifs?
-	- generate ad hoc, instead of rigidly left-to-right?
-	- add motif critic that looks for good places to insert these motifs and
-	  creates expectations for them
-	- create temporary dups of all critics and train them heavily on the motifs.
+   - generate ad hoc, instead of rigidly left-to-right?
+   - add motif critic that looks for good places to insert these motifs and
+	 creates expectations for them
+   - create temporary dups of all critics and train them heavily on the motifs.
+   - have a few "spare" critics in each generator that are looking for structure and which
+	 don't persist their training?
+   - look for surprising notes & assume those are where motifs are anchored?
 
-Use bidirectional Markov's in more of the crtiics
+Use bidirectional Markov's in more of the critics
 
 Change to planning based on time or number of beats (vs. number of notes)
 
-New Critic: overall shape of line (low priority. interval critic handles this well)
+New Critic: overall shape of line (low priority. interval critic
+handles this well)
 
-###############################################################################
-# MORE RESPONSIVE / INTERACTIVE
-###############################################################################
+I'd like to build layers of assumptions and fall-back as needed.
+First assume we're doing
+standard Western cannon.  Then if that fails, assume there's still
+chords and scales.  Then
+if that fails, look for consistent pitch class sets.  And if all else
+fails ... no idea.
+
+### MORE RESPONSIVE / INTERACTIVE
 
 Mimic the stimulus's: meter
 Mimic the stimulus's: phrase length
 Mimic the stimulus's: tempo
 
-###############################################################################
-# INTRODUCING FARG ARCHITECTURE
-###############################################################################
+### INTRODUCING FARG ARCHITECTURE
 
 Explore FARG architecture for improvising better endings
 
-Use rule-based FARG architectures to go apply happiness / unhappiness values
-	throughout a finished improv and rip the parts
+Use rule-based FARG architectures to go apply happiness / unhappiness values throughout a finished improv and rip the parts
 
 Use FARG techniques to look for structure / repeated patterns in the stimulus
-
