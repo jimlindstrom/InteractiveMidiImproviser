@@ -9,6 +9,10 @@ module Music
       @vals = []
     end
 
+    def self.num_values
+      2**12
+    end
+
     def add(pc)
       @vals = (@vals + [pc.val]).sort.uniq
     end

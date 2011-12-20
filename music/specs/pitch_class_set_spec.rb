@@ -13,6 +13,12 @@ describe Music::PitchClassSet do
     end
   end
 
+  context "num_values" do
+    it "should return 4096" do
+      Music::PitchClassSet.num_values.should == 4096
+    end
+  end
+
   context "add" do
     it "should put another pitch class in vals" do
       pcs = Music::PitchClassSet.new()

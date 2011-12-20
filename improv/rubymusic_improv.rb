@@ -14,6 +14,8 @@ require File.join(File.dirname(__FILE__), 'lib', 'pitch_symbol')
 require File.join(File.dirname(__FILE__), 'lib', 'meter_symbol')
 require File.join(File.dirname(__FILE__), 'lib', 'beat_position_symbol')
 require File.join(File.dirname(__FILE__), 'lib', 'duration_and_beat_position_symbol')
+require File.join(File.dirname(__FILE__), 'lib', 'pitch_class_set_symbol')
+require File.join(File.dirname(__FILE__), 'lib', 'pitch_and_pitch_class_set_symbol.rb')
 
 require File.join(File.dirname(__FILE__), 'lib', 'critic')
 require File.join(File.dirname(__FILE__), 'lib', 'duration_critic')
