@@ -9,12 +9,9 @@ module Music
       return Pitch.num_values * PitchClassSet.num_values
     end
   
-    def initialize(*params)
-      raise ArgumentError.new("expecting two params") if params.length != 2
-
-      @pitch           = params[0] # Pitch.new(0)
-      @pitch_class_set = params[1] # PitchClassSet.new
-      puts "params: " + params.inspect
+    def initialize(pitch, pcs)
+      @pitch           = pitch
+      @pitch_class_set = pcs
     end
   
     def to_symbol
