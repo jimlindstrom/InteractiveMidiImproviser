@@ -13,6 +13,11 @@ Put a 'context' member on each note that points to shared context hash (***)
 
 Use bidirectional Markov's in more of the critics (better endings)
 
+Look at aggregate stats:
+	- pitch range
+	- jumps vs. steps
+	- surprise envelopes
+
 How can the improvs contain repeated motifs?
    - generate ad hoc, instead of rigidly left-to-right?
    - add motif critic that looks for good places to insert these motifs and
