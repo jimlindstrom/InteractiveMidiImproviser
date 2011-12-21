@@ -57,7 +57,8 @@ class InteractiveImprovisor
       @listener.listen stimulus_notes
 
       puts "Improvising..." if LOGGING
-      response_notes = @improvisor.generate
+      response_notes = @improvisor.generate # FIXME: make this not train
+      @listener.listen(stimulus_notes, do_logging=true) # FIXME: this is only here to print it out.  make this not train...
 
       max_tempo = 400
       min_tempo = 250
