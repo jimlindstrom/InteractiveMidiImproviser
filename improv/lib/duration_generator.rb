@@ -25,15 +25,14 @@ class DurationGenerator
   end
 
   def generate
+    expectations = Math::RandomVariable.new(Music::Duration.num_values)
+
     # try generating with knowledge of the beat position
     duration_and_beat_position_exp = @duration_and_beat_position_critic.get_expectations
-    if !duration_and_beat_position_exp.nil?
-      x = duration_and_beat_position_exp.choose_outcome # x can be nil if no observations
-      return Music::DurationAndBeatPosition.new(*x).duration if !x.nil?
-    end
+    expectations += duration_and_beat_position_exp if !duration_and_beat_position_exp.nil?
 
-    # if that doens't work, initialize a random variable, ...
-    expectations = Math::RandomVariable.new(Music::Duration.num_values)
+    x = expectations.choose_outcome
+    return Music::Duration.new(x) if !x.nil?
 
     # and try adding duration stats to it
     duration_exp = @duration_critic.get_expectations
@@ -48,6 +47,7 @@ class DurationGenerator
     x = duration_exp.choose_outcome
     return Music::Duration.new(x) if !x.nil?
 
-    raise "Failed to generate a duration"
+    raise RuntimeError.new("Failed to generate a duration")
   end
+
 end

@@ -27,7 +27,7 @@ describe DurationAndBeatPositionCritic do
       dc.listen(@nq1.first)
       dc.reset
       x = dc.get_expectations
-      Music::DurationAndBeatPosition.new(*x.choose_outcome).duration.val.should == @nq1.first.duration.val
+      Music::Duration.new(x.choose_outcome).val.should == @nq1.first.duration.val
     end
   end
 
@@ -115,25 +115,23 @@ describe DurationAndBeatPositionCritic do
     end
     it "returns a random variable that is less surprised about states observed more often" do
       dc = DurationAndBeatPositionCritic.new(order=1, lookahead=1)
-      dc.listen(@nq1.first)
+      dc.listen(@nq1[0])
       dc.reset
-      dc.listen(@nq1.first)
+      dc.listen(@nq1[0])
       dc.reset
-      dc.listen(@nq2.first)
+      dc.listen(@nq2[1])
       dc.reset
       x = dc.get_expectations
 
-      dbps1 = Music::DurationAndBeatPosition.new(@nq1.first.duration, @nq1.first.analysis[:beat_position])
-      dbps2 = Music::DurationAndBeatPosition.new(@nq2.first.duration, @nq2.first.analysis[:beat_position])
-
-      x.get_surprise(dbps1.val).should be < x.get_surprise(dbps2.val)
+      puts "x: " + x.inspect
+      x.get_surprise(@nq1[0].duration.val).should be < x.get_surprise(@nq2[1].duration.val)
     end
     it "returns a random variable that only chooses states observed" do
       dc = DurationAndBeatPositionCritic.new(order=1, lookahead=1)
       dc.listen(@nq1.first)
       dc.reset
       x = dc.get_expectations
-      Music::DurationAndBeatPosition.new(*x.choose_outcome).duration.val.should == 1
+      Music::Duration.new(x.choose_outcome).val.should == 1
     end
   end
 

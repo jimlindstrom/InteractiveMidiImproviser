@@ -2,9 +2,9 @@
 
 Have PitchAndPitchClassSetCritic do more sophisticated weighting, based on 
 	- beat strength
+
 Determine if the PitchAndPitchClassSetCritic is reliably producing expected vals?
-Refactor DurationAndBeatPositionCritic to use an AsymmetricBidirectionalMarkovChain
-	- it could then be combined with anything else that predicts duration.
+
 Put a 'context' member on each note that points to shared context hash (***)
 	- this could be different for different phrases
 	- it could contain harmonic info, intended surprise levels, etc.
@@ -12,11 +12,6 @@ Put a 'context' member on each note that points to shared context hash (***)
 ### BETTER IMPROVS
 
 Use bidirectional Markov's in more of the critics (better endings)
-
-Look at aggregate stats:
-	- pitch range
-	- jumps vs. steps
-	- surprise envelopes
 
 How can the improvs contain repeated motifs?
    - generate ad hoc, instead of rigidly left-to-right?
@@ -27,8 +22,11 @@ How can the improvs contain repeated motifs?
 	 don't persist their training?
    - look for surprising notes & assume those are where motifs are anchored?
 
-New Critic: overall shape of line (low priority. interval critic
-handles this well)
+Look at aggregate stats:
+	- pitch range
+	- jumps vs. steps
+	- surprise envelopes
+	- overall shape of line 
 
 Explore ways to make it harmonically intelligible
    - critic for {pitch class set (polyphonic, harmonic context); last note}->{next note}
@@ -43,17 +41,17 @@ Explore ways to make it harmonically intelligible
 Change to planning based on time or number of beats (vs. number of notes)
 
 I'd like to build layers of assumptions and fall-back as needed.
-First assume we're doing
-standard Western cannon.  Then if that fails, assume there's still
-chords and scales.  Then
-if that fails, look for consistent pitch class sets.  And if all else
-fails ... no idea.
+	- First assume we're doing standard Western cannon.  
+	- Then if that fails, assume there's still chords and scales.  
+	- Then if that fails, look for consistent pitch class sets.  
+	- And if all else fails ... no idea.
 
 ### MORE RESPONSIVE / INTERACTIVE
 
 Mimic the stimulus's: meter
 Mimic the stimulus's: phrase length
 Mimic the stimulus's: tempo
+Mimic the stimulus's: pitch classes
 
 ### INTRODUCING FARG ARCHITECTURE
 
