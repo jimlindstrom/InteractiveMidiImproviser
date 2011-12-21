@@ -3,7 +3,8 @@
 Put a 'context' member on each note that points to shared context hash (***)
 	   - this could be different for different phrases
 	   - it could contain harmonic info, intended surprise levels, etc.
-Make PitchAndPitchClassSet use WeightedPCS instead of just PCS
+Use PitchAndPitchClassSetCritic in the pitch generator
+Refactor DurationAndBeatPositionCritic to use an AsymmetricBidirectionalMarkovChain
 
 ### BETTER IMPROVS
 
