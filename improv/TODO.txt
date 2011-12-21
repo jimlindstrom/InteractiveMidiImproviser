@@ -1,10 +1,13 @@
 ### REFACTORING
 
-Put a 'context' member on each note that points to shared context hash (***)
-	   - this could be different for different phrases
-	   - it could contain harmonic info, intended surprise levels, etc.
-Use PitchAndPitchClassSetCritic in the pitch generator
+Have PitchAndPitchClassSetCritic do more sophisticated weighting, based on 
+	- beat strength
+Determine if the PitchAndPitchClassSetCritic is reliably producing expected vals?
 Refactor DurationAndBeatPositionCritic to use an AsymmetricBidirectionalMarkovChain
+	- it could then be combined with anything else that predicts duration.
+Put a 'context' member on each note that points to shared context hash (***)
+	- this could be different for different phrases
+	- it could contain harmonic info, intended surprise levels, etc.
 
 ### BETTER IMPROVS
 

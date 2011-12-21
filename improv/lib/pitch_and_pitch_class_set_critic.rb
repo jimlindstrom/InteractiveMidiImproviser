@@ -58,7 +58,8 @@ class PitchAndPitchClassSetCritic < Critic
     wpcs = Music::WeightedPitchClassSet.new()
     weight = 1.0
     (@note_history.length-1).downto(0) do |note_idx|
-      wpcs.add(Music::PitchClass.from_pitch(@note_history[note_idx].pitch), weight)
+      cur_note=@note_history[note_idx]
+      wpcs.add(Music::PitchClass.from_pitch(cur_note.pitch), weight*cur_note.duration.val)
       weight *= 0.9
     end
 

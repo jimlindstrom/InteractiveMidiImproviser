@@ -21,8 +21,8 @@ class Improvisor
     puts "\tmeter: #{meter.inspect}"
 
     # FIXME: replace this with a critic / random variable
-    max_num_notes = 12
-    min_num_notes = 6
+    max_num_notes = 16
+    min_num_notes = 10
     num_notes = min_num_notes + (rand*(max_num_notes-min_num_notes)).round
 
     num_notes.times do 

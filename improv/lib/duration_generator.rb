@@ -10,7 +10,7 @@ class DurationGenerator
     @duration_critic = DurationCritic.new(duration_critic_order)
     @critics.push @duration_critic
 
-    duration_critic_order = 1
+    duration_critic_order = 2
     duration_critic_lookahead = 3
     @duration_and_beat_position_critic = DurationAndBeatPositionCritic.new(duration_critic_order, duration_critic_lookahead)
     @critics.push @duration_and_beat_position_critic
