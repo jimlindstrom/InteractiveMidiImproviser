@@ -60,7 +60,7 @@ module Math
       end
       raise RuntimeError.new("bad markov file") if docs.length != 8
 
-      m = AsymmetricBidirectionalMarkovChain.new(docs[0], docs[1], docs[2], docs[3]) # FIXME: use self.class.new?
+      m = AsymmetricBidirectionalMarkovChain.new(docs[0], docs[1], docs[2], docs[3])
       m.set_internals(docs[4], docs[5], docs[6], docs[7])
 
       return m
