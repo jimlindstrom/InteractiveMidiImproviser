@@ -1,11 +1,12 @@
 #!/usr/bin/env ruby
 
 class PitchAndPitchClassSetCritic < Critic
-  def initialize(order)
+  def initialize(order, lookahead)
     reset_cumulative_surprise
-    @markov_chain = Math::AsymmetricMarkovChain.new(order, 
-                                                    num_states=Music::PitchAndPitchClassSet.num_values, 
-                                                    num_outcomes=Music::Pitch.num_values)
+    @markov_chain = Math::AsymmetricBidirectionalMarkovChain.new(order, 
+                                                                 lookahead, 
+                                                                 num_states=Music::PitchAndPitchClassSet.num_values, 
+                                                                 num_outcomes=Music::Pitch.num_values)
     reset
   end
 
@@ -15,23 +16,24 @@ class PitchAndPitchClassSetCritic < Critic
   end
 
   def save(folder)
-    filename = "#{folder}/pitch_and_pitch_class_set_critic_#{@markov_chain.order}.yml"
+    filename = "#{folder}/pitch_and_pitch_class_set_critic_#{@markov_chain.order}_#{@markov_chain.lookahead}.yml"
     @markov_chain.save(filename)
 
-    filename = "#{folder}/pitch_and_pitch_class_set_critic_#{@markov_chain.order}_note_history.yml"
+    filename = "#{folder}/pitch_and_pitch_class_set_critic_#{@markov_chain.order}_#{@markov_chain.lookahead}_note_history.yml"
     File.open(filename, 'w') { |f| f.puts YAML::dump @note_history }
   end
 
   def load(folder)
-    filename = "#{folder}/pitch_and_pitch_class_set_critic_#{@markov_chain.order}.yml"
+    filename = "#{folder}/pitch_and_pitch_class_set_critic_#{@markov_chain.order}_#{@markov_chain.lookahead}.yml"
     @markov_chain = Math::AsymmetricMarkovChain.load(filename)
 
-    filename = "#{folder}/pitch_and_pitch_class_set_critic_#{@markov_chain.order}_note_history.yml"
+    filename = "#{folder}/pitch_and_pitch_class_set_critic_#{@markov_chain.order}_#{@markov_chain.lookahead}_note_history.yml"
     File.open(filename, 'r') { |f| @note_history = YAML::load(f) }
   end
 
   def listen(note)
     raise ArgumentError.new("not a note.  is a #{note.class}") if note.class != Music::Note
+    raise ArgumentError.new("note must have notes_left analysis") if note.analysis[:notes_left].nil?
 
     @note_history.push note
     pcs = current_pitch_class_set
@@ -41,8 +43,8 @@ class PitchAndPitchClassSetCritic < Critic
 
     surprise = @markov_chain.get_expectations.get_surprise(next_outcome.val)
     add_to_cumulative_surprise surprise
-    @markov_chain.observe(next_outcome.val)
-    @markov_chain.transition(next_state.val)
+    @markov_chain.observe(next_outcome.val, note.analysis[:notes_left])
+    @markov_chain.transition(next_state.val, note.analysis[:notes_left])
     return surprise
   end
 

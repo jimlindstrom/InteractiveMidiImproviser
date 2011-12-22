@@ -1,17 +1,12 @@
 ### REFACTORING
 
-Have PitchAndPitchClassSetCritic do more sophisticated weighting, based on 
-	- beat strength
-
-Determine if the PitchAndPitchClassSetCritic is reliably producing expected vals?
+Better tests to ensure that PitchAndPitchClassSetCritic is producing expected vals
 
 Put a 'context' member on each note that points to shared context hash (***)
 	- this could be different for different phrases
 	- it could contain harmonic info, intended surprise levels, etc.
 
 ### BETTER IMPROVS
-
-Use bidirectional Markov's in more of the critics (better endings)
 
 How can the improvs contain repeated motifs?
    - generate ad hoc, instead of rigidly left-to-right?
@@ -37,6 +32,9 @@ Explore ways to make it harmonically intelligible
 	     could just take the highest active note at any point in time.
    - Like duration, if we have notes from other tracks, we can use that as polyphonic
 	 context. If we don't, we could fall back on scalar context.
+
+Have PitchAndPitchClassSetCritic do more sophisticated weighting, based on 
+	- beat strength
 
 Change to planning based on time or number of beats (vs. number of notes)
 
