@@ -28,6 +28,7 @@ if do_training
   end
   i.save "data/production"
 else
+  puts "Loading..."
   i.load "data/production"
 end
 
