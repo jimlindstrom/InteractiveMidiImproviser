@@ -4,7 +4,7 @@ $LOAD_PATH << '.'
 require 'rubymusic_improv'
 
 do_training = false
-num_training_vectors = 300 # there are 409 available
+num_training_vectors = 600 # there are 1300+ available
 num_testing_vectors  =  20
 
 if ARGV.length > 0

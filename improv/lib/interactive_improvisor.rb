@@ -18,7 +18,7 @@ class InteractiveImprovisor
     puts "\ttraining over #{num_training_vectors} vectors" if LOGGING
     until (stimulus_events = @sensor.get_stimulus).nil?
       stimulus_notes = Music::NoteQueue.from_event_queue(stimulus_events)
-      @listener.listen stimulus_notes 
+      @listener.listen stimulus_notes if !stimulus_notes.nil?
     end
 
     if num_testing_vectors > 0
@@ -29,7 +29,7 @@ class InteractiveImprovisor
       num_training_vectors.times { @sensor.get_stimulus } # throw away the ones we already trained on
       until (stimulus_events = @sensor.get_stimulus).nil?
         stimulus_notes = Music::NoteQueue.from_event_queue(stimulus_events)
-        @listener.listen(stimulus_notes, do_logging=true)
+        @listener.listen(stimulus_notes, do_logging=true) if !stimulus_notes.nil?
       end
     end
 
@@ -58,7 +58,8 @@ class InteractiveImprovisor
 
       puts "Improvising..." if LOGGING
       response_notes = @improvisor.generate # FIXME: make this not train
-      @listener.listen(stimulus_notes, do_logging=true) # FIXME: this is only here to print it out.  make this not train...
+      @listener.listen(stimulus_notes, do_logging=true) if !stimulus_notes.nil?
+		# FIXME: this is only here to print it out.  make this not train...
 
       max_tempo = 400
       min_tempo = 250

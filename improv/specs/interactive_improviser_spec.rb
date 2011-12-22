@@ -22,12 +22,12 @@ describe InteractiveImprovisor do
     end
     it "should cause critics to get smarter and have lower cumulative surprise over testing vectors" do
       i = InteractiveImprovisor.new
-      num_training_vectors = 5
+      num_training_vectors = 4
       num_testing_vectors  = 10
       cum_error_less_training = i.train(num_training_vectors, num_testing_vectors)
 
       i = InteractiveImprovisor.new
-      num_training_vectors = 10
+      num_training_vectors = 16
       num_testing_vectors  = 10
       cum_error_more_training = i.train(num_training_vectors, num_testing_vectors)
 

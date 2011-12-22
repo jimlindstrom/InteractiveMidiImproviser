@@ -6,12 +6,23 @@ module Midi
 
   # Inter-onset interval (IOI) = the time delta between the start of two consecutive notes 
   class IOIArray < Array
+    LOGGING = false
     
     def evaluate_quantizer(q)
-      b    = self.map{|x| x.to_f/q}
+      filtered_x = self.select{|x| x>0} # get rid of zero-deltas (simultaneous onsets)
+      b    = filtered_x.map{|x| x.to_f/q}
+      #b    = self.map{|x| x.to_f/q}
       br   = b.map{|x| x.round}
       errs = b.zip(br).map { |x| (x[0]-x[1]).to_f / x[0].to_f }
       errs.collect!{ |x| x*x }
+
+      if LOGGING
+        puts "evaluate_quantizer(self=#{self.inspect},q=#{q})"
+        puts "b: #{b.inspect}"
+        puts "br: #{br.inspect}"
+        puts "errs: #{errs.inspect}"
+      end
+
       err  = errs.inject{|sum,el| sum + el}
     end
     
@@ -34,18 +45,26 @@ module Midi
   protected
 
     def quantize_helper(q1, q2, num_segs, max_depth) # FIXME: make private?
+      q1 = [q1,10.0].max
       delta=(q2-q1)/(num_segs-1).to_f
       qs=[q1.to_f]
       (num_segs-1).times { qs.push(qs.last+delta) }
     
       begin
-      abs_errs  = qs.collect{|q| evaluate_quantizer(q).abs}
+        abs_errs  = qs.collect{|q| evaluate_quantizer(q).abs}
       rescue # there's a bug in here, and I don't know where.  print out some diagnostic info
         puts "quantize_helper(#{q1}, #{q2}, #{num_segs}, #{max_depth})"
         puts "qs: #{qs.inspect}"
         raise
       end
+      begin
       min_err   = abs_errs.min
+      rescue # there's a bug in here, and I don't know where.  print out some diagnostic info
+        puts "quantize_helper(#{q1}, #{q2}, #{num_segs}, #{max_depth})"
+        puts "qs: #{qs.inspect}"
+        puts "abs_errs: #{abs_errs.inspect}"
+        raise
+      end
       min_idx   = abs_errs.index(min_err)
       min_err_q = qs[min_idx]
     

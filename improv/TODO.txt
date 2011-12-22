@@ -1,6 +1,8 @@
 ### REFACTORING
 
-Better tests to ensure that PitchAndPitchClassSetCritic is producing expected vals
+fake_sensor_vectors is now huge.  figure out a different strategy...
+	- Don't load all >50MB of events when running specs
+	- I also want to load / not load different styles easily.
 
 Put a 'context' member on each note that points to shared context hash (***)
 	- this could be different for different phrases

@@ -14,7 +14,15 @@ module Music
       notes = NoteQueue.new
       notes.tempo = q_ret[:q]
       iois.zip(evq.get_pitches).each do |ioi, pitch|
-        notes.push Note.new(Pitch.new(pitch), Duration.new(ioi))
+        if ioi < 0 or ioi >= Duration.num_values
+          puts "can't convert event queue to note queue due to bogus ioi: #{ioi}"
+          return nil 
+        elsif pitch < 0 or pitch >= Pitch.num_values
+          puts "can't convert event queue to note queue due to bogus pitch: #{pitch}"
+          return nil 
+        else
+          notes.push Note.new(Pitch.new(pitch), Duration.new(ioi))
+        end
       end
       
       return notes

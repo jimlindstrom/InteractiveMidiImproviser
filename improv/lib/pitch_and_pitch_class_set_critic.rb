@@ -7,7 +7,6 @@ class PitchAndPitchClassSetCritic < Critic
                                                                  lookahead, 
                                                                  num_states=Music::PitchAndPitchClassSet.num_values, 
                                                                  num_outcomes=Music::Pitch.num_values)
-    puts "lookahead1: #{@markov_chain.lookahead}"
     reset
   end
 
@@ -25,11 +24,9 @@ class PitchAndPitchClassSetCritic < Critic
   end
 
   def load(folder)
-    puts "lookahead2: #{@markov_chain.lookahead}"
     filename = "#{folder}/pitch_and_pitch_class_set_critic_#{@markov_chain.order}_#{@markov_chain.lookahead}.yml"
     @markov_chain = Math::AsymmetricBidirectionalMarkovChain.load(filename)
 
-    puts "lookahead3: #{@markov_chain.lookahead}"
     filename = "#{folder}/pitch_and_pitch_class_set_critic_#{@markov_chain.order}_#{@markov_chain.lookahead}_note_history.yml"
     File.open(filename, 'r') { |f| @note_history = YAML::load(f) }
   end
