@@ -3,7 +3,7 @@
 #require 'interactive_improvisor_lib'
 
 class Critic
-  attr_reader :cumulative_surprise
+  attr_reader :cumulative_information_content
 
   def initialize
     raise NotImplementedError.new("Abstract base class - cannot be instantiated")
@@ -21,11 +21,11 @@ class Critic
     raise NotImplementedError.new("Abstract base class - cannot be instantiated")
   end
 
-  def reset_cumulative_surprise
-    @cumulative_surprise = 0.0
+  def reset_cumulative_information_content
+    @cumulative_information_content = 0.0
   end
 
-  def add_to_cumulative_surprise(s)
-    @cumulative_surprise += s
+  def add_to_cumulative_information_content(s)
+    @cumulative_information_content += s
   end
 end

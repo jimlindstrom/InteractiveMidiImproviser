@@ -61,25 +61,25 @@ describe DurationAndBeatPositionCritic do
     end
   end
 
-  context ".cumulative_surprise" do
+  context ".cumulative_information_content" do
     it "should return zero initially" do
       dc = DurationAndBeatPositionCritic.new(order=1, lookahead=1)
-      dc.cumulative_surprise.should be_within(0.0001).of(0.0)
+      dc.cumulative_information_content.should be_within(0.0001).of(0.0)
     end
-    it "should return the sum of all listening surprise" do
+    it "should return the sum of all listening information_content" do
       dc = DurationAndBeatPositionCritic.new(order=1, lookahead=1)
-      cum_surprise = 0.0
-      cum_surprise += dc.listen(@nq1[0])
-      cum_surprise += dc.listen(@nq1[1])
-      cum_surprise += dc.listen(@nq1[2])
-      cum_surprise += dc.listen(@nq1[3])
-      dc.cumulative_surprise.should be_within(0.0001).of(cum_surprise)
+      cum_information_content = 0.0
+      cum_information_content += dc.listen(@nq1[0])
+      cum_information_content += dc.listen(@nq1[1])
+      cum_information_content += dc.listen(@nq1[2])
+      cum_information_content += dc.listen(@nq1[3])
+      dc.cumulative_information_content.should be_within(0.0001).of(cum_information_content)
     end
-    it "should return zero after calling reset_cumulative_surprise" do
+    it "should return zero after calling reset_cumulative_information_content" do
       dc = DurationAndBeatPositionCritic.new(order=1, lookahead=1)
       dc.listen(@nq1[0])
-      dc.reset_cumulative_surprise
-      dc.cumulative_surprise.should be_within(0.0001).of(0.0)
+      dc.reset_cumulative_information_content
+      dc.cumulative_information_content.should be_within(0.0001).of(0.0)
     end
   end
 
@@ -98,13 +98,13 @@ describe DurationAndBeatPositionCritic do
       note.analysis[:notes_left] = 1
       expect{ dc.listen(note) }.to raise_error(ArgumentError)
     end
-    it "should return the surprise associated with the given note" do
+    it "should return the information_content associated with the given note" do
       dc = DurationAndBeatPositionCritic.new(order=1, lookahead=1)
       note = Music::Note.new(Music::Pitch.new(0), Music::Duration.new(1))
       note.analysis[:beat_position] = @nq1.first.analysis[:beat_position].dup
       note.analysis[:notes_left] = 1
-      surprise = dc.listen(note)
-      surprise.should be_within(0.01).of(0.5)
+      information_content = dc.listen(note)
+	  information_content.should == Math::RandomVariable.max_information_content
     end
   end
 
@@ -113,7 +113,7 @@ describe DurationAndBeatPositionCritic do
       dc = DurationAndBeatPositionCritic.new(order=1, lookahead=1)
       dc.get_expectations.should be_an_instance_of Math::RandomVariable
     end
-    it "returns a random variable that is less surprised about states observed more often" do
+    it "returns a random variable that is less information_contentd about states observed more often" do
       dc = DurationAndBeatPositionCritic.new(order=1, lookahead=1)
       dc.listen(@nq1[0])
       dc.reset
@@ -124,7 +124,7 @@ describe DurationAndBeatPositionCritic do
       x = dc.get_expectations
 
       puts "x: " + x.inspect
-      x.get_surprise(@nq1[0].duration.val).should be < x.get_surprise(@nq2[1].duration.val)
+      x.information_content(@nq1[0].duration.val).should be < x.information_content(@nq2[1].duration.val)
     end
     it "returns a random variable that only chooses states observed" do
       dc = DurationAndBeatPositionCritic.new(order=1, lookahead=1)

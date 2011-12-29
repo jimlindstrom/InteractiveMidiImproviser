@@ -102,6 +102,25 @@ describe Math::RandomVariable do
       x = Math::RandomVariable.new(num_outcomes=3)
       expect{ x.add_possible_outcome(outcome=-1, num_observations=5) }.to raise_error(ArgumentError)
     end
+    it "increases the number of observations" do
+      x = Math::RandomVariable.new(num_outcomes=3)
+      x.add_possible_outcome(outcome=2, num_observations=5)
+      x.num_observations.should == 5
+    end
+  end
+
+  context "num_observations" do
+    it "returns 0 for a new random variable" do
+      x = Math::RandomVariable.new(num_outcomes=3)
+      x.num_observations.should == 0
+    end
+    it "returns the sum of the number of observations made so far" do
+      x = Math::RandomVariable.new(num_outcomes=3)
+      x.add_possible_outcome(outcome=2, num_observations=1)
+      x.add_possible_outcome(outcome=2, num_observations=2)
+      x.add_possible_outcome(outcome=2, num_observations=3)
+      x.num_observations.should == (1+2+3)
+    end
   end
 
   context "choose_outcome" do

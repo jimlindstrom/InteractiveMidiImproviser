@@ -22,7 +22,7 @@ class InteractiveImprovisor
     end
 
     if num_testing_vectors > 0
-      @improvisor.get_critics.each { |c| c.reset_cumulative_surprise }
+      @improvisor.get_critics.each { |c| c.reset_cumulative_information_content }
   
       @sensor = FakeSensor.new($fake_sensor_vectors, num_training_vectors+num_testing_vectors)
       puts "\ttesting over #{num_testing_vectors} vectors" if LOGGING
@@ -33,7 +33,7 @@ class InteractiveImprovisor
       end
     end
 
-    return @improvisor.get_critics.map { |c| { :critic=>c, :cum_surprise=>c.cumulative_surprise } }
+    return @improvisor.get_critics.map { |c| { :critic=>c, :cum_information_content=>c.cumulative_information_content } }
   end
 
   def save(folder)

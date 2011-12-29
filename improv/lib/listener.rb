@@ -25,8 +25,8 @@ class Listener
     notes.each do |n| 
       str = log("#{n.pitch.val}, #{n.duration.val}") if logging
       @critics.each do |c| 
-        surprise = c.listen(n) 
-        str += log(String(surprise)) if logging
+        information_content = c.listen(n) 
+        str += log(String(information_content)) if logging
       end
       puts str if logging
     end

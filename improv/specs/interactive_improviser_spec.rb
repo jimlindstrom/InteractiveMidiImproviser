@@ -14,13 +14,13 @@ describe InteractiveImprovisor do
   end
 
   context ".train" do
-    it "should return a hash of each critic and it's cumulative surprise over the testing vectors" do
+    it "should return a hash of each critic and it's cumulative information_content over the testing vectors" do
       i = InteractiveImprovisor.new
       num_training_vectors = 2
       num_testing_vectors  = 2
-      i.train(num_training_vectors, num_testing_vectors).first.keys.should == [:critic, :cum_surprise]
+      i.train(num_training_vectors, num_testing_vectors).first.keys.should == [:critic, :cum_information_content]
     end
-    it "should cause critics to get smarter and have lower cumulative surprise over testing vectors" do
+    it "should cause critics to get smarter and have lower cumulative information_content over testing vectors" do
       i = InteractiveImprovisor.new
       num_training_vectors = 4
       num_testing_vectors  = 10
@@ -31,7 +31,7 @@ describe InteractiveImprovisor do
       num_testing_vectors  = 10
       cum_error_more_training = i.train(num_training_vectors, num_testing_vectors)
 
-      cum_error_more_training.first[:cum_surprise].should < cum_error_less_training.first[:cum_surprise]
+      cum_error_more_training.first[:cum_information_content].should < cum_error_less_training.first[:cum_information_content]
     end
   end
 

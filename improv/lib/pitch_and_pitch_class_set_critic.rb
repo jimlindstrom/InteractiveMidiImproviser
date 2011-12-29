@@ -2,7 +2,7 @@
 
 class PitchAndPitchClassSetCritic < Critic
   def initialize(order, lookahead)
-    reset_cumulative_surprise
+    reset_cumulative_information_content
     @markov_chain = Math::AsymmetricBidirectionalMarkovChain.new(order, 
                                                                  lookahead, 
                                                                  num_states=Music::PitchAndPitchClassSet.num_values, 
@@ -41,11 +41,16 @@ class PitchAndPitchClassSetCritic < Critic
     next_state   = Music::PitchAndPitchClassSet.new(note.pitch, pcs).to_symbol
     next_outcome = note.pitch.to_symbol
 
-    surprise = @markov_chain.get_expectations.get_surprise(next_outcome.val)
-    add_to_cumulative_surprise surprise
+    expectations = @markov_chain.get_expectations
+    if expectations.num_observations > 0
+      information_content = expectations.information_content(next_outcome.val)
+    else
+      information_content = Math::RandomVariable.max_information_content
+    end
+    add_to_cumulative_information_content information_content
     @markov_chain.observe(next_outcome.val, note.analysis[:notes_left])
     @markov_chain.transition(next_state.val, note.analysis[:notes_left])
-    return surprise
+    return information_content
   end
 
   def get_expectations

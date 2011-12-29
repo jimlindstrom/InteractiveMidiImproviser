@@ -69,25 +69,25 @@ describe PitchAndPitchClassSetCritic do
     end
   end
 
-  context ".cumulative_surprise" do
+  context ".cumulative_information_content" do
     it "should return zero initially" do
       ppcs = PitchAndPitchClassSetCritic.new(order=1, lookahead=1)
-      ppcs.cumulative_surprise.should be_within(0.0001).of(0.0)
+      ppcs.cumulative_information_content.should be_within(0.0001).of(0.0)
     end
-    it "should return the sum of all listening surprise" do
+    it "should return the sum of all listening information_content" do
       ppcs = PitchAndPitchClassSetCritic.new(order=1, lookahead=1)
-      cum_surprise = 0.0
-      cum_surprise += ppcs.listen(@nq1[0])
-      cum_surprise += ppcs.listen(@nq1[1])
-      cum_surprise += ppcs.listen(@nq1[2])
-      cum_surprise += ppcs.listen(@nq1[3])
-      ppcs.cumulative_surprise.should be_within(0.0001).of(cum_surprise)
+      cum_information_content = 0.0
+      cum_information_content += ppcs.listen(@nq1[0])
+      cum_information_content += ppcs.listen(@nq1[1])
+      cum_information_content += ppcs.listen(@nq1[2])
+      cum_information_content += ppcs.listen(@nq1[3])
+      ppcs.cumulative_information_content.should be_within(0.0001).of(cum_information_content)
     end
-    it "should return zero after calling reset_cumulative_surprise" do
+    it "should return zero after calling reset_cumulative_information_content" do
       ppcs = PitchAndPitchClassSetCritic.new(order=1, lookahead=1)
       ppcs.listen(@nq1[0])
-      ppcs.reset_cumulative_surprise
-      ppcs.cumulative_surprise.should be_within(0.0001).of(0.0)
+      ppcs.reset_cumulative_information_content
+      ppcs.cumulative_information_content.should be_within(0.0001).of(0.0)
     end
   end
 
@@ -98,12 +98,12 @@ describe PitchAndPitchClassSetCritic do
       #note.analysis[:notes_left] = 1
       expect{ ppcs.listen(note) }.to raise_error(ArgumentError)
     end
-    it "should return the surprise associated with the given note" do
+    it "should return the information_content associated with the given note" do
       ppcs = PitchAndPitchClassSetCritic.new(order=1, lookahead=1)
       note = Music::Note.new(Music::Pitch.new(0), Music::Duration.new(1))
       note.analysis[:notes_left] = 1
-      surprise = ppcs.listen(note)
-      surprise.should be_within(0.01).of(0.5)
+      information_content = ppcs.listen(note)
+	  information_content.should == Math::RandomVariable.max_information_content
     end
   end
 
@@ -112,7 +112,7 @@ describe PitchAndPitchClassSetCritic do
       ppcs = PitchAndPitchClassSetCritic.new(order=1, lookahead=1)
       ppcs.get_expectations.should be_an_instance_of Math::RandomVariable
     end
-    it "returns a random variable that is less surprised about states observed more often" do
+    it "returns a random variable that is less information_contentd about states observed more often" do
       ppcs = PitchAndPitchClassSetCritic.new(order=1, lookahead=1)
       ppcs.listen(@nq1[0])
       ppcs.reset
@@ -121,7 +121,7 @@ describe PitchAndPitchClassSetCritic do
       ppcs.listen(@nq1[1])
       ppcs.reset
       x = ppcs.get_expectations
-      x.get_surprise(@nq1[0].pitch.val).should be < x.get_surprise(@nq1[1].pitch.val)
+      x.information_content(@nq1[0].pitch.val).should be < x.information_content(@nq1[1].pitch.val)
     end
     it "returns a random variable that only chooses states observed" do
       ppcs = PitchAndPitchClassSetCritic.new(order=1, lookahead=1)

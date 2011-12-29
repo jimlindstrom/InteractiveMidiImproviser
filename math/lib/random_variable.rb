@@ -3,6 +3,8 @@
 module Math
   
   class RandomVariable
+    attr_reader :num_observations, :num_outcomes
+
     LOGGING = false
   
     def initialize(num_outcomes)
@@ -96,6 +98,10 @@ module Math
     def information_content(transformed_outcome)
       raise RuntimeError.new("information content doesn't make sense without observations") if @num_observations == 0
       return Math.log2(1.0 / probability(transformed_outcome))
+    end
+
+    def self.max_information_content 
+      Math.log2(1.0 / (1.0 / 1000000)) # this is arbitrary...
     end
 
     # The maximum entropy that COULD be observed is a function of the number of 
