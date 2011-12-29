@@ -1,0 +1,39 @@
+### Combine long-term and short-term predictions
+
+- low-order markov chains are highly general but don't give enough weight to 
+  context
+- higher-order markov chains capture subtler, longer-term patterns, but fail
+  to generalize and see short patterns.
+
+In http://www.doc.gold.ac.uk/~mas03dm/papers/AMIR_PearceMullensiefenWiggins_2010.pdf
+they propose keeping track of all n-grams (markov-chains with order 0-to-N, for 
+some maximum N), and weighting the predictions in some way that uses higher-order
+predictions when they're available, but falls back on lower-order ones otherwise.
+
+- Recursive Backoff?
+- Interpolated Backoff?
+
+### Cause the critics and ultimately the improvisor to calculate the information
+### theoretical values: entropy, cross entropy, perplexity, etc.
+### Surprise calculation
+
+Change from surprise calculation to information theoretical calculation of 
+information content:
+
+	h(e(t) | e(t-1)) = log2[ 1 / p(e(t) | e(t-1)) ]
+
+The information content can be interpreted as the contextual unexpectedness or
+surprisal associated with an event. The contextual uncertainty of the model’s
+expectations in a given melodic context can be deﬁned as the entropy (or 
+average information content) of the predictive context itself:
+
+	H(e(t-1)) = sum(e in S)[ p(e(t) | e(t-1))*h(e(t) | e(t-1))
+
+
+Also print out the H_Max calculation, to see what kind of compression the 
+critic is getting.
+
+These calculations could be expensive.  Consider either:
+1. Using a mixin to include / not include these calculations at runtime
+2. Using delayed calculation (eval or lambda) to delay the calculation as 
+   much as possible.

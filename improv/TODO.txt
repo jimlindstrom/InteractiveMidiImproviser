@@ -11,13 +11,16 @@ Put a 'context' member on each note that points to shared context hash (***)
 ### BETTER IMPROVS
 
 How can the improvs contain repeated motifs?
-   - generate ad hoc, instead of rigidly left-to-right?
-   - add motif critic that looks for good places to insert these motifs and
-	 creates expectations for them
-   - create temporary dups of all critics and train them heavily on the motifs.
-   - have a few "spare" critics in each generator that are looking for structure and which
-	 don't persist their training?
-   - look for surprising notes & assume those are where motifs are anchored?
+	- use two copies of every critic.  One is trained on long-term inputs.  The
+	  other is reset at the beginning of each listening, and is used to generate
+	  piece-specific expectations
+	- generate ad hoc, instead of rigidly left-to-right?
+	- add motif critic that looks for good places to insert these motifs and
+	  creates expectations for them
+	- create temporary dups of all critics and train them heavily on the motifs.
+	- have a few "spare" critics in each generator that are looking for structure and which
+	  don't persist their training?
+	- look for surprising notes & assume those are where motifs are anchored?
 
 Look at aggregate stats:
 	- pitch range
@@ -26,14 +29,14 @@ Look at aggregate stats:
 	- overall shape of line 
 
 Explore ways to make it harmonically intelligible
-   - critic for {pitch class set (polyphonic, harmonic context); last note}->{next note}
-	   - this critic would be idle/mute for monophonic inputs
-	   - this is easier in 4-part choral-style midi files, because they're separated into
-	     tracks.  In the general case (live, human performer), we'd need a stream
-	     splitter.  Could be a fancier one that can parse things like Bach prelude #1. Or
-	     could just take the highest active note at any point in time.
-   - Like duration, if we have notes from other tracks, we can use that as polyphonic
-	 context. If we don't, we could fall back on scalar context.
+	- critic for {pitch class set (polyphonic, harmonic context); last note}->{next note}
+		- this critic would be idle/mute for monophonic inputs
+		- this is easier in 4-part choral-style midi files, because they're separated into
+		  tracks.  In the general case (live, human performer), we'd need a stream
+		  splitter.  Could be a fancier one that can parse things like Bach prelude 1. Or
+		  could just take the highest active note at any point in time.
+	- Like duration, if we have notes from other tracks, we can use that as polyphonic
+	  context. If we don't, we could fall back on scalar context.
 
 Have PitchAndPitchClassSetCritic do more sophisticated weighting, based on 
 	- beat strength

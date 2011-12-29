@@ -41,6 +41,8 @@ module Math
   
     def add_possible_outcome(outcome, num_observations)
       raise ArgumentError.new("num_observations must be >= 0") if num_observations < 0
+      raise ArgumentError.new("outcome must be >= 0") if outcome < 0
+      raise ArgumentError.new("outcome must be < #{@num_outcomes}") if outcome >= @num_outcomes
   
       @observations[outcome] += num_observations
       @num_observations      += num_observations
@@ -69,7 +71,7 @@ module Math
   
       raise RuntimeError.new("RandomVariable couldn't choose outcome for orig_r=#{orig_r}, num_outcomes=#{@num_outcomes}") if LOGGING
     end
-  
+   
     def get_surprise(transformed_outcome)
       return 0.5 if @num_observations == 0
   
@@ -79,6 +81,39 @@ module Math
       surprise = (max_expectation - cur_expectation).to_f / max_expectation
   
       return surprise
+    end
+
+    # This is a more information theoretic version of 'get_surprise' that 
+    # returns the amount of informational content associated with a particular
+    # outcome, given the context of this state.
+    def information_content(transformed_outcome)
+      raise RuntimeError.new("information content doesn't make sense without observations") if @num_observations == 0
+      outcome = @outcome_untransformer.call(transformed_outcome)
+      prob_of_outcome = @observations[outcome].to_f / @num_observations
+      return Math.log2(1.0 / prob_of_outcome)
+    end
+
+    # The maximum entropy that COULD be observed is a function of the number of 
+    # outcomes.  The units of this value is "bits"
+    def max_entropy
+      Math.log2(@num_outcomes)
+    end
+
+    # This has two interpretations: (1) A lower bound on the average number of 
+    # bits needed to encode the outcome of this random variable.  (2) The amount 
+    # of uncertainty in this context.
+    def entropy
+      raise RuntimeError.new("entropy is undefined until there are observations") if @num_observations == 0
+  
+      cur_H = 0.0
+      @observations.each do |cur_observations|
+        if cur_observations > 0
+          cur_probability = cur_observations.to_f / @num_observations
+          cur_H -= cur_probability * Math.log2(cur_probability)
+        end
+      end
+  
+      return cur_H
     end
   
     protected
