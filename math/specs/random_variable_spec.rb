@@ -117,6 +117,19 @@ describe Math::RandomVariable do
     end
   end
 
+  context "probability" do
+    it "returns the probability of an outcome" do
+      x = Math::RandomVariable.new(num_outcomes=5)
+      x.add_possible_outcome(outcome=1, num_observations=1)
+      x.add_possible_outcome(outcome=2, num_observations=2)
+      x.probability(1).should be_within(0.01).of(1.0/3.0)
+    end
+    it "raises an error if nothing has been observed" do
+      x = Math::RandomVariable.new(num_outcomes=5)
+      expect { x.probability(0) }.to raise_error
+    end
+  end
+
   context "get_surprise" do
     it "returns 0.5 if no observations have been made" do
       x = Math::RandomVariable.new(num_outcomes=5)

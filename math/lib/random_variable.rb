@@ -71,7 +71,14 @@ module Math
   
       raise RuntimeError.new("RandomVariable couldn't choose outcome for orig_r=#{orig_r}, num_outcomes=#{@num_outcomes}") if LOGGING
     end
-   
+    
+    def probability(transformed_outcome)
+      raise RuntimeError.new("probability is undefined without observations") if @num_observations == 0
+  
+      outcome = @outcome_untransformer.call(transformed_outcome)
+      return @observations[outcome].to_f / @num_observations
+    end
+  
     def get_surprise(transformed_outcome)
       return 0.5 if @num_observations == 0
   
@@ -88,9 +95,7 @@ module Math
     # outcome, given the context of this state.
     def information_content(transformed_outcome)
       raise RuntimeError.new("information content doesn't make sense without observations") if @num_observations == 0
-      outcome = @outcome_untransformer.call(transformed_outcome)
-      prob_of_outcome = @observations[outcome].to_f / @num_observations
-      return Math.log2(1.0 / prob_of_outcome)
+      return Math.log2(1.0 / probability(transformed_outcome))
     end
 
     # The maximum entropy that COULD be observed is a function of the number of 
