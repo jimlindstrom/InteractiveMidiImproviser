@@ -17,11 +17,6 @@ Use copies of the critics that are trained on the stats in the stimulus.  That
 way the response should be more likely to bear a resemblance to the stimulus and
 it should feel more interactive.
 
-Rests!
-	- I'm not sure how rests are even getting encoded.  Do they get tacked onto
-	  the previous note's qIOI?  Are they screwing up the beat positioning & meter
-	  detection?
-
 Try constraining the surprises primarily to either pitch OR rhythm.  Could do this
 by self-multiplying expectations, to square the probabilities
 

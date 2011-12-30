@@ -11,7 +11,7 @@ class PitchGenerator
                                           interval_critic_lookahead=3)
     @critics.push @interval_critic
 
-    @pitch_and_pitch_class_set_critic = PitchAndPitchClassSetCritic.new(pitch_and_pitch_class_set_critic_order=6,
+    @pitch_and_pitch_class_set_critic = PitchAndPitchClassSetCritic.new(pitch_and_pitch_class_set_critic_order=3, # was 6
                                                                         pitch_and_pitch_class_set_critic_lookahead=3)
     @critics.push @pitch_and_pitch_class_set_critic
 

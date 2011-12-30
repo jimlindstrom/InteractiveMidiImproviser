@@ -36,10 +36,10 @@ module Math
       File.open(filename, 'r') do |f|
         YAML.each_document(f) { |d| docs.push d }
       end
-      raise RuntimeError.new("bad markov file") if docs.length != 8
+      raise RuntimeError.new("bad markov file") if docs.length != 7
 
       m = AsymmetricBidirectionalBackoffMarkovChain.new(docs[0], docs[1], docs[2], docs[3])
-      m.set_internals(docs[4], docs[5], docs[6], docs[7])
+      m.set_internals(docs[4], docs[5], docs[6])
 
       sub_filename = filename.gsub(/\./,"_sub.")
       if m.order == 2

@@ -8,10 +8,10 @@ num_training_vectors = 400 # there are 1300+ available
 num_testing_vectors  =  20
 
 # Last best run:
-#   PitchCritic:                   3710.243064776054
+#   PitchCritic:                   3717.848543434250
 #   IntervalCritic:                3153.2237495266   # uses backoff scaling (had been 4698 before backoff scaling and lookahead)
-#   PitchAndPitchClassSetCritic:   5397.955312380645 # uses backoff scaling (had been 11950 before backoff scaling)
-#   ComplexPitchCritic:            4154.841988992107 # +'s sub-expectations (had been 12821 when *'ing)
+#   PitchAndPitchClassSetCritic:   4451.936356461992 # uses backoff scaling (had been 11950 before backoff scaling)
+#   ComplexPitchCritic:            4080.426410113001 # +'s sub-expectations (had been 12821 when *'ing)
 #   DurationCritic:                3069.602244765782
 #   DurationAndBeatPositionCritic: 2976.034956725619 # uses backoff scaling (had been 3069 before backoff scaling)
 

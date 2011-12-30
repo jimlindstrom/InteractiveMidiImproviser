@@ -7,6 +7,7 @@ module Math
   class AsymmetricBidirectionalMarkovChain
     attr_reader :order
     attr_reader :lookahead
+    attr_reader :steps_left
 
     LOGGING = false
 
@@ -25,18 +26,15 @@ module Math
   
       reset
     end
-
-    def steps_left
-      @steps_left #FIXME: why not an attr_reader?
-    end
   
     def current_state
-      return @state_history.last
+      cur_state = @state_history_string.last
+      return nil if cur_state == "nil"
+      return cur_state.to_i
     end
    
     def reset
       @steps_left           = nil
-      @state_history        = [ nil ]*@order
       @state_history_string = ["nil"]*@order
     end
   
@@ -47,7 +45,6 @@ module Math
         f.puts YAML::dump @num_states
         f.puts YAML::dump @num_outcomes
         f.puts YAML::dump @observations
-        f.puts YAML::dump @state_history
         f.puts YAML::dump @state_history_string
         f.puts YAML::dump @steps_left
       end
@@ -58,10 +55,10 @@ module Math
       File.open(filename, 'r') do |f|
         YAML.each_document(f) { |d| docs.push d }
       end
-      raise RuntimeError.new("bad markov file") if docs.length != 8
+      raise RuntimeError.new("bad markov file") if docs.length != 7
 
       m = AsymmetricBidirectionalMarkovChain.new(docs[0], docs[1], docs[2], docs[3])
-      m.set_internals(docs[4], docs[5], docs[6], docs[7])
+      m.set_internals(docs[4], docs[5], docs[6])
 
       return m
     end
@@ -87,9 +84,6 @@ module Math
       raise ArgumentError.new("steps_left cannot be negative") if (steps_left < 0)
       raise ArgumentError.new("steps_left expected to be #{@steps_left-1}") if !@steps_left.nil? and (steps_left != (@steps_left-1))
   
-      @state_history.push next_state
-      @state_history.shift
-  
       @state_history_string.push String(next_state || "nil")
       @state_history_string.shift
 
@@ -108,9 +102,8 @@ module Math
     end
 
   # FIXME: This is terrible.  How else can (only) self.load set these though?
-    def set_internals(o, sh, shs, sl)
+    def set_internals(o, shs, sl)
       @observations         = o
-      @state_history        = sh
       @state_history_string = shs
       @steps_left           = sl
     end
