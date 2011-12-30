@@ -45,8 +45,6 @@ module Math
     def *(r)
       x1 =   get_possible_transformed_outcomes
       x2 = r.get_possible_transformed_outcomes
-      puts "\t\t1: #{x1.inspect}"
-      puts "\t\t2: #{x2.inspect}"
 
       o = x1 + x2
       omax = o.map{|x| x[:outcome] }.max
@@ -59,7 +57,6 @@ module Math
       x1.each do |a|
         b = x2.find{|x| x[:outcome]==a[:outcome] }
         if !b.nil?
-          puts "\t\trnew.add_possible_outcome(#{a[:outcome] - omin}, #{a[:num_observations]}*#{b[:num_observations]})"
           rnew.add_possible_outcome(a[:outcome] - omin, a[:num_observations]*b[:num_observations])
         end
       end
@@ -67,7 +64,12 @@ module Math
   
       return rnew
     end
-   
+    
+    def scale(m)
+      @observations.map!{ |x| x*m }
+      @num_observations *= m
+    end
+
     def add_possible_outcome(outcome, num_observations)
       raise ArgumentError.new("num_observations must be >= 0") if num_observations < 0
       raise ArgumentError.new("outcome must be >= 0") if outcome < 0

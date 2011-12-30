@@ -1,0 +1,1 @@
+Try a version of RandomVariable::* that does soft-multiplication. 

@@ -14,6 +14,12 @@ class PitchGenerator
     @pitch_and_pitch_class_set_critic = PitchAndPitchClassSetCritic.new(pitch_and_pitch_class_set_critic_order=6,
                                                                         pitch_and_pitch_class_set_critic_lookahead=3)
     @critics.push @pitch_and_pitch_class_set_critic
+
+
+    @complex_pitch_critic = ComplexPitchCritic.new(@pitch_critic,
+                                                   @interval_critic,
+                                                   @pitch_and_pitch_class_set_critic)
+    @critics.push @complex_pitch_critic # FIXME: order-dependent.  Assumes the 1st 3 will be listen()'ed first
   end
 
   def get_critics
@@ -25,25 +31,8 @@ class PitchGenerator
   end
 
   def generate
-    expectations = Math::RandomVariable.new(Music::Pitch.num_values)
-
-    pitch_and_pitch_class_set_exp = @pitch_and_pitch_class_set_critic.get_expectations
-    expectations += pitch_and_pitch_class_set_exp if !pitch_and_pitch_class_set_exp.nil?
-
-    interval_exp = @interval_critic.get_expectations
-    expectations += interval_exp if !interval_exp.nil?
-
+    expectations = @complex_pitch_critic.get_expectations
     x = expectations.choose_outcome
-    return Music::Pitch.new(x) if !x.nil?
-     
-    pitch_exp = @pitch_critic.get_expectations
-    x = pitch_exp.choose_outcome
-    return Music::Pitch.new(x) if !x.nil?
-
-    reset # we got to a point where we have no data.  reset, to get back to some stat we know about
-
-    pitch_exp = @pitch_critic.get_expectations
-    x = pitch_exp.choose_outcome
     return Music::Pitch.new(x) if !x.nil?
 
     raise RuntimeError.new("Failed to choose a pitch")

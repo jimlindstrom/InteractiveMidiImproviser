@@ -207,6 +207,16 @@ describe Math::RandomVariable do
     end
   end
 
+  context "scale" do
+    it "increases the number of observations of all outcomes by a scaling factor" do
+      x = Math::RandomVariable.new(num_outcomes=5)
+      x.add_possible_outcome(outcome=1, num_observations=1)
+      x.scale(2.0)
+      x.add_possible_outcome(outcome=2, num_observations=2)
+      x.probability(1).should be_within(0.0001).of(x.probability(2))
+    end
+  end
+
   context "get_surprise" do
     it "returns 0.5 if no observations have been made" do
       x = Math::RandomVariable.new(num_outcomes=5)

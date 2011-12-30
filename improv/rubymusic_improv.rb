@@ -22,6 +22,7 @@ require File.join(File.dirname(__FILE__), 'lib', 'duration_critic')
 require File.join(File.dirname(__FILE__), 'lib', 'duration_and_beat_position_critic')
 require File.join(File.dirname(__FILE__), 'lib', 'pitch_and_pitch_class_set_critic')
 require File.join(File.dirname(__FILE__), 'lib', 'pitch_critic')
+require File.join(File.dirname(__FILE__), 'lib', 'complex_pitch_critic')
 require File.join(File.dirname(__FILE__), 'lib', 'interval_critic')
 
 require File.join(File.dirname(__FILE__), 'lib', 'duration_generator')
