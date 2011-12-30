@@ -1,5 +1,7 @@
 ### REFACTORING
 
+Stop using PitchCritic and DurationCritic. 
+
 fake_sensor_vectors is now huge.  figure out a different strategy...
 	- Don't load all >50MB of events when running specs
 	- I also want to load / not load different styles easily.
@@ -9,6 +11,8 @@ Put a 'context' member on each note that points to shared context hash (***)
 	- it could contain harmonic info, intended surprise levels, etc.
 
 ### BETTER IMPROVS
+
+Make IntervalCritic use backoff scaling, and lookahead
 
 Backoff smoothing to combine short- and long-term predictions is 1 dimension.
 Try extending it two 2D backoff by also backing off from exact symbols to fuzzy

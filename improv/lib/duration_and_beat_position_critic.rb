@@ -3,10 +3,10 @@
 class DurationAndBeatPositionCritic < Critic
   def initialize(order, lookahead)
     reset_cumulative_information_content
-    @markov_chain = Math::AsymmetricBidirectionalMarkovChain.new(order, 
-                                                                 lookahead, 
-                                                                 num_states=Music::DurationAndBeatPosition.num_values, 
-                                                                 num_outcomes=Music::Duration.num_values)
+    @markov_chain = Math::AsymmetricBidirectionalBackoffMarkovChain.new(order, 
+                                                                        lookahead, 
+                                                                        num_states=Music::DurationAndBeatPosition.num_values, 
+                                                                        num_outcomes=Music::Duration.num_values)
   end
 
   def reset

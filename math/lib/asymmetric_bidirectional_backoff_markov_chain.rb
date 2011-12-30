@@ -5,6 +5,9 @@ require 'yaml'
 module Math
   
   class AsymmetricBidirectionalBackoffMarkovChain < AsymmetricBidirectionalMarkovChain
+
+    BACK_OFF_SCALING = 0.05
+
     def initialize(order, lookahead, num_states, num_outcomes)
       super(order, lookahead, num_states, num_outcomes)
       if order == 1
@@ -67,7 +70,7 @@ module Math
       all_outcomes.each do |cur_outcome|
         if expectations.observations[cur_outcome] > 0
         elsif expectations.observations[cur_outcome] == 0
-          expectations.add_possible_outcome(cur_outcome, 0.5*sub_expectations.observations[cur_outcome])
+          expectations.add_possible_outcome(cur_outcome, BACK_OFF_SCALING * sub_expectations.observations[cur_outcome])
         end
       end
 
