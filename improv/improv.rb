@@ -4,7 +4,7 @@ $LOAD_PATH << '.'
 require 'rubymusic_improv'
 
 do_training = false
-num_training_vectors = 600 # there are 1300+ available
+num_training_vectors = 400 # there are 1300+ available
 num_testing_vectors  =  20
 
 if ARGV.length > 0
@@ -24,7 +24,7 @@ if do_training
   puts "Training..."
   surprises = i.train(num_training_vectors, num_testing_vectors)
   surprises.each do |s|
-    puts "\t#{s[:critic].class}: #{s[:cum_surprise]}"
+    puts "\t#{s[:critic].class}: #{s[:cum_information_content]}"
   end
   i.save "data/production"
 else
