@@ -17,6 +17,14 @@ Backoff smoothing to combine short- and long-term predictions is 1 dimension.
 Try extending it two 2D backoff by also backing off from exact symbols to fuzzy
 symbols.
 
+Combine random variables differently:
+	- For intervals and pitches, try soft-multiplication to MOSTly do the 
+	  intersection, but also allow one side to lead the other.
+	- There's no longer a need to "fall back" on pitch and duration critics.
+	  Their main utility now is in finding absolute patterns that occur at
+	  different beat positions, or in different pitch class sets.  Use them
+	  differently...
+
 Do a better job baselining the predictive performance and then measuring 
 improvements:
 	- Move from cumulative information content to cumulative cross entropy, which
@@ -27,14 +35,6 @@ improvements:
 	  and their are surprising events in surprising contexts (in which the
 	  context is mostly responsible for the information content).  Not sure
 	  what to do with that....
-
-Combine random variables differently:
-	- For intervals and pitches, try soft-multiplication to MOSTly do the 
-	  intersection, but also allow one side to lead the other.
-	- There's no longer a need to "fall back" on pitch and duration critics.
-	  Their main utility now is in finding absolute patterns that occur at
-	  different beat positions, or in different pitch class sets.  Use them
-	  differently...
 
 How can the improvs contain repeated motifs?
 	- use two copies of every critic.  One is trained on long-term inputs.  The

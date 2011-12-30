@@ -22,7 +22,7 @@ module Math
       @outcome_transformer   = t
       @outcome_untransformer = un_t
     end
-  
+   
     def +(r)
       o = get_possible_transformed_outcomes
       o += r.get_possible_transformed_outcomes
@@ -36,6 +36,32 @@ module Math
       rnew = RandomVariable.new(num_outcomes)
       o.each do |x|
         rnew.add_possible_outcome(x[:outcome] - omin, x[:num_observations])
+      end
+      rnew.transform_outcomes(outcome_transformer, outcome_untransformer)
+  
+      return rnew
+    end
+ 
+    def *(r)
+      x1 =   get_possible_transformed_outcomes
+      x2 = r.get_possible_transformed_outcomes
+      puts "\t\t1: #{x1.inspect}"
+      puts "\t\t2: #{x2.inspect}"
+
+      o = x1 + x2
+      omax = o.map{|x| x[:outcome] }.max
+      omin = o.map{|x| x[:outcome] }.min
+      num_outcomes = (omax || 0) - (omin || 0) + 1
+      outcome_transformer   = lambda{|x| x + omin}
+      outcome_untransformer = lambda{|x| x - omin}
+  
+      rnew = RandomVariable.new(num_outcomes)
+      x1.each do |a|
+        b = x2.find{|x| x[:outcome]==a[:outcome] }
+        if !b.nil?
+          puts "\t\trnew.add_possible_outcome(#{a[:outcome] - omin}, #{a[:num_observations]}*#{b[:num_observations]})"
+          rnew.add_possible_outcome(a[:outcome] - omin, a[:num_observations]*b[:num_observations])
+        end
       end
       rnew.transform_outcomes(outcome_transformer, outcome_untransformer)
   

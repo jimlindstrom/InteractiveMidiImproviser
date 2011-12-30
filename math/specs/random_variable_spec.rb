@@ -92,6 +92,64 @@ describe Math::RandomVariable do
     end
   end
 
+  context "*" do
+    before (:each) do
+      @x1 = Math::RandomVariable.new(@num_outcomes=6)
+      @x1.add_possible_outcome(@outcome=2, @num_observations=5)
+      @x1.add_possible_outcome(@outcome=3, @num_observations=10)
+      @x1.add_possible_outcome(@outcome=4, @num_observations=5)
+
+      @x2 = Math::RandomVariable.new(@num_outcomes=6)
+      @x2.add_possible_outcome(@outcome=3, @num_observations=4)
+      @x2.add_possible_outcome(@outcome=4, @num_observations=12)
+      @x2.add_possible_outcome(@outcome=5, @num_observations=4)
+    end
+    it "combines the random variables, so that get_surprise still works" do
+      @x1 = @x1 * @x2
+      @x1.get_surprise(3).should be < @x1.get_surprise(2)
+    end
+    it "combines the random variables, so that get_surprise still works" do
+      @x1 = @x1 * @x2
+      @x1.get_surprise(4).should be < 1.0
+    end
+    it "combines the random variables, such that choose_outcome uses outcomes from both random variables" do
+      @x1 = @x1 * @x2
+      [3, 4].include?(@x1.choose_outcome).should be_true
+    end
+    it "combines the random variables, even if the first one is transformed" do
+      symbol_to_outcome = lambda {|y| y-1}
+      outcome_to_symbol = lambda {|y| y+1}
+      @x1.transform_outcomes(symbol_to_outcome, outcome_to_symbol)
+      @x1 = @x1 * @x2
+      @x1.choose_outcome.should == 3
+    end
+    it "combines the random variables, even if the second one is transformed" do
+      symbol_to_outcome = lambda {|y| y+1}
+      outcome_to_symbol = lambda {|y| y-1}
+      @x2.transform_outcomes(symbol_to_outcome, outcome_to_symbol)
+      @x1 = @x1 * @x2
+      @x1.choose_outcome.should == 4
+    end
+    it "combines the random variables, even the two have different numbers of outcomes and are transformed" do
+      x1 = Math::RandomVariable.new(num_outcomes=50)
+      x1.add_possible_outcome(outcome=4, num_observations=10)
+      symbol_to_outcome = lambda {|y| y+21}
+      outcome_to_symbol = lambda {|y| y-21}
+      x1.transform_outcomes(symbol_to_outcome, outcome_to_symbol)
+
+      x2 = Math::RandomVariable.new(num_outcomes=50)
+      x2.add_possible_outcome(outcome=26, num_observations=1)
+      symbol_to_outcome = lambda {|y| y-1}
+      outcome_to_symbol = lambda {|y| y+1}
+      x2.transform_outcomes(symbol_to_outcome, outcome_to_symbol)
+
+      x1 = x1 + x2
+
+      a = x1.choose_outcome
+      [25].include?(a).should be_true
+    end
+  end
+
   context "add_possible_outcome" do
     it "increases the probability that the possible outcome will be chosen" do
       x = Math::RandomVariable.new(num_outcomes=3)
