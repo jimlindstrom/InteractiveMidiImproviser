@@ -61,9 +61,10 @@ class InteractiveImprovisor
       @listener.listen(stimulus_notes, do_logging=true) if !stimulus_notes.nil?
 		# FIXME: this is only here to print it out.  make this not train...
 
-      max_tempo = 400
-      min_tempo = 250
+      max_tempo = 450
+      min_tempo = 300
       response_notes.tempo = min_tempo + (rand*(max_tempo-min_tempo)).round
+      response_notes.tempo *= response_notes.first.analysis[:beat_position].subbeats_per_beat # scale up tempo to keep it interesting
       puts "\ttempo: #{response_notes.tempo}" if LOGGING
       response_events = response_notes.to_event_queue
       @performer.perform response_events

@@ -13,6 +13,18 @@ Put a 'context' member on each note that points to shared context hash (***)
 
 ### BETTER IMPROVS
 
+Use copies of the critics that are trained on the stats in the stimulus.  That 
+way the response should be more likely to bear a resemblance to the stimulus and
+it should feel more interactive.
+
+Rests!
+	- I'm not sure how rests are even getting encoded.  Do they get tacked onto
+	  the previous note's qIOI?  Are they screwing up the beat positioning & meter
+	  detection?
+
+Try constraining the surprises primarily to either pitch OR rhythm.  Could do this
+by self-multiplying expectations, to square the probabilities
+
 Backoff smoothing to combine short- and long-term predictions is 1 dimension.
 Try extending it two 2D backoff by also backing off from exact symbols to fuzzy
 symbols.
@@ -28,12 +40,6 @@ improvements:
 	  model, and the likely cross entropy of generated improvs.
 	- Move from cumulative information content to cumulative cross entropy, which
 	  is a more standard info-theoretic calculation.
-	- Also, it looks like what used to be called surprise could now be broken 
-	  down into two things.  there are surprising events in an unsurprising 
-	  context (the event is solely responsible for the information content).
-	  and their are surprising events in surprising contexts (in which the
-	  context is mostly responsible for the information content).  Not sure
-	  what to do with that....
 
 How can the improvs contain repeated motifs?
 	- use two copies of every critic.  One is trained on long-term inputs.  The

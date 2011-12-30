@@ -7,7 +7,6 @@ class IntervalCritic < Critic
                                                                         lookahead,
                                                                         num_states=Music::Interval.num_values, 
                                                                         num_outcomes=Music::Interval.num_values)
-    puts "interval critic lookahead: #{lookahead}, #{@markov_chain.lookahead}"
     reset
   end
 
