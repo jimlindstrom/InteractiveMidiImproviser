@@ -97,7 +97,9 @@ module Math
     # outcome, given the context of this state.
     def information_content(transformed_outcome)
       raise RuntimeError.new("information content doesn't make sense without observations") if @num_observations == 0
-      return Math.log2(1.0 / probability(transformed_outcome))
+      p = probability(transformed_outcome)
+      return RandomVariable::max_information_content if p < 1.0e-10
+      return Math.log2(1.0 / p)
     end
 
     def self.max_information_content 

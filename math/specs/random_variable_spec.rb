@@ -213,6 +213,14 @@ describe Math::RandomVariable do
       expected_ic = Math.log2(1.0 / prob_of_outcome)
       x.information_content(outcome=1).should be_within(0.01).of(expected_ic)
     end
+    it "returns max_information_content for zero-probability events" do
+      num_outcomes = 5
+      x = Math::RandomVariable.new(num_outcomes)
+      x.add_possible_outcome(outcome=0, num_observations=1)
+      x.add_possible_outcome(outcome=1, num_observations=3)
+      expected_ic = Math::RandomVariable.max_information_content
+      x.information_content(outcome=2).should be_within(0.01).of(expected_ic)
+    end
   end
 
 end

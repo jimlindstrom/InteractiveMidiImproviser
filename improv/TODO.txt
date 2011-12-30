@@ -10,6 +10,25 @@ Put a 'context' member on each note that points to shared context hash (***)
 
 ### BETTER IMPROVS
 
+Backoff smoothing to combine short- and long-term predictions is 1 dimension.
+Try extending it two 2D backoff by also backing off from exact symbols to fuzzy
+symbols.
+
+Do a better job baselining the predictive performance and then measuring 
+improvements:
+	- Move from cumulative information content to cumulative cross entropy, which
+	  is a more standard info-theoretic calculation.
+	- Also, it looks like what used to be called surprise could now be broken 
+	  down into two things.  there are surprising events in an unsurprising 
+	  context (the event is solely responsible for the information content).
+	  and their are surprising events in surprising contexts (in which the
+	  context is mostly responsible for the information content).  Not sure
+	  what to do with that....
+
+Combine random variables differently:
+	- For intervals and pitches, try soft-multiplication to MOSTly do the 
+	  intersection, but also allow one side to lead the other.
+
 How can the improvs contain repeated motifs?
 	- use two copies of every critic.  One is trained on long-term inputs.  The
 	  other is reset at the beginning of each listening, and is used to generate
