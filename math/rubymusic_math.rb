@@ -8,3 +8,4 @@ require File.join(File.dirname(__FILE__), 'lib', 'asymmetric_bidirectional_marko
 require File.join(File.dirname(__FILE__), 'lib', 'asymmetric_markov_chain')
 require File.join(File.dirname(__FILE__), 'lib', 'markov_chain')
 require File.join(File.dirname(__FILE__), 'lib', 'bidirectional_markov_chain')
+require File.join(File.dirname(__FILE__), 'lib', 'asymmetric_bidirectional_backoff_markov_chain')

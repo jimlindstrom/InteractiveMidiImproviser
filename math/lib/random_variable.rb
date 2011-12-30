@@ -4,6 +4,7 @@ module Math
   
   class RandomVariable
     attr_reader :num_observations, :num_outcomes
+    attr_reader :observations
 
     LOGGING = false
   
@@ -40,7 +41,7 @@ module Math
   
       return rnew
     end
-  
+   
     def add_possible_outcome(outcome, num_observations)
       raise ArgumentError.new("num_observations must be >= 0") if num_observations < 0
       raise ArgumentError.new("outcome must be >= 0") if outcome < 0

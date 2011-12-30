@@ -7,6 +7,13 @@ do_training = false
 num_training_vectors = 400 # there are 1300+ available
 num_testing_vectors  =  20
 
+# Last best run:
+#   PitchCritic:                   3710.243064776054
+#   IntervalCritic:                4698.001156797827
+#   PitchAndPitchClassSetCritic:  11950.832476360305
+#   DurationCritic:                3069.602244765782
+#   DurationAndBeatPositionCritic: 4130.939365558941
+
 if ARGV.length > 0
   case ARGV[0].upcase
   when "TRAIN"

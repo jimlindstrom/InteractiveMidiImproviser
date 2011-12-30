@@ -166,10 +166,11 @@ describe Math::AsymmetricMarkovChain do
       mc = Math::AsymmetricMarkovChain.new(order=2, num_states=100, num_outcomes=90)
       pitches = [64, 71, 71, 69, 76, 74, 73, 71, 74, 73, 71, 73, 74, 73, 71, 73, 71] #, 73
       pitches.each do |pitch|
-        mc.observe(pitch)
+        mc.observe(outcome=pitch)
+        mc.transition(state=pitch)
       end
       x = mc.get_expectations
-      x.get_surprise(73).should be < 0.5
+      x.get_surprise(outcome=73).should be < 0.5
     end
   end
 
