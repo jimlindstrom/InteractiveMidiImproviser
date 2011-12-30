@@ -20,7 +20,7 @@ class DurationAndBeatPositionCritic < Critic
 
   def load(folder)
     filename = "#{folder}/duration_and_beat_position_critic_#{@markov_chain.order}_#{@markov_chain.lookahead}.yml"
-    @markov_chain = Math::BidirectionalMarkovChain.load(filename)
+    @markov_chain = Math::AsymmetricBidirectionalBackoffMarkovChain.load(filename)
   end
 
   def listen(note)

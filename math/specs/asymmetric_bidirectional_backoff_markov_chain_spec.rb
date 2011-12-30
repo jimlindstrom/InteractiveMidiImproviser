@@ -107,6 +107,20 @@ describe Math::AsymmetricBidirectionalBackoffMarkovChain do
       x = mc2.get_expectations
       x.choose_outcome.should == 3
     end
+    it "restores the order proprely" do
+      mc = Math::AsymmetricBidirectionalBackoffMarkovChain.new(order=2, lookahead=1, num_states=20, num_outcomes=4)
+      filename = "/tmp/rubymidi_markov_chain.yml"
+      mc.save filename
+      mc2 = Math::AsymmetricBidirectionalBackoffMarkovChain.load filename
+      mc2.order.should == mc.order
+    end
+    it "restores the lookahead proprely" do
+      mc = Math::AsymmetricBidirectionalBackoffMarkovChain.new(order=2, lookahead=7, num_states=20, num_outcomes=4)
+      filename = "/tmp/rubymidi_markov_chain123.yml"
+      mc.save filename
+      mc2 = Math::AsymmetricBidirectionalBackoffMarkovChain.load filename
+      mc2.lookahead.should == mc.lookahead
+    end
   end
 
   context "observe" do

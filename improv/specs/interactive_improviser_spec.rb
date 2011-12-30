@@ -50,7 +50,14 @@ describe InteractiveImprovisor do
   context ".load" do
     it "should load all the critices from <folder>/*critic*.yml" do
       i = InteractiveImprovisor.new
-      i.load "data/test"
+      num_training_vectors = 5
+      num_testing_vectors  = 0
+      i.train(num_training_vectors, num_testing_vectors)
+      Dir[File.expand_path(File.join(File.dirname(__FILE__),"..","data","test",'*yml'))].each { |f| File.delete(f) }
+      i.save "data/test"
+
+      i2 = InteractiveImprovisor.new
+      i2.load "data/test"
       pending
     end
   end

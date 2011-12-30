@@ -17,13 +17,13 @@ describe DurationAndBeatPositionCritic do
 
   context ".new" do
     it "should return a DurationAndBeatPositionCritic" do
-      DurationAndBeatPositionCritic.new(order=1, lookahead=1).should be_an_instance_of DurationAndBeatPositionCritic
+      DurationAndBeatPositionCritic.new(order=2, lookahead=1).should be_an_instance_of DurationAndBeatPositionCritic
     end
   end
 
   context ".reset" do
     it "should reset to the state in which no notes have been heard yet" do
-      dc = DurationAndBeatPositionCritic.new(order=1, lookahead=1)
+      dc = DurationAndBeatPositionCritic.new(order=2, lookahead=1)
       dc.listen(@nq1.first)
       dc.reset
       x = dc.get_expectations
@@ -33,7 +33,7 @@ describe DurationAndBeatPositionCritic do
 
   context ".save" do
     it "should save a file, named <folder>/duration_and_beat_position_critic_<order>_<lookahead>.yml" do
-      dc = DurationAndBeatPositionCritic.new(order=1, lookahead=1)
+      dc = DurationAndBeatPositionCritic.new(order=2, lookahead=1)
       dc.listen(@nq1.first)
       dc.listen(@nq2.first)
       filename = "data/test/duration_and_beat_position_critic_#{order}_#{lookahead}.yml"
@@ -45,7 +45,7 @@ describe DurationAndBeatPositionCritic do
 
   context ".load" do
     it "should load a file, named <folder>/duration_and_beat_position_critic_<order>_<lookahead>.yml, and act just like the saved critic" do
-      dc = DurationAndBeatPositionCritic.new(order=1, lookahead=1)
+      dc = DurationAndBeatPositionCritic.new(order=2, lookahead=1)
       dc.listen(@nq1[0])
       dc.listen(@nq1[1])
       dc.listen(@nq1[2])
@@ -53,7 +53,7 @@ describe DurationAndBeatPositionCritic do
       dc.listen(@nq1[0])
       dc.listen(@nq1[1])
       dc.save "data/test"
-      dc2 = DurationAndBeatPositionCritic.new(order=1, lookahead=1)
+      dc2 = DurationAndBeatPositionCritic.new(order=2, lookahead=1)
       dc2.load "data/test"
       x = dc.get_expectations
       x2 = dc2.get_expectations
@@ -63,11 +63,11 @@ describe DurationAndBeatPositionCritic do
 
   context ".cumulative_information_content" do
     it "should return zero initially" do
-      dc = DurationAndBeatPositionCritic.new(order=1, lookahead=1)
+      dc = DurationAndBeatPositionCritic.new(order=2, lookahead=1)
       dc.cumulative_information_content.should be_within(0.0001).of(0.0)
     end
     it "should return the sum of all listening information_content" do
-      dc = DurationAndBeatPositionCritic.new(order=1, lookahead=1)
+      dc = DurationAndBeatPositionCritic.new(order=2, lookahead=1)
       cum_information_content = 0.0
       cum_information_content += dc.listen(@nq1[0])
       cum_information_content += dc.listen(@nq1[1])
@@ -76,7 +76,7 @@ describe DurationAndBeatPositionCritic do
       dc.cumulative_information_content.should be_within(0.0001).of(cum_information_content)
     end
     it "should return zero after calling reset_cumulative_information_content" do
-      dc = DurationAndBeatPositionCritic.new(order=1, lookahead=1)
+      dc = DurationAndBeatPositionCritic.new(order=2, lookahead=1)
       dc.listen(@nq1[0])
       dc.reset_cumulative_information_content
       dc.cumulative_information_content.should be_within(0.0001).of(0.0)
@@ -85,21 +85,21 @@ describe DurationAndBeatPositionCritic do
 
   context ".listen" do
     it "should raise an error if the note has no meter analysis" do
-      dc = DurationAndBeatPositionCritic.new(order=1, lookahead=1)
+      dc = DurationAndBeatPositionCritic.new(order=2, lookahead=1)
       note = Music::Note.new(Music::Pitch.new(0), Music::Duration.new(1))
       note.analysis[:beat_position] = @nq1.first.analysis[:beat_position].dup
       #note.analysis[:notes_left] = 1
       expect{ dc.listen(note) }.to raise_error(ArgumentError)
     end
     it "should raise an error if the note isn't tagged with the number of following notes" do
-      dc = DurationAndBeatPositionCritic.new(order=1, lookahead=1)
+      dc = DurationAndBeatPositionCritic.new(order=2, lookahead=1)
       note = Music::Note.new(Music::Pitch.new(0), Music::Duration.new(1))
       #note.analysis[:beat_position] = @nq1.first.analysis[:beat_position].dup
       note.analysis[:notes_left] = 1
       expect{ dc.listen(note) }.to raise_error(ArgumentError)
     end
     it "should return the information_content associated with the given note" do
-      dc = DurationAndBeatPositionCritic.new(order=1, lookahead=1)
+      dc = DurationAndBeatPositionCritic.new(order=2, lookahead=1)
       note = Music::Note.new(Music::Pitch.new(0), Music::Duration.new(1))
       note.analysis[:beat_position] = @nq1.first.analysis[:beat_position].dup
       note.analysis[:notes_left] = 1
@@ -110,11 +110,11 @@ describe DurationAndBeatPositionCritic do
 
   context ".get_expectations" do
     it "returns a random variable" do
-      dc = DurationAndBeatPositionCritic.new(order=1, lookahead=1)
+      dc = DurationAndBeatPositionCritic.new(order=2, lookahead=1)
       dc.get_expectations.should be_an_instance_of Math::RandomVariable
     end
     it "returns a random variable that is less information_contentd about states observed more often" do
-      dc = DurationAndBeatPositionCritic.new(order=1, lookahead=1)
+      dc = DurationAndBeatPositionCritic.new(order=2, lookahead=1)
       dc.listen(@nq1[0])
       dc.reset
       dc.listen(@nq1[0])
@@ -127,7 +127,7 @@ describe DurationAndBeatPositionCritic do
       x.information_content(@nq1[0].duration.val).should be < x.information_content(@nq2[1].duration.val)
     end
     it "returns a random variable that only chooses states observed" do
-      dc = DurationAndBeatPositionCritic.new(order=1, lookahead=1)
+      dc = DurationAndBeatPositionCritic.new(order=2, lookahead=1)
       dc.listen(@nq1.first)
       dc.reset
       x = dc.get_expectations

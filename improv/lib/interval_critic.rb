@@ -1,10 +1,14 @@
 #!/usr/bin/env ruby
 
 class IntervalCritic < Critic
-  def initialize(order)
+  def initialize(order, lookahead)
     reset_cumulative_information_content
-    @markov_chain = Math::MarkovChain.new(order, Music::Interval.num_values)
-    @note_history = []
+    @markov_chain = Math::AsymmetricBidirectionalBackoffMarkovChain.new(order, 
+                                                                        lookahead,
+                                                                        num_states=Music::Interval.num_values, 
+                                                                        num_outcomes=Music::Interval.num_values)
+    puts "interval critic lookahead: #{lookahead}, #{@markov_chain.lookahead}"
+    reset
   end
 
   def reset
@@ -13,23 +17,24 @@ class IntervalCritic < Critic
   end
 
   def save(folder)
-    filename = "#{folder}/interval_critic_#{@markov_chain.order}.yml"
+    filename = "#{folder}/interval_critic_#{@markov_chain.order}_#{@markov_chain.lookahead}.yml"
     @markov_chain.save(filename)
 
-    filename = "#{folder}/interval_critic_#{@markov_chain.order}_note_history.yml"
+    filename = "#{folder}/interval_critic_#{@markov_chain.order}_#{@markov_chain.lookahead}_note_history.yml"
     File.open(filename, 'w') { |f| f.puts YAML::dump @note_history }
   end
 
   def load(folder)
-    filename = "#{folder}/interval_critic_#{@markov_chain.order}.yml"
-    @markov_chain = Math::MarkovChain.load(filename)
+    filename = "#{folder}/interval_critic_#{@markov_chain.order}_#{@markov_chain.lookahead}.yml"
+    @markov_chain = Math::AsymmetricBidirectionalBackoffMarkovChain.load(filename)
 
-    filename = "#{folder}/interval_critic_#{@markov_chain.order}_note_history.yml"
+    filename = "#{folder}/interval_critic_#{@markov_chain.order}_#{@markov_chain.lookahead}_note_history.yml"
     File.open(filename, 'r') { |f| @note_history = YAML::load(f) }
   end
 
   def listen(note)
     raise ArgumentError.new("not a note.  is a #{note.class}") if note.class != Music::Note
+    raise ArgumentError.new("note must contain 'notes_left' analysis") if note.analysis[:notes_left].nil?
 
     @note_history.unshift note
     if @note_history.length >= 2
@@ -43,8 +48,8 @@ class IntervalCritic < Critic
         information_content = Math::RandomVariable.max_information_content
 	  end
       add_to_cumulative_information_content information_content
-      @markov_chain.observe(next_symbol.val)
-      @markov_chain.transition(next_symbol.val)
+      @markov_chain.observe(next_symbol.val, note.analysis[:notes_left])
+      @markov_chain.transition(next_symbol.val, note.analysis[:notes_left])
       return information_content
     end
     return nil

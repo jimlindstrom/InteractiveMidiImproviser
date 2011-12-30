@@ -25,7 +25,7 @@ class PitchAndPitchClassSetCritic < Critic
 
   def load(folder)
     filename = "#{folder}/pitch_and_pitch_class_set_critic_#{@markov_chain.order}_#{@markov_chain.lookahead}.yml"
-    @markov_chain = Math::AsymmetricBidirectionalMarkovChain.load(filename)
+    @markov_chain = Math::AsymmetricBidirectionalBackoffMarkovChain.load(filename)
 
     filename = "#{folder}/pitch_and_pitch_class_set_critic_#{@markov_chain.order}_#{@markov_chain.lookahead}_note_history.yml"
     File.open(filename, 'r') { |f| @note_history = YAML::load(f) }

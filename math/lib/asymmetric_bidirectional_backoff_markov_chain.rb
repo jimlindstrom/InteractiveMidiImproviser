@@ -47,6 +47,7 @@ module Math
       elsif m.order > 2
         m.set_sub_chain AsymmetricBidirectionalBackoffMarkovChain.load(sub_filename)
       end
+      return m
     end
   
     def observe(outcome, steps_left)

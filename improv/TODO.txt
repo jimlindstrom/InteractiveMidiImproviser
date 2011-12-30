@@ -1,6 +1,7 @@
 ### REFACTORING
 
-Stop using PitchCritic and DurationCritic. 
+Take a look at the saved markov chain yml's.  Some keys are quoted and some
+aren't.  Is that a bug?
 
 fake_sensor_vectors is now huge.  figure out a different strategy...
 	- Don't load all >50MB of events when running specs
@@ -11,8 +12,6 @@ Put a 'context' member on each note that points to shared context hash (***)
 	- it could contain harmonic info, intended surprise levels, etc.
 
 ### BETTER IMPROVS
-
-Make IntervalCritic use backoff scaling, and lookahead
 
 Backoff smoothing to combine short- and long-term predictions is 1 dimension.
 Try extending it two 2D backoff by also backing off from exact symbols to fuzzy
@@ -32,6 +31,10 @@ improvements:
 Combine random variables differently:
 	- For intervals and pitches, try soft-multiplication to MOSTly do the 
 	  intersection, but also allow one side to lead the other.
+	- There's no longer a need to "fall back" on pitch and duration critics.
+	  Their main utility now is in finding absolute patterns that occur at
+	  different beat positions, or in different pitch class sets.  Use them
+	  differently...
 
 How can the improvs contain repeated motifs?
 	- use two copies of every critic.  One is trained on long-term inputs.  The
