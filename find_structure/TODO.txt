@@ -1,18 +1,19 @@
-### Possible Objecives
+### Objecive
 
-	1.  Structurally segment the melody into a decomposable tree
-		- this is not what I am trying to do.  I don't believe that every note
-		  must fulfill a structural role.  I believe that the ear is retaining 
-		  enough information to make that calculation.  I believe that the lay 
-		  ear reduces information pretty radically and hears approximate contours
-		  (envelopes), fuzzy intervals, etc.  
-	2.  Identify repeated elements or groups of elements.
-		- This is more what I'm after.  I believe that the note-by-note stats
-		  that are currently driving the improv engine are insufficient to 
-		  structure the piece.  I'm merely looking for some top-level templates
-		  that can be used as a skeleton to exert top-down structure pressure on
-		  the bottom-up, note-by-note statistics currently being used to generate
-		  improvisations
+NO: Structurally segment the melody into a decomposable tree
+	- this is not what I am trying to do.  I don't believe that every note
+	  must fulfill a structural role.  I believe that the ear is retaining 
+	  enough information to make that calculation.  I believe that the lay 
+	  ear reduces information pretty radically and hears approximate contours
+	  (envelopes), fuzzy intervals, etc.  
+
+YES: Identify repeated elements or groups of elements.
+	- This is more what I'm after.  I believe that the note-by-note stats
+	  that are currently driving the improv engine are insufficient to 
+	  structure the piece.  I'm merely looking for some top-level templates
+	  that can be used as a skeleton to exert top-down structure pressure on
+	  the bottom-up, note-by-note statistics currently being used to generate
+	  improvisations
 
 ### How to represent notes
 
@@ -42,6 +43,7 @@ What does a group represent?
 	- gestalt principles (separated by rests; in a different range; texturally 
 	  unique)
 	- constraints (a single pitch class set; only quarter notes; etc)
+	- a repeated pattern
 
 What do successive instances of a group represent?
 	- variation
@@ -75,13 +77,13 @@ Split groupings at
 Gestalt principles (look to GTTM for more)
 	- similarity - in A.A.B, prefer to group A.A vs A.B
 	- proximity - in A.B..C, prefer to group A.B vs. B..C
-	- closure - ABC.D is probably a group.  ABC.A is less likely a group
+	- closure - ABC.D is more likely a group than is ABC.A 
 	- good continuation - A.BxCy.z should produce overlapping A.B.C and x.y.z
 	- common fate - AxyBxyCxyD should produce interleaved A..B..C..D and xy.xy.xy ??
 	- good form - ?
 
 Groups should be homogeneous:
-	- Groups at a given height should all have similar length
+	- Groups at a given abstraction-height should all have similar length
 	- Groups at different heights should have lengths in mostly non-overlapping 
 	  ranges
 

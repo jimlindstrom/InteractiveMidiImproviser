@@ -1,40 +1,26 @@
-### REFACTORING
+- I'm not confident that the complex * critics are reporting their info content
+  properly.  I think I may need to have them own access to their subcritics, in
+  order to ensure that things are called in the right order.  That makes it 
+  trickier to inspect the cumulative info content of subcritics though..
 
-Take a look at the saved markov chain yml's.  Some keys are quoted and some
-aren't.  Is that a bug?
+### QUESTIONS
 
-fake_sensor_vectors is now huge.  figure out a different strategy...
-	- Don't load all >50MB of events when running specs
-	- I also want to load / not load different styles easily.
+- Why are so few of the improvised melodies rhythmically unintelligable?
 
-Put a 'context' member on each note that points to shared context hash (***)
-	- this could be different for different phrases
-	- it could contain harmonic info, intended surprise levels, etc.
+- Why is there max-information-content happening?  Shouldn't that be SUPER rare?
+	- Seems to be happening only at the end, which makes me think that the lookahead
+	  isn't helpful.  Reducing lookahead marginally improved information content,
+	  but I suspect this comes at the expense of a perceptually important worsening
+	  of ending quality.
+
+- Why did going to a lower-order PitchAndPitchClassSetCritic improve its 
+  performance?  That indicates the backoff algorithm is probably not optimal
 
 ### BETTER IMPROVS
 
 Use copies of the critics that are trained on the stats in the stimulus.  That 
 way the response should be more likely to bear a resemblance to the stimulus and
 it should feel more interactive.
-
-Try constraining the surprises primarily to either pitch OR rhythm.  Could do this
-by self-multiplying expectations, to square the probabilities
-
-Backoff smoothing to combine short- and long-term predictions is 1 dimension.
-Try extending it two 2D backoff by also backing off from exact symbols to fuzzy
-symbols.
-	- There's no longer a need to "fall back" on pitch and duration critics.
-	  Their main utility now is in finding absolute patterns that occur at
-	  different beat positions, or in different pitch class sets.  Use them
-	  differently...
-
-Do a better job baselining the predictive performance and then measuring 
-improvements:
-	- Look at the cross entropy coming out of the pitch generator, in addition
-	  to the individual critics.  That is more representative of the whole
-	  model, and the likely cross entropy of generated improvs.
-	- Move from cumulative information content to cumulative cross entropy, which
-	  is a more standard info-theoretic calculation.
 
 How can the improvs contain repeated motifs?
 	- use two copies of every critic.  One is trained on long-term inputs.  The
@@ -43,10 +29,19 @@ How can the improvs contain repeated motifs?
 	- generate ad hoc, instead of rigidly left-to-right?
 	- add motif critic that looks for good places to insert these motifs and
 	  creates expectations for them
-	- create temporary dups of all critics and train them heavily on the motifs.
-	- have a few "spare" critics in each generator that are looking for structure and which
-	  don't persist their training?
-	- look for surprising notes & assume those are where motifs are anchored?
+
+Manage the surprise:
+	- Try constraining the surprises primarily to either pitch OR rhythm.  Could 
+	  do this by self-multiplying expectations, to square the probabilities
+	- Have a surprise critic that generates expected surprise envelopes
+
+Do a better job baselining the predictive performance and then measuring 
+improvements:
+	- Look at the cross entropy coming out of the pitch generator, in addition
+	  to the individual critics.  That is more representative of the whole
+	  model, and the likely cross entropy of generated improvs.
+	- Move from cumulative information content to cumulative cross entropy, which
+	  is a more standard info-theoretic calculation.
 
 Look at aggregate stats:
 	- pitch range
@@ -74,6 +69,16 @@ I'd like to build layers of assumptions and fall-back as needed.
 	- Then if that fails, assume there's still chords and scales.  
 	- Then if that fails, look for consistent pitch class sets.  
 	- And if all else fails ... no idea.
+
+### REFACTORING
+
+fake_sensor_vectors is now huge.  figure out a different strategy...
+	- Don't load all >50MB of events when running specs
+	- I also want to load / not load different styles easily.
+
+Put a 'context' member on each note that points to shared context hash (***)
+	- this could be different for different phrases
+	- it could contain harmonic info, intended surprise levels, etc.
 
 ### MORE RESPONSIVE / INTERACTIVE
 
