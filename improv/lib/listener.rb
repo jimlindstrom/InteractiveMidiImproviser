@@ -17,24 +17,26 @@ class Listener
     @critics.each { |c| c.reset }
 
     if logging
-      str = log("note")
-      @critics.each { |c| str += log(String(c.class)) }
-      puts str if logging
+      str  = to_fixed_width("note")
+      str += @critics.map { |c| to_fixed_width(String(c.class)) }.join
+      puts str
     end
 
     notes.each do |n| 
-      str = log("#{n.pitch.val}, #{n.duration.val}") if logging
+      str = to_fixed_width("#{n.pitch.val}, #{n.duration.val}") if logging
+
       @critics.each do |c| 
-        information_content = c.listen(n) 
-        str += log(String(information_content)) if logging
+        information_content = c.listen(n)  # FIXME: try splitting up getting info content from listen()ing
+        str += to_fixed_width(String(information_content)) if logging
       end
+
       puts str if logging
     end
   end
 
   private
 
-  def log(str,str_len=10,pad_len=2) # generate a fixed-width string, and pad it
+  def to_fixed_width(str,str_len=10,pad_len=2)
     s = str[0..(str_len-1)]
     until (s.length == str_len) do
       s += " "

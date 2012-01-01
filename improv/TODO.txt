@@ -1,7 +1,9 @@
 - I'm not confident that the complex * critics are reporting their info content
   properly.  I think I may need to have them own access to their subcritics, in
   order to ensure that things are called in the right order.  That makes it 
-  trickier to inspect the cumulative info content of subcritics though..
+  trickier to inspect the cumulative info content of subcritics though..  Maybe
+  this is an appropriate time to use an observer, to pull info content out of
+  each of the critics??
 
 ### QUESTIONS
 

@@ -4,17 +4,20 @@
 
 class DurationGenerator
   def initialize
-    @critics = []
+    @duration_critic = 
+      DurationCritic.new(order=3)
 
-    @duration_critic = DurationCritic.new(duration_critic_order=3)
-    @critics.push @duration_critic
+    @duration_and_beat_position_critic = 
+      DurationAndBeatPositionCritic.new(order=2, 
+                                        lookahead=3)
 
-    @duration_and_beat_position_critic = DurationAndBeatPositionCritic.new(duration_critic_order=2, duration_critic_lookahead=3)
-    @critics.push @duration_and_beat_position_critic
+    @complex_duration_critic = 
+      ComplexDurationCritic.new(@duration_critic, 
+                                @duration_and_beat_position_critic)
 
-    # FIXME: order dependency.  Assumes that this will get called to listen() after the prev. two critics
-    @complex_duration_critic = ComplexDurationCritic.new(@duration_critic, @duration_and_beat_position_critic)
-    @critics.push @complex_duration_critic
+    @critics = [ @duration_critic,
+                 @duration_and_beat_position_critic,
+                 @complex_duration_critic ]
   end
 
   def get_critics
