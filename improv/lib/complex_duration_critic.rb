@@ -20,8 +20,7 @@ class ComplexDurationCritic < Critic
     # do nothing...
   end
 
-  def listen(note)
-    # FIXME this assumes all 3 sub-critics have already listened to the note
+  def information_content(note)
     raise ArgumentError.new("not a note.  is a #{note.class}") if note.class != Music::Note
     next_symbol = note.duration.to_symbol
     expectations = get_expectations
@@ -32,6 +31,10 @@ class ComplexDurationCritic < Critic
     end
     add_to_cumulative_information_content information_content
     return information_content
+  end
+
+  def listen(note)
+    # do nothing...
   end
 
   def get_expectations
@@ -46,8 +49,6 @@ class ComplexDurationCritic < Critic
     # still no luck?  then reset and just pick a random duration
     @duration_critic.reset
     e = @duration_critic.get_expectations
-    return e if !e.nil? and e.num_observations > 0
-
-    raise RuntimeError.new("Failed to generate a duration")
+    return e
   end
 end

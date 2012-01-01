@@ -21,8 +21,7 @@ class ComplexPitchCritic < Critic
     # do nothing...
   end
 
-  def listen(note)
-    # FIXME this assumes all 3 sub-critics have already listened to the note
+  def information_content(note)
     raise ArgumentError.new("not a note.  is a #{note.class}") if note.class != Music::Note
     next_symbol = note.pitch.to_symbol
     expectations = get_expectations
@@ -33,6 +32,10 @@ class ComplexPitchCritic < Critic
     end
     add_to_cumulative_information_content information_content
     return information_content
+  end
+
+  def listen(note)
+    # do nothing
   end
 
   def get_expectations
@@ -58,8 +61,6 @@ class ComplexPitchCritic < Critic
 
     @pitch_critic.reset # we got to a point where we have no data.  reset, to get back to some stat we know about
     expectations = @pitch_critic.get_expectations
-    return expectations if expectations.num_observations > 0
-
-    raise RuntimeError.new("Failed to choose a pitch")
+    return expectations
   end
 end

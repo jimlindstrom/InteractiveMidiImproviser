@@ -31,6 +31,27 @@ class IntervalCritic < Critic
     File.open(filename, 'r') { |f| @note_history = YAML::load(f) }
   end
 
+  def information_content(note)
+    raise ArgumentError.new("not a note.  is a #{note.class}") if note.class != Music::Note
+    raise ArgumentError.new("note must contain 'notes_left' analysis") if note.analysis[:notes_left].nil?
+
+    tmp_note_history = @note_history.dup
+    tmp_note_history.unshift note
+    if tmp_note_history.length >= 2
+      interval = Music::Interval.calculate(tmp_note_history[-1].pitch, tmp_note_history[-2].pitch)
+      next_symbol = interval.to_symbol
+	  expectations = @markov_chain.get_expectations
+	  if expectations.num_observations > 0
+	    information_content = expectations.information_content(next_symbol.val)
+	  else
+        information_content = Math::RandomVariable.max_information_content
+	  end
+      add_to_cumulative_information_content information_content
+      return information_content
+    end
+    return nil
+  end
+
   def listen(note)
     raise ArgumentError.new("not a note.  is a #{note.class}") if note.class != Music::Note
     raise ArgumentError.new("note must contain 'notes_left' analysis") if note.analysis[:notes_left].nil?
@@ -40,18 +61,9 @@ class IntervalCritic < Critic
       interval = Music::Interval.calculate(@note_history[-1].pitch, @note_history[-2].pitch)
       @note_history.pop
       next_symbol = interval.to_symbol
-	  expectations = @markov_chain.get_expectations
-	  if expectations.num_observations > 0
-	    information_content = expectations.information_content(next_symbol.val)
-	  else
-        information_content = Math::RandomVariable.max_information_content
-	  end
-      add_to_cumulative_information_content information_content
       @markov_chain.observe(next_symbol.val, note.analysis[:notes_left])
       @markov_chain.transition(next_symbol.val, note.analysis[:notes_left])
-      return information_content
     end
-    return nil
   end
 
   def get_expectations

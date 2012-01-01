@@ -64,28 +64,41 @@ describe DurationCritic do
     it "should return the sum of all listening information_content" do
       order = 1
       dc = DurationCritic.new(order)
+
+      notes  = [ Music::Note.new(Music::Pitch.new(1), Music::Duration.new(1)) ]
+      notes.push Music::Note.new(Music::Pitch.new(2), Music::Duration.new(3))
+      notes.push Music::Note.new(Music::Pitch.new(4), Music::Duration.new(2))
+      notes.push Music::Note.new(Music::Pitch.new(3), Music::Duration.new(2))
+
       cum_information_content = 0.0
-      cum_information_content += dc.listen(Music::Note.new(Music::Pitch.new(1), Music::Duration.new(1)))
-      cum_information_content += dc.listen(Music::Note.new(Music::Pitch.new(2), Music::Duration.new(3)))
-      cum_information_content += dc.listen(Music::Note.new(Music::Pitch.new(4), Music::Duration.new(2)))
-      cum_information_content += dc.listen(Music::Note.new(Music::Pitch.new(3), Music::Duration.new(2)))
+      notes.each do |note|
+        cum_information_content += dc.information_content note
+        dc.listen note
+      end
       dc.cumulative_information_content.should be_within(0.0001).of(cum_information_content)
     end
     it "should return zero after calling reset_cumulative_information_content" do
       order = 1
       dc = DurationCritic.new(order)
-      dc.listen(Music::Note.new(Music::Pitch.new(1), Music::Duration.new(1)))
+      note = Music::Note.new(Music::Pitch.new(1), Music::Duration.new(1))
+      dummy = dc.information_content note
+      dc.listen note
       dc.reset_cumulative_information_content
       dc.cumulative_information_content.should be_within(0.0001).of(0.0)
     end
   end
+
   context ".listen" do
+  end
+
+  context ".information_content" do
     it "should return the information_content associated with the given note" do
       order = 1
       dc = DurationCritic.new(order)
-      information_content = dc.listen(Music::Note.new(Music::Pitch.new(0), Music::Duration.new(1)))
+      information_content = dc.information_content(Music::Note.new(Music::Pitch.new(0), Music::Duration.new(1)))
 	  information_content.should == Math::RandomVariable.max_information_content
     end
+    # FIXME: this has fewer tests than the other critics
   end
 
   context ".get_expectations" do

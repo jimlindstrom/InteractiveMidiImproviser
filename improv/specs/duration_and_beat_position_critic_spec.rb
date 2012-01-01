@@ -69,14 +69,15 @@ describe DurationAndBeatPositionCritic do
     it "should return the sum of all listening information_content" do
       dc = DurationAndBeatPositionCritic.new(order=2, lookahead=1)
       cum_information_content = 0.0
-      cum_information_content += dc.listen(@nq1[0])
-      cum_information_content += dc.listen(@nq1[1])
-      cum_information_content += dc.listen(@nq1[2])
-      cum_information_content += dc.listen(@nq1[3])
+      @nq1[0..3].each do |note|
+        cum_information_content += dc.information_content note
+        dc.listen note
+      end
       dc.cumulative_information_content.should be_within(0.0001).of(cum_information_content)
     end
     it "should return zero after calling reset_cumulative_information_content" do
       dc = DurationAndBeatPositionCritic.new(order=2, lookahead=1)
+      dummy = dc.information_content(@nq1[0])
       dc.listen(@nq1[0])
       dc.reset_cumulative_information_content
       dc.cumulative_information_content.should be_within(0.0001).of(0.0)
@@ -98,13 +99,29 @@ describe DurationAndBeatPositionCritic do
       note.analysis[:notes_left] = 1
       expect{ dc.listen(note) }.to raise_error(ArgumentError)
     end
+  end
+
+  context ".information_content" do
+    it "should raise an error if the note has no meter analysis" do
+      dc = DurationAndBeatPositionCritic.new(order=2, lookahead=1)
+      note = Music::Note.new(Music::Pitch.new(0), Music::Duration.new(1))
+      note.analysis[:beat_position] = @nq1.first.analysis[:beat_position].dup
+      #note.analysis[:notes_left] = 1
+      expect{ dc.information_content(note) }.to raise_error(ArgumentError)
+    end
+    it "should raise an error if the note isn't tagged with the number of following notes" do
+      dc = DurationAndBeatPositionCritic.new(order=2, lookahead=1)
+      note = Music::Note.new(Music::Pitch.new(0), Music::Duration.new(1))
+      #note.analysis[:beat_position] = @nq1.first.analysis[:beat_position].dup
+      note.analysis[:notes_left] = 1
+      expect{ dc.information_content(note) }.to raise_error(ArgumentError)
+    end
     it "should return the information_content associated with the given note" do
       dc = DurationAndBeatPositionCritic.new(order=2, lookahead=1)
       note = Music::Note.new(Music::Pitch.new(0), Music::Duration.new(1))
       note.analysis[:beat_position] = @nq1.first.analysis[:beat_position].dup
       note.analysis[:notes_left] = 1
-      information_content = dc.listen(note)
-	  information_content.should == Math::RandomVariable.max_information_content
+      dc.information_content(note).should == Math::RandomVariable.max_information_content
     end
   end
 

@@ -119,23 +119,19 @@ describe IntervalCritic do
     end
     it "should return the sum of all listening information_content" do
       ic = IntervalCritic.new(order=2, lookahead=1)
+
+      notes  = [ Music::Note.new(Music::Pitch.new(1), Music::Duration.new(1)) ]
+      notes.push Music::Note.new(Music::Pitch.new(2), Music::Duration.new(1))
+      notes.push Music::Note.new(Music::Pitch.new(1), Music::Duration.new(1))
+      notes.push Music::Note.new(Music::Pitch.new(6), Music::Duration.new(1))
+
       cum_information_content = 0.0
-
-      note = Music::Note.new(Music::Pitch.new(1), Music::Duration.new(1))
-      note.analysis[:notes_left] = 5
-      cum_information_content += ic.listen(note) || 0.0
-
-      note = Music::Note.new(Music::Pitch.new(2), Music::Duration.new(1))
-      note.analysis[:notes_left] = 4
-      cum_information_content += ic.listen(note) || 0.0
-
-      note = Music::Note.new(Music::Pitch.new(1), Music::Duration.new(1))
-      note.analysis[:notes_left] = 3
-      cum_information_content += ic.listen(note) || 0.0
-
-      note = Music::Note.new(Music::Pitch.new(6), Music::Duration.new(1))
-      note.analysis[:notes_left] = 2
-      cum_information_content += ic.listen(note) || 0.0
+      notes_left = 6
+      notes.each do |note|
+        note.analysis[:notes_left] = (notes_left -= 1)
+        cum_information_content += ic.information_content(note) || 0.0
+        ic.listen(note)
+      end
 
       ic.cumulative_information_content.should be_within(0.0001).of(cum_information_content)
     end
@@ -144,10 +140,12 @@ describe IntervalCritic do
 
       note = Music::Note.new(Music::Pitch.new(1), Music::Duration.new(1))
       note.analysis[:notes_left] = 4
+      dummy = ic.information_content(note)
       ic.listen(note)
 
       note = Music::Note.new(Music::Pitch.new(6), Music::Duration.new(1))
       note.analysis[:notes_left] = 3
+      dummy = ic.information_content(note)
       ic.listen(note)
 
       ic.reset_cumulative_information_content
@@ -160,28 +158,31 @@ describe IntervalCritic do
       ic = IntervalCritic.new(order=2, lookahead=1)
       expect { ic.listen(Music::Note.new(Music::Pitch.new(1), Music::Duration.new(0))) }.to raise_error
     end
-    it "should return nil if zero or one notes have been heard" do
+  end
+
+  context ".information_content" do
+    it "should raise an error if the note analysis does not contain notes_left" do
       ic = IntervalCritic.new(order=2, lookahead=1)
-
-      note = Music::Note.new(Music::Pitch.new(6), Music::Duration.new(1))
-      note.analysis[:notes_left] = 3
-      ic.listen(note)
-
-      information_content = ic.listen(note)
-      information_content.should be_within(0.001).of(Math::RandomVariable.max_information_content)
+      expect { ic.information_content(Music::Note.new(Music::Pitch.new(1), Music::Duration.new(0))) }.to raise_error
     end
-    it "should return the information_content associated with the given note" do
+    it "should return nil, if zero notes have been heard" do
       ic = IntervalCritic.new(order=2, lookahead=1)
 
       note = Music::Note.new(Music::Pitch.new(6), Music::Duration.new(1))
       note.analysis[:notes_left] = 3
+      ic.information_content(note).should be_nil
+    end
+    it "should return the information_content associated with the given note, if 1 or more notes have been heard" do
+      ic = IntervalCritic.new(order=2, lookahead=1)
+
+      note = Music::Note.new(Music::Pitch.new(6), Music::Duration.new(1))
+      note.analysis[:notes_left] = 3
+      ic.information_content(note)
       ic.listen(note)
 
       note = Music::Note.new(Music::Pitch.new(9), Music::Duration.new(1))
       note.analysis[:notes_left] = 2
-      information_content = ic.listen(note)
-
-	  information_content.should == Math::RandomVariable.max_information_content
+      ic.information_content(note).should be_within(0.001).of(Math::RandomVariable.max_information_content)
     end
   end
 
@@ -204,36 +205,43 @@ describe IntervalCritic do
 
       note = Music::Note.new(Music::Pitch.new(0), Music::Duration.new(1))
       note.analysis[:notes_left] = 3
+      dummy = ic.information_content(note)
       ic.listen(note)
 
       note = Music::Note.new(Music::Pitch.new(1), Music::Duration.new(1))
       note.analysis[:notes_left] = 2
+      dummy = ic.information_content(note)
       ic.listen(note)
 
       ic.reset
 
       note = Music::Note.new(Music::Pitch.new(0), Music::Duration.new(1))
       note.analysis[:notes_left] = 3
+      dummy = ic.information_content(note)
       ic.listen(note)
 
       note = Music::Note.new(Music::Pitch.new(1), Music::Duration.new(1))
       note.analysis[:notes_left] = 2
+      dummy = ic.information_content(note)
       ic.listen(note)
 
       ic.reset
 
       note = Music::Note.new(Music::Pitch.new(0), Music::Duration.new(1))
       note.analysis[:notes_left] = 3
+      dummy = ic.information_content(note)
       ic.listen(note)
 
       note = Music::Note.new(Music::Pitch.new(0), Music::Duration.new(1))
       note.analysis[:notes_left] = 2
+      dummy = ic.information_content(note)
       ic.listen(note)
 
       ic.reset
 
       note = Music::Note.new(Music::Pitch.new(0), Music::Duration.new(1))
       note.analysis[:notes_left] = 3
+      dummy = ic.information_content(note)
       ic.listen(note)
 
       x = ic.get_expectations
@@ -247,10 +255,12 @@ describe IntervalCritic do
 
       note = Music::Note.new(Music::Pitch.new(base_note), Music::Duration.new(1))
       note.analysis[:notes_left] = 3
+      dummy = ic.information_content(note)
       ic.listen(note)
 
       note = Music::Note.new(Music::Pitch.new(base_note + interval), Music::Duration.new(1))
       note.analysis[:notes_left] = 2
+      dummy = ic.information_content(note)
       ic.listen(note)
 
       ic.reset
@@ -259,6 +269,7 @@ describe IntervalCritic do
 
       note = Music::Note.new(Music::Pitch.new(base_note), Music::Duration.new(1))
       note.analysis[:notes_left] = 3
+      dummy = ic.information_content(note)
       ic.listen(note)
 
       x = ic.get_expectations
@@ -269,62 +280,76 @@ describe IntervalCritic do
 
       note = Music::Note.new(Music::Pitch.new(0), Music::Duration.new(1))
       note.analysis[:notes_left] = 8
+      dummy = ic.information_content(note)
       ic.listen(note)
 
       note = Music::Note.new(Music::Pitch.new(1), Music::Duration.new(1)) # 1
       note.analysis[:notes_left] = 7
+      dummy = ic.information_content(note)
       ic.listen(note)
 
       note = Music::Note.new(Music::Pitch.new(2), Music::Duration.new(1)) # 1
       note.analysis[:notes_left] = 6
+      dummy = ic.information_content(note)
       ic.listen(note)
 
       note = Music::Note.new(Music::Pitch.new(3), Music::Duration.new(1)) # 1
       note.analysis[:notes_left] = 5
+      dummy = ic.information_content(note)
       ic.listen(note)
 
       note = Music::Note.new(Music::Pitch.new(6), Music::Duration.new(1)) # 3
       note.analysis[:notes_left] = 4
+      dummy = ic.information_content(note)
       ic.listen(note)
 
       ic.reset
 
       note = Music::Note.new(Music::Pitch.new(0), Music::Duration.new(1))
       note.analysis[:notes_left] = 8
+      dummy = ic.information_content(note)
       ic.listen(note)
 
       note = Music::Note.new(Music::Pitch.new(5), Music::Duration.new(1)) # 5
       note.analysis[:notes_left] = 7
+      dummy = ic.information_content(note)
       ic.listen(note)
 
       note = Music::Note.new(Music::Pitch.new(6), Music::Duration.new(1)) # 1
       note.analysis[:notes_left] = 6
+      dummy = ic.information_content(note)
       ic.listen(note)
 
       note = Music::Note.new(Music::Pitch.new(7), Music::Duration.new(1)) # 1
       note.analysis[:notes_left] = 5
+      dummy = ic.information_content(note)
       ic.listen(note)
 
       note = Music::Note.new(Music::Pitch.new(8), Music::Duration.new(1)) # 1
       note.analysis[:notes_left] = 4
+      dummy = ic.information_content(note)
       ic.listen(note)
 
       ic.reset
 
       note = Music::Note.new(Music::Pitch.new(0), Music::Duration.new(1))
       note.analysis[:notes_left] = 8
+      dummy = ic.information_content(note)
       ic.listen(note)
 
       note = Music::Note.new(Music::Pitch.new(5), Music::Duration.new(1)) # 5
       note.analysis[:notes_left] = 7
+      dummy = ic.information_content(note)
       ic.listen(note)
 
       note = Music::Note.new(Music::Pitch.new(6), Music::Duration.new(1)) # 1
       note.analysis[:notes_left] = 6
+      dummy = ic.information_content(note)
       ic.listen(note)
 
       note = Music::Note.new(Music::Pitch.new(7), Music::Duration.new(1)) # 1
       note.analysis[:notes_left] = 5
+      dummy = ic.information_content(note)
       ic.listen(note)
 
       10.times do # it's probabalistic, so let's try it a few times

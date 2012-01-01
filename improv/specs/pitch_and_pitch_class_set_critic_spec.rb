@@ -76,15 +76,18 @@ describe PitchAndPitchClassSetCritic do
     end
     it "should return the sum of all listening information_content" do
       ppcs = PitchAndPitchClassSetCritic.new(order=2, lookahead=1)
+
       cum_information_content = 0.0
-      cum_information_content += ppcs.listen(@nq1[0])
-      cum_information_content += ppcs.listen(@nq1[1])
-      cum_information_content += ppcs.listen(@nq1[2])
-      cum_information_content += ppcs.listen(@nq1[3])
+      @nq1[0..3].each do |note|
+        cum_information_content += ppcs.information_content note
+        ppcs.listen note
+      end
+
       ppcs.cumulative_information_content.should be_within(0.0001).of(cum_information_content)
     end
     it "should return zero after calling reset_cumulative_information_content" do
       ppcs = PitchAndPitchClassSetCritic.new(order=2, lookahead=1)
+      ppcs.information_content(@nq1[0])
       ppcs.listen(@nq1[0])
       ppcs.reset_cumulative_information_content
       ppcs.cumulative_information_content.should be_within(0.0001).of(0.0)
@@ -98,12 +101,20 @@ describe PitchAndPitchClassSetCritic do
       #note.analysis[:notes_left] = 1
       expect{ ppcs.listen(note) }.to raise_error(ArgumentError)
     end
+  end
+
+  context ".information_content" do
+    it "should raise an error if the note isn't tagged with the number of following notes" do
+      ppcs = PitchAndPitchClassSetCritic.new(order=2, lookahead=1)
+      note = Music::Note.new(Music::Pitch.new(0), Music::Duration.new(1))
+      #note.analysis[:notes_left] = 1
+      expect{ ppcs.information_content(note) }.to raise_error(ArgumentError)
+    end
     it "should return the information_content associated with the given note" do
       ppcs = PitchAndPitchClassSetCritic.new(order=2, lookahead=1)
       note = Music::Note.new(Music::Pitch.new(0), Music::Duration.new(1))
       note.analysis[:notes_left] = 1
-      information_content = ppcs.listen(note)
-	  information_content.should == Math::RandomVariable.max_information_content
+      ppcs.information_content(note).should == Math::RandomVariable.max_information_content
     end
   end
 

@@ -23,7 +23,7 @@ class DurationAndBeatPositionCritic < Critic
     @markov_chain = Math::AsymmetricBidirectionalBackoffMarkovChain.load(filename)
   end
 
-  def listen(note)
+  def information_content(note)
     raise ArgumentError.new("not a note.  is a #{note.class}") if note.class != Music::Note
     raise ArgumentError.new("note must have meter analysis") if note.analysis[:beat_position].nil?
     raise ArgumentError.new("note must have notes_left analysis") if note.analysis[:notes_left].nil?
@@ -36,9 +36,17 @@ class DurationAndBeatPositionCritic < Critic
       information_content = Math::RandomVariable.max_information_content
     end
     add_to_cumulative_information_content information_content
+    return information_content
+  end
+
+  def listen(note)
+    raise ArgumentError.new("not a note.  is a #{note.class}") if note.class != Music::Note
+    raise ArgumentError.new("note must have meter analysis") if note.analysis[:beat_position].nil?
+    raise ArgumentError.new("note must have notes_left analysis") if note.analysis[:notes_left].nil?
+    next_outcome = note.duration.to_symbol
+    next_state   = Music::DurationAndBeatPosition.new(note.duration, note.analysis[:beat_position]).to_symbol
     @markov_chain.observe(next_outcome.val, note.analysis[:notes_left])
     @markov_chain.transition(next_state.val, note.analysis[:notes_left])
-    return information_content
   end
 
   def get_expectations

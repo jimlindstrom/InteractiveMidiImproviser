@@ -23,14 +23,15 @@ class Listener
     end
 
     notes.each do |n| 
-      str = to_fixed_width("#{n.pitch.val}, #{n.duration.val}") if logging
-
-      @critics.each do |c| 
-        information_content = c.listen(n)  # FIXME: try splitting up getting info content from listen()ing
-        str += to_fixed_width(String(information_content)) if logging
+      if logging     
+        str = to_fixed_width("#{n.pitch.val}, #{n.duration.val}")
+        @critics.each do |c| 
+          str += to_fixed_width(String(c.information_content(n)))
+        end
+        puts str
       end
-
-      puts str if logging
+   
+      @critics.each { |c| c.listen(n) }
     end
   end
 

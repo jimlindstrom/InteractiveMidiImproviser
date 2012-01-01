@@ -31,6 +31,27 @@ class PitchAndPitchClassSetCritic < Critic
     File.open(filename, 'r') { |f| @note_history = YAML::load(f) }
   end
 
+  def information_content(note)
+    raise ArgumentError.new("not a note.  is a #{note.class}") if note.class != Music::Note
+    raise ArgumentError.new("note must have notes_left analysis") if note.analysis[:notes_left].nil?
+
+    saved_note_history = @note_history.dup
+    @note_history.push note
+    pcs = current_pitch_class_set
+    @note_history = saved_note_history
+
+    next_outcome = note.pitch.to_symbol
+
+    expectations = @markov_chain.get_expectations
+    if expectations.num_observations > 0
+      information_content = expectations.information_content(next_outcome.val)
+    else
+      information_content = Math::RandomVariable.max_information_content
+    end
+    add_to_cumulative_information_content information_content
+    return information_content
+  end
+
   def listen(note)
     raise ArgumentError.new("not a note.  is a #{note.class}") if note.class != Music::Note
     raise ArgumentError.new("note must have notes_left analysis") if note.analysis[:notes_left].nil?
@@ -41,16 +62,8 @@ class PitchAndPitchClassSetCritic < Critic
     next_state   = Music::PitchAndPitchClassSet.new(note.pitch, pcs).to_symbol
     next_outcome = note.pitch.to_symbol
 
-    expectations = @markov_chain.get_expectations
-    if expectations.num_observations > 0
-      information_content = expectations.information_content(next_outcome.val)
-    else
-      information_content = Math::RandomVariable.max_information_content
-    end
-    add_to_cumulative_information_content information_content
     @markov_chain.observe(next_outcome.val, note.analysis[:notes_left])
     @markov_chain.transition(next_state.val, note.analysis[:notes_left])
-    return information_content
   end
 
   def get_expectations

@@ -1,19 +1,6 @@
-- I'm not confident that the complex * critics are reporting their info content
-  properly.  I think I may need to have them own access to their subcritics, in
-  order to ensure that things are called in the right order.  That makes it 
-  trickier to inspect the cumulative info content of subcritics though..  Maybe
-  this is an appropriate time to use an observer, to pull info content out of
-  each of the critics??
-
 ### QUESTIONS
 
 - Why are so few of the improvised melodies rhythmically unintelligable?
-
-- Why is there max-information-content happening?  Shouldn't that be SUPER rare?
-	- Seems to be happening only at the end, which makes me think that the lookahead
-	  isn't helpful.  Reducing lookahead marginally improved information content,
-	  but I suspect this comes at the expense of a perceptually important worsening
-	  of ending quality.
 
 - Why did going to a lower-order PitchAndPitchClassSetCritic improve its 
   performance?  That indicates the backoff algorithm is probably not optimal

@@ -20,7 +20,7 @@ class PitchCritic < Critic
     @markov_chain = Math::MarkovChain.load(filename)
   end
 
-  def listen(note)
+  def information_content(note)
     raise ArgumentError.new("not a note.  is a #{note.class}") if note.class != Music::Note
     next_symbol = note.pitch.to_symbol
     expectations = @markov_chain.get_expectations
@@ -30,9 +30,14 @@ class PitchCritic < Critic
       information_content = Math::RandomVariable.max_information_content
     end
     add_to_cumulative_information_content information_content
+    return information_content
+  end
+
+  def listen(note)
+    raise ArgumentError.new("not a note.  is a #{note.class}") if note.class != Music::Note
+    next_symbol = note.pitch.to_symbol
     @markov_chain.observe(next_symbol.val)
     @markov_chain.transition(next_symbol.val)
-    return information_content
   end
 
   def get_expectations
