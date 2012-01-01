@@ -15,6 +15,8 @@ class Listener
     return if !analyze_note_queue(notes)
 
     @critics.each { |c| c.reset }
+    cum_info_content = {}
+    @critics.each { |c| cum_info_content[String(c.class)] = 0.0 }
 
     if logging
       str  = to_fixed_width("note")
@@ -26,12 +28,20 @@ class Listener
       if logging     
         str = to_fixed_width("#{n.pitch.val}, #{n.duration.val}")
         @critics.each do |c| 
-          str += to_fixed_width(String(c.information_content(n)))
+          info_content = c.information_content(n)
+          cum_info_content[String(c.class)] += ( info_content || 0.0 )
+          str += to_fixed_width(String(info_content))
         end
         puts str
       end
    
       @critics.each { |c| c.listen(n) }
+    end
+
+    if logging
+      str  = to_fixed_width("total")
+      str += @critics.map { |c| to_fixed_width(String(cum_info_content[String(c.class)])) }.join
+      puts str
     end
   end
 

@@ -48,6 +48,10 @@ class InteractiveImprovisor
     @improvisor.generate
   end
 
+  def analyze_single_note_queue(notes)
+    @listener.listen(notes, do_logging=true)
+  end
+
   def run(use_real_midi=true)
     setup(use_real_midi)
 
