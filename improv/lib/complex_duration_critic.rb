@@ -1,6 +1,8 @@
 #!/usr/bin/env ruby
 
-class ComplexDurationCritic < Critic
+class ComplexDurationCritic
+  include CriticWithInfoContent
+
   def initialize(duration_critic, duration_and_beat_position_critic)
     reset_cumulative_information_content
 

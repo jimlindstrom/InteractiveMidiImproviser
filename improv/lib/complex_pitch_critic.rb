@@ -1,6 +1,8 @@
 #!/usr/bin/env ruby
 
-class ComplexPitchCritic < Critic
+class ComplexPitchCritic
+  include CriticWithInfoContent
+
   def initialize(pitch_critic, interval_critic, pitch_and_pitch_class_set_critic)
     reset_cumulative_information_content
 

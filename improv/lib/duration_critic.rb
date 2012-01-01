@@ -1,6 +1,8 @@
 #!/usr/bin/env ruby
 
-class DurationCritic < Critic
+class DurationCritic
+  include CriticWithInfoContent
+
   def initialize(order)
     reset_cumulative_information_content
     @markov_chain = Math::MarkovChain.new(order, Music::Duration.num_values)

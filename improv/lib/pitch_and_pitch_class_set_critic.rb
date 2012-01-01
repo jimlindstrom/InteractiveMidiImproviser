@@ -1,6 +1,8 @@
 #!/usr/bin/env ruby
 
-class PitchAndPitchClassSetCritic < Critic
+class PitchAndPitchClassSetCritic
+  include CriticWithInfoContent
+
   def initialize(order, lookahead)
     reset_cumulative_information_content
     @markov_chain = Math::AsymmetricBidirectionalBackoffMarkovChain.new(order, 

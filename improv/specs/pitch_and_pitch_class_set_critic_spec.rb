@@ -13,11 +13,12 @@ describe PitchAndPitchClassSetCritic do
     @nq2.tag_with_notes_left
   end
 
-  context ".new" do
-    it "should return a PitchAndPitchClassSetCritic" do
-      PitchAndPitchClassSetCritic.new(order=2, lookahead=1).should be_an_instance_of PitchAndPitchClassSetCritic
-    end
+  before(:all) do
+    @class_type = PitchAndPitchClassSetCritic
+    @params_for_new = [order=2, lookahead=1]
+    @filename = "data/test/pitch_and_pitch_class_set_critic_#{order}_#{lookahead}.yml"
   end
+  it_should_behave_like "a critic"
 
   context ".reset" do
     it "should reset to the state in which no notes have been heard yet" do
@@ -35,62 +36,6 @@ describe PitchAndPitchClassSetCritic do
       ppcs.listen @nq1[3]
       ppcs.reset
       ppcs.current_pitch_class_set.vals.should == []
-    end
-
-  end
-
-  context ".save" do
-    it "should save a file, named <folder>/pitch_and_pitch_class_set_critic_<order>_<lookahead>.yml" do
-      ppcs = PitchAndPitchClassSetCritic.new(order=2, lookahead=1)
-      ppcs.listen(@nq1.first)
-      ppcs.listen(@nq2.first)
-      filename = "data/test/pitch_and_pitch_class_set_critic_#{order}_#{lookahead}.yml"
-      File.delete filename if FileTest.exists? filename
-      ppcs.save "data/test"
-      FileTest.exists?(filename).should == true
-    end
-  end
-
-  context ".load" do
-    it "should load a file, named <folder>/pitch_and_pitch_class_set_critic_<order>_<lookahead>.yml, and act just like the saved critic" do
-      ppcs = PitchAndPitchClassSetCritic.new(order=2, lookahead=1)
-      ppcs.listen(@nq1[0])
-      ppcs.listen(@nq1[1])
-      ppcs.listen(@nq1[2])
-      ppcs.reset
-      ppcs.listen(@nq1[0])
-      ppcs.listen(@nq1[1])
-      ppcs.save "data/test"
-      ppcs2 = PitchAndPitchClassSetCritic.new(order=2, lookahead=1)
-      ppcs2.load "data/test"
-      x = ppcs.get_expectations
-      x2 = ppcs2.get_expectations
-      x.choose_outcome.should == x2.choose_outcome
-    end
-  end
-
-  context ".cumulative_information_content" do
-    it "should return zero initially" do
-      ppcs = PitchAndPitchClassSetCritic.new(order=2, lookahead=1)
-      ppcs.cumulative_information_content.should be_within(0.0001).of(0.0)
-    end
-    it "should return the sum of all listening information_content" do
-      ppcs = PitchAndPitchClassSetCritic.new(order=2, lookahead=1)
-
-      cum_information_content = 0.0
-      @nq1[0..3].each do |note|
-        cum_information_content += ppcs.information_content note
-        ppcs.listen note
-      end
-
-      ppcs.cumulative_information_content.should be_within(0.0001).of(cum_information_content)
-    end
-    it "should return zero after calling reset_cumulative_information_content" do
-      ppcs = PitchAndPitchClassSetCritic.new(order=2, lookahead=1)
-      ppcs.information_content(@nq1[0])
-      ppcs.listen(@nq1[0])
-      ppcs.reset_cumulative_information_content
-      ppcs.cumulative_information_content.should be_within(0.0001).of(0.0)
     end
   end
 
@@ -119,10 +64,6 @@ describe PitchAndPitchClassSetCritic do
   end
 
   context ".get_expectations" do
-    it "returns a random variable" do
-      ppcs = PitchAndPitchClassSetCritic.new(order=2, lookahead=1)
-      ppcs.get_expectations.should be_an_instance_of Math::RandomVariable
-    end
     it "returns a random variable that is less information_contentd about states observed more often" do
       ppcs = PitchAndPitchClassSetCritic.new(order=2, lookahead=1)
       ppcs.listen(@nq1[0])

@@ -15,11 +15,12 @@ describe DurationAndBeatPositionCritic do
     @nq2.tag_with_notes_left
   end
 
-  context ".new" do
-    it "should return a DurationAndBeatPositionCritic" do
-      DurationAndBeatPositionCritic.new(order=2, lookahead=1).should be_an_instance_of DurationAndBeatPositionCritic
-    end
+  before(:all) do
+    @class_type = DurationAndBeatPositionCritic
+    @params_for_new = [order=2, lookahead=1]
+    @filename = "data/test/duration_and_beat_position_critic_#{order}_#{lookahead}.yml"
   end
+  it_should_behave_like "a critic"
 
   context ".reset" do
     it "should reset to the state in which no notes have been heard yet" do
@@ -28,59 +29,6 @@ describe DurationAndBeatPositionCritic do
       dc.reset
       x = dc.get_expectations
       Music::Duration.new(x.choose_outcome).val.should == @nq1.first.duration.val
-    end
-  end
-
-  context ".save" do
-    it "should save a file, named <folder>/duration_and_beat_position_critic_<order>_<lookahead>.yml" do
-      dc = DurationAndBeatPositionCritic.new(order=2, lookahead=1)
-      dc.listen(@nq1.first)
-      dc.listen(@nq2.first)
-      filename = "data/test/duration_and_beat_position_critic_#{order}_#{lookahead}.yml"
-      File.delete filename if FileTest.exists? filename
-      dc.save "data/test"
-      FileTest.exists?(filename).should == true
-    end
-  end
-
-  context ".load" do
-    it "should load a file, named <folder>/duration_and_beat_position_critic_<order>_<lookahead>.yml, and act just like the saved critic" do
-      dc = DurationAndBeatPositionCritic.new(order=2, lookahead=1)
-      dc.listen(@nq1[0])
-      dc.listen(@nq1[1])
-      dc.listen(@nq1[2])
-      dc.reset
-      dc.listen(@nq1[0])
-      dc.listen(@nq1[1])
-      dc.save "data/test"
-      dc2 = DurationAndBeatPositionCritic.new(order=2, lookahead=1)
-      dc2.load "data/test"
-      x = dc.get_expectations
-      x2 = dc2.get_expectations
-      x.choose_outcome.should == x2.choose_outcome
-    end
-  end
-
-  context ".cumulative_information_content" do
-    it "should return zero initially" do
-      dc = DurationAndBeatPositionCritic.new(order=2, lookahead=1)
-      dc.cumulative_information_content.should be_within(0.0001).of(0.0)
-    end
-    it "should return the sum of all listening information_content" do
-      dc = DurationAndBeatPositionCritic.new(order=2, lookahead=1)
-      cum_information_content = 0.0
-      @nq1[0..3].each do |note|
-        cum_information_content += dc.information_content note
-        dc.listen note
-      end
-      dc.cumulative_information_content.should be_within(0.0001).of(cum_information_content)
-    end
-    it "should return zero after calling reset_cumulative_information_content" do
-      dc = DurationAndBeatPositionCritic.new(order=2, lookahead=1)
-      dummy = dc.information_content(@nq1[0])
-      dc.listen(@nq1[0])
-      dc.reset_cumulative_information_content
-      dc.cumulative_information_content.should be_within(0.0001).of(0.0)
     end
   end
 
@@ -126,10 +74,6 @@ describe DurationAndBeatPositionCritic do
   end
 
   context ".get_expectations" do
-    it "returns a random variable" do
-      dc = DurationAndBeatPositionCritic.new(order=2, lookahead=1)
-      dc.get_expectations.should be_an_instance_of Math::RandomVariable
-    end
     it "returns a random variable that is less information_contentd about states observed more often" do
       dc = DurationAndBeatPositionCritic.new(order=2, lookahead=1)
       dc.listen(@nq1[0])

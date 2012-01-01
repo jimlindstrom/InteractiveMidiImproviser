@@ -1,6 +1,8 @@
 #!/usr/bin/env ruby
 
-class PitchCritic < Critic
+class PitchCritic
+  include CriticWithInfoContent
+
   def initialize(order)
     reset_cumulative_information_content
     @markov_chain = Math::MarkovChain.new(order, Music::Pitch.num_values)

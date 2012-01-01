@@ -3,14 +3,12 @@
 require 'spec_helper'
 
 describe IntervalCritic do
-  before do
+  before(:all) do
+    @class_type = IntervalCritic
+    @params_for_new = [order=2, lookahead=1]
+    @filename = "data/test/interval_critic_#{order}_#{lookahead}.yml"
   end
-
-  context ".new" do
-    it "should return a IntervalCritic" do
-      IntervalCritic.new(order=2, lookahead=1).should be_an_instance_of IntervalCritic
-    end
-  end
+  it_should_behave_like "a critic"
 
   context ".reset" do
     it "should reset to the state in which no notes have been heard yet" do
@@ -37,119 +35,6 @@ describe IntervalCritic do
 
       x = ic.get_expectations
       Music::Pitch.new(x.choose_outcome).val.should == (base_note + interval)
-    end
-  end
-
-  context ".save" do
-    it "should save a file, named <folder>/interval_critic_<order>_<lookahead>.yml" do
-      ic = IntervalCritic.new(order=2, lookahead=1)
-
-      note = Music::Note.new(Music::Pitch.new(4), Music::Duration.new(1))
-      note.analysis[:notes_left] = 5
-      ic.listen note
-
-      note = Music::Note.new(Music::Pitch.new(4), Music::Duration.new(1))
-      note.analysis[:notes_left] = 4
-      ic.listen note
-
-      note = Music::Note.new(Music::Pitch.new(4), Music::Duration.new(1))
-      note.analysis[:notes_left] = 3
-      ic.listen note
-
-      note = Music::Note.new(Music::Pitch.new(2), Music::Duration.new(1))
-      note.analysis[:notes_left] = 2
-      ic.listen note
-
-      filename = "data/test/interval_critic_#{order}_#{lookahead}.yml"
-      File.delete filename if FileTest.exists? filename
-      ic.save "data/test"
-      FileTest.exists?(filename).should == true
-    end
-  end
-
-  context ".load" do
-    it "should load a file, named <folder>/interval_critic_<order>_<lookahead>.yml, and act just like the saved critic" do
-      ic = IntervalCritic.new(order=2, lookahead=1)
-
-      note = Music::Note.new(Music::Pitch.new(1), Music::Duration.new(1))
-      note.analysis[:notes_left] = 5
-      ic.listen note
-
-      note = Music::Note.new(Music::Pitch.new(9), Music::Duration.new(1))
-      note.analysis[:notes_left] = 4
-      ic.listen note
-
-      note = Music::Note.new(Music::Pitch.new(3), Music::Duration.new(1))
-      note.analysis[:notes_left] = 3
-      ic.listen note
-
-      note = Music::Note.new(Music::Pitch.new(5), Music::Duration.new(1))
-      note.analysis[:notes_left] = 2
-      ic.listen note
-
-      ic.reset
-
-      note = Music::Note.new(Music::Pitch.new(1), Music::Duration.new(1))
-      note.analysis[:notes_left] = 5
-      ic.listen note
-
-      note = Music::Note.new(Music::Pitch.new(9), Music::Duration.new(1))
-      note.analysis[:notes_left] = 4
-      ic.listen note
-
-      note = Music::Note.new(Music::Pitch.new(3), Music::Duration.new(1))
-      note.analysis[:notes_left] = 3
-      ic.listen note
-
-      ic.save "data/test"
-      ic2 = IntervalCritic.new(order, lookahead=1)
-      ic2.load "data/test"
-      10.times do # it's probabalistic, so let's try it a few times
-        x = ic.get_expectations
-        x2 = ic2.get_expectations
-        x.choose_outcome.should == x2.choose_outcome
-      end
-    end
-  end
-
-  context ".cumulative_information_content" do
-    it "should return zero initially" do
-      ic = IntervalCritic.new(order=2, lookahead=1)
-      ic.cumulative_information_content.should be_within(0.0001).of(0.0)
-    end
-    it "should return the sum of all listening information_content" do
-      ic = IntervalCritic.new(order=2, lookahead=1)
-
-      notes  = [ Music::Note.new(Music::Pitch.new(1), Music::Duration.new(1)) ]
-      notes.push Music::Note.new(Music::Pitch.new(2), Music::Duration.new(1))
-      notes.push Music::Note.new(Music::Pitch.new(1), Music::Duration.new(1))
-      notes.push Music::Note.new(Music::Pitch.new(6), Music::Duration.new(1))
-
-      cum_information_content = 0.0
-      notes_left = 6
-      notes.each do |note|
-        note.analysis[:notes_left] = (notes_left -= 1)
-        cum_information_content += ic.information_content(note) || 0.0
-        ic.listen(note)
-      end
-
-      ic.cumulative_information_content.should be_within(0.0001).of(cum_information_content)
-    end
-    it "should return zero after calling reset_cumulative_information_content" do
-      ic = IntervalCritic.new(order=2, lookahead=1)
-
-      note = Music::Note.new(Music::Pitch.new(1), Music::Duration.new(1))
-      note.analysis[:notes_left] = 4
-      dummy = ic.information_content(note)
-      ic.listen(note)
-
-      note = Music::Note.new(Music::Pitch.new(6), Music::Duration.new(1))
-      note.analysis[:notes_left] = 3
-      dummy = ic.information_content(note)
-      ic.listen(note)
-
-      ic.reset_cumulative_information_content
-      ic.cumulative_information_content.should be_within(0.0001).of(0.0)
     end
   end
 
@@ -187,19 +72,6 @@ describe IntervalCritic do
   end
 
   context ".get_expectations" do
-    it "returns nil until one note has been listened to" do
-      ic = IntervalCritic.new(order=2, lookahead=1)
-      ic.get_expectations.should be_nil
-    end
-    it "returns a random variable" do
-      ic = IntervalCritic.new(order=2, lookahead=1)
-
-      note = Music::Note.new(Music::Pitch.new(6), Music::Duration.new(1))
-      note.analysis[:notes_left] = 3
-      ic.listen(note)
-
-      ic.get_expectations.should be_an_instance_of Math::RandomVariable
-    end
     it "returns a random variable that is less information_contentd about states observed more often" do
       ic = IntervalCritic.new(order=2, lookahead=1)
 
