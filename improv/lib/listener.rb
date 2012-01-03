@@ -47,7 +47,7 @@ class Listener
 
   private
 
-  def to_fixed_width(str,str_len=10,pad_len=2)
+  def to_fixed_width(str,str_len=6,pad_len=2)
     s = str[0..(str_len-1)]
     until (s.length == str_len) do
       s += " "
