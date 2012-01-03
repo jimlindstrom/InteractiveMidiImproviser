@@ -166,7 +166,57 @@ describe Music::NoteQueue do
       nq.detect_meter
       nq.first.analysis[:beat_position].to_hash.inspect.should == vector[:first_beat_position].to_hash.inspect
     end
+  end
 
+  describe "detect_phrases" do
+    it "returns true if it's confident about the detected phrases" do
+      vector = $phrasing_vectors["Bring back my bonnie to me"]
+      nq = vector[:note_queue]
+      nq.detect_phrases.should == true
+    end
+    it "returns false if it's not confident about the detected phrases" do
+      vector = $phrasing_vectors["Bring back my bonnie to me"]
+      nq = vector[:note_queue]
+      nq = nq[0..0] # something so short it's guaranteed to be metrically ambiguous
+      nq.detect_phrases.should == false
+    end
+
+    it "detects the phrase onsets (my bonnie lies...)" do
+      vector = $phrasing_vectors["Bring back my bonnie to me"]
+      nq = vector[:note_queue]
+      nq.detect_phrases
+      nq.phrases.collect{|p| p.start_idx }.should == vector[:phrase_boundaries].collect{|p| p[:start_idx] }
+    end
+    it "detects the phrase onsets (battle hymn...)" do
+      vector = $phrasing_vectors["Battle hymn of the republic"]
+      nq = vector[:note_queue]
+      nq.detect_phrases
+      nq.phrases.collect{|p| p.start_idx }.should == vector[:phrase_boundaries].collect{|p| p[:start_idx] }
+    end
+    it "detects the phrase onsets (bach minuet...)" do
+      vector = $phrasing_vectors["Bach Minuet in G"]
+      nq = vector[:note_queue]
+      nq.detect_phrases
+      nq.phrases.collect{|p| p.start_idx }.should == vector[:phrase_boundaries].collect{|p| p[:start_idx] }
+    end
+    it "detects the phrase onsets (somewhere over...)" do
+      vector = $phrasing_vectors["Somewhere over the rainbow"]
+      nq = vector[:note_queue]
+      nq.detect_phrases
+      nq.phrases.collect{|p| p.start_idx }.should == vector[:phrase_boundaries].collect{|p| p[:start_idx] }
+    end
+    it "detects the phrase onsets (this train...)" do
+      vector = $phrasing_vectors["This train is bound for glory"]
+      nq = vector[:note_queue]
+      nq.detect_phrases
+      nq.phrases.collect{|p| p.start_idx }.should == vector[:phrase_boundaries].collect{|p| p[:start_idx] }
+    end
+    it "detects the phrase onsets (bach minuet 2...)" do
+      vector = $phrasing_vectors["Bach Minuet (2)"]
+      nq = vector[:note_queue]
+      nq.detect_phrases
+      nq.phrases.collect{|p| p.start_idx }.should == vector[:phrase_boundaries].collect{|p| p[:start_idx] }
+    end
   end
 
   describe "tag_with_notes_left" do
