@@ -126,7 +126,7 @@ m = Music::Meter.new(3, 4, 1) # 3/4 time, quarter note pulses
 b = Music::BeatPosition.new
 b.measure     = 0
 b.beat        = 2 # 0-based: beat 3 
-b.subbeat     = 0 # 0-based: first subbeatision
+b.subbeat     = 0 # 0-based: first subbeat
 b.beats_per_measure = 3 # 0-based: beat 3 
 b.subbeats_per_beat = 1 # 0-based: first subbeatision
 
@@ -550,4 +550,91 @@ $phrasing_vectors["Bach Minuet (2)"] =
     :note_queue          => nq,
     :phrase_boundaries   => phrases
   }
+
+###############################################################################
+# Amazing Grace
+###############################################################################
+
+nq = Music::NoteQueue.new
+nq.tempo = 100
+
+nq.push Music::Note.new(Music::Pitch.new(PC4), Music::Duration.new( 1))		#  0	++
+nq.push Music::Note.new(Music::Pitch.new(PF4), Music::Duration.new( 1))		#  1
+
+nq.push Music::Note.new(Music::Pitch.new(PF4), Music::Duration.new( 4))		#  2
+nq.push Music::Note.new(Music::Pitch.new(PA4), Music::Duration.new( 1))		#  3
+nq.push Music::Note.new(Music::Pitch.new(PF4), Music::Duration.new( 1))		#  4
+
+nq.push Music::Note.new(Music::Pitch.new(PA4), Music::Duration.new( 4))		#  5	--
+nq.push Music::Note.new(Music::Pitch.new(PG4), Music::Duration.new( 2))		#  6	++
+
+nq.push Music::Note.new(Music::Pitch.new(PF4), Music::Duration.new( 4))		#  7
+nq.push Music::Note.new(Music::Pitch.new(PD4), Music::Duration.new( 2))		#  8
+
+nq.push Music::Note.new(Music::Pitch.new(PC4), Music::Duration.new( 4))		#  9	--
+nq.push Music::Note.new(Music::Pitch.new(PC4), Music::Duration.new( 1))		# 10	++
+nq.push Music::Note.new(Music::Pitch.new(PF4), Music::Duration.new( 1))		# 11
+
+nq.push Music::Note.new(Music::Pitch.new(PF4), Music::Duration.new( 4))		# 12
+nq.push Music::Note.new(Music::Pitch.new(PA4), Music::Duration.new( 1))		# 13
+nq.push Music::Note.new(Music::Pitch.new(PG4), Music::Duration.new( 1))		# 14
+
+nq.push Music::Note.new(Music::Pitch.new(PA4), Music::Duration.new( 4))		# 15
+nq.push Music::Note.new(Music::Pitch.new(PC5), Music::Duration.new( 2))		# 16
+
+nq.push Music::Note.new(Music::Pitch.new(PC5), Music::Duration.new(10))		# 17	--
+nq.push Music::Note.new(Music::Pitch.new(PA4), Music::Duration.new( 1))		# 18	++
+nq.push Music::Note.new(Music::Pitch.new(PC5), Music::Duration.new( 1))		# 19
+
+nq.push Music::Note.new(Music::Pitch.new(PC5), Music::Duration.new( 4))		# 20
+nq.push Music::Note.new(Music::Pitch.new(PA4), Music::Duration.new( 1))		# 21
+nq.push Music::Note.new(Music::Pitch.new(PF4), Music::Duration.new( 1))		# 22
+
+nq.push Music::Note.new(Music::Pitch.new(PA4), Music::Duration.new( 4))		# 23	--
+nq.push Music::Note.new(Music::Pitch.new(PG4), Music::Duration.new( 2))		# 24	++
+
+nq.push Music::Note.new(Music::Pitch.new(PF4), Music::Duration.new( 4))		# 25
+nq.push Music::Note.new(Music::Pitch.new(PD4), Music::Duration.new( 2))		# 26
+
+nq.push Music::Note.new(Music::Pitch.new(PC4), Music::Duration.new( 4))		# 27	--
+nq.push Music::Note.new(Music::Pitch.new(PC4), Music::Duration.new( 1))		# 28	++
+nq.push Music::Note.new(Music::Pitch.new(PF4), Music::Duration.new( 1))		# 29
+
+nq.push Music::Note.new(Music::Pitch.new(PF4), Music::Duration.new( 4))		# 30
+nq.push Music::Note.new(Music::Pitch.new(PA4), Music::Duration.new( 1))		# 31
+nq.push Music::Note.new(Music::Pitch.new(PF4), Music::Duration.new( 1))		# 32
+
+nq.push Music::Note.new(Music::Pitch.new(PA4), Music::Duration.new( 4))		# 33
+nq.push Music::Note.new(Music::Pitch.new(PG4), Music::Duration.new( 2))		# 34
+
+nq.push Music::Note.new(Music::Pitch.new(PF4), Music::Duration.new(12))		# 35	--
+
+m = Music::Meter.new(3, 4, 2) # 3/4 time, eighth note pulses
+b = Music::BeatPosition.new
+b.measure     = 0
+b.beat        = 2 # 0-based: third beat
+b.subbeat     = 1 # 0-based: second eighth note
+b.beats_per_measure = 3 # 3 beats
+b.subbeats_per_beat = 2 # half of quarter notes
+
+$meter_vectors["Amazing Grace"] =
+  {
+    :meter               => m,
+    :first_beat_position => b,
+    :note_queue          => nq
+  }
+
+phrases = [ ]
+phrases.push({ :start_idx =>  0, :end_idx =>  5 })
+phrases.push({ :start_idx =>  6, :end_idx =>  9 })
+phrases.push({ :start_idx => 10, :end_idx => 17 })
+phrases.push({ :start_idx => 18, :end_idx => 23 })
+phrases.push({ :start_idx => 24, :end_idx => 35 })
+
+$phrasing_vectors["Amazing Grace"] =
+  {
+    :note_queue          => nq,
+    :phrase_boundaries   => phrases
+  }
+
 

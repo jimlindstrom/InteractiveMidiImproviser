@@ -9,12 +9,12 @@ module Music
     PITCH_WEIGHT    = 0.5
     DURATION_WEIGHT = 0.5
 
-    attr_reader :d
+    attr_reader :distance
 
     def initialize(first_note, second_note)
       @pitch_dist    = normalize_dist(second_note.pitch.val    - first_note.pitch.val,    MAX_PITCH_DELTA)
       @duration_dist = normalize_dist(second_note.duration.val - first_note.duration.val, MAX_DURATION_DELTA)
-      @d             = (PITCH_WEIGHT * @pitch_dist) + (DURATION_WEIGHT * @duration_dist)
+      @distance      = (PITCH_WEIGHT * @pitch_dist) + (DURATION_WEIGHT * @duration_dist)
     end
 
     private

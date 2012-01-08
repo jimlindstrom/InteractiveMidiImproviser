@@ -35,20 +35,6 @@ module Music
       notes.inject(0.0) { |x, note| x + note.duration.val }
     end
 
-    def total_distance
-      within_dist = 0.0
-      if @end_idx > @start_idx
-        within_dist += notes[0..-2].inject(0.0) { |x, note| x + note.analysis[:interval_after].s }
-      end
-
-      border_dist = 0.0
-      if !notes.last.analysis[:interval_after].nil?
-        border_dist = notes.last.analysis[:interval_after].s
-      end
-
-      return within_dist - border_dist # or divide by?
-    end
-
     def score(do_logging=false)
       total = 0.0 
 
@@ -82,6 +68,8 @@ module Music
       return total
     end
 
+    # UNTESTED
+
     def split_at_a_big_ioi
       puts "\tsplit_at_a_big_ioi" if LOGGING
 
@@ -91,7 +79,13 @@ module Music
 
       x = Math::RandomVariable.new(@note_queue.length)
       indices.zip(@note_queue[indices]).each do |y|
-        x.add_possible_outcome(outcome=y[0], num_observations=1.0+((y[1].analysis[:interval_after].s || 0.0)*2))
+        if y[1].analysis[:interval_after].class == Music::LBDMInterval
+          x.add_possible_outcome(outcome=y[0], num_observations=1.0+((y[1].analysis[:interval_after].s || 0.0)*2))
+        elsif y[1].analysis[:interval_after].class == Music::DistInterval
+          x.add_possible_outcome(outcome=y[0], num_observations=1.0+((y[1].analysis[:interval_after].distance || 0.0)*2))
+        else
+          raise RuntimeError.new("Unknown interval type #{y[1].analysis[:interval_after].class}")
+        end
       end
       idx = x.choose_outcome
       puts "\t\tsplitting at: #{idx}" if LOGGING
@@ -106,6 +100,45 @@ module Music
       @end_idx = idx
       return new_phrase
     end
+
+    private
+
+    def total_distance
+      return total_distance_lbdm if notes.first.analysis[:interval_after].class == Music::LBDMInterval
+      return total_distance_dist if notes.first.analysis[:interval_after].class == Music::DistInterval
+      return 0.0                 if notes.first.analysis[:interval_after].class == NilClass
+
+      raise RuntimeError.new("Unknown interval type #{notes.first.analysis[:interval_after].class}")
+    end
+
+    def total_distance_lbdm
+      within_dist = 0.0
+      if @end_idx > @start_idx
+        within_dist += notes[0..-2].inject(0.0) { |x, note| x + note.analysis[:interval_after].s }
+      end
+
+      border_dist = 0.0
+      if !notes.last.analysis[:interval_after].nil?
+        border_dist = notes.last.analysis[:interval_after].s
+      end
+
+      return within_dist - border_dist # or divide by?
+    end
+
+    def total_distance_dist
+      within_dist = 0.0
+      if @end_idx > @start_idx
+        within_dist += notes[0..-2].inject(0.0) { |x, note| x + note.analysis[:interval_after].distance }
+      end
+
+      border_dist = 0.0
+      if !notes.last.analysis[:interval_after].nil?
+        border_dist = notes.last.analysis[:interval_after].distance
+      end
+
+      return within_dist - border_dist # or divide by?
+    end
+
   end
  
 end

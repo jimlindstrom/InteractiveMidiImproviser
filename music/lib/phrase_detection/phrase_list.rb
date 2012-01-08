@@ -23,10 +23,6 @@ module Music
       return pl
     end
 
-    def to_s
-      self.collect{|p| "#{p.start_idx}-#{p.end_idx}" }.join(", ")
-    end
-
     def score
       puts "\tscoring phrases:" if LOGGING
       calculate_phrase_duration_penalty(do_logging=LOGGING)
@@ -37,6 +33,12 @@ module Music
 
       return overall_score
     end
+
+    def to_s
+      self.collect{|p| "#{p.start_idx}-#{p.end_idx}" }.join(", ")
+    end
+
+    # UNTESTED
 
     def split_a_phrase_at_biggest_ioi
       orig_phrase = self[choose_phrase_idx_weighted_by_score]

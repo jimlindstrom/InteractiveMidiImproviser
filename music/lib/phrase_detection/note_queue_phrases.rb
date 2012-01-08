@@ -65,23 +65,5 @@ private
     return next_tactic
   end
 
-  #def create_intervals
-  #  prev = nil
-  #  self.each do |cur|
-  #    if !prev.nil?
-  #      i = Music::LBDMInterval.new(prev, cur)
-  #      prev.analysis[:interval_after] = i
-  #      cur.analysis[:interval_before] = i
-  #    end
-  #    prev = cur
-  #  end
-  #  self.each do |cur|
-  #    if !cur.analysis[:interval_before].nil? and !cur.analysis[:interval_after].nil?
-  #      cur.analysis[:interval_after ].prev_interval = cur.analysis[:interval_before]
-  #      cur.analysis[:interval_before].next_interval = cur.analysis[:interval_after ]
-  #    end
-  #  end
-  #end
-
 end
 

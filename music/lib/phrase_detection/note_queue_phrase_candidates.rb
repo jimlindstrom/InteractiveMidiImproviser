@@ -4,6 +4,11 @@ module NoteQueuePhraseCandidates_LBDMAlgorithm
   LOGGING = false
 
   def create_intervals
+    if !@create_intervals_has_run.nil?    
+      return # don't run more than once
+    end
+    @create_intervals_has_run = true
+
     prev = nil
     self.each do |cur|
       if !prev.nil?
@@ -83,12 +88,12 @@ module NoteQueuePhraseCandidates_DistanceAlgorithm
   def phrase_boundary_candidates
     m = []
 
-    m.push 0 if (self[0].analysis[:interval_after].d > self[1].analysis[:interval_after].d)
+    m.push 0 if (self[0].analysis[:interval_after].distance > self[1].analysis[:interval_after].distance)
 
     (1..(self.length-3)).each do |idx|
-      d_prev = self[idx-1].analysis[:interval_after].d 
-      d_cur  = self[idx  ].analysis[:interval_after].d 
-      d_next = self[idx+1].analysis[:interval_after].d 
+      d_prev = self[idx-1].analysis[:interval_after].distance 
+      d_cur  = self[idx  ].analysis[:interval_after].distance 
+      d_next = self[idx+1].analysis[:interval_after].distance 
 
       m.push idx if (d_cur > d_prev) and (d_cur > d_next)
     end
@@ -107,7 +112,7 @@ module NoteQueuePhraseCandidates_DistanceAlgorithm
         is_candidate = candidates.include?(idx)          ? "[Dist. Peak]"    : ""
         is_start     = actual_boundaries.include?(idx+1) ? "[Actual Phrase]" : ""
         puts "     > " +
-             "#{(i.d*1000.0).round/1000.0} " +
+             "#{(i.distance*1000.0).round/1000.0} " +
              "#{is_candidate} " +
              "#{is_start}"
       end
@@ -158,7 +163,7 @@ module NoteQueuePhraseCandidates_DistanceAndSimilarityAlgorithm
       i = note.analysis[:interval_after]
       if !i.nil?
         puts "     > " +
-             "#{(i.d*1000.0).round/1000.0}"
+             "#{(i.distance*1000.0).round/1000.0}"
       end
     end
   end
@@ -213,8 +218,8 @@ module NoteQueuePhraseCandidates_DistanceAndSimilarityAlgorithm
       score *= (1.0 + self[idx-1].analysis[:similarity_peak_score]**0.5) if (idx-1) >= 0
       score *= (1.0 + self[idx  ].analysis[:similarity_peak_score])
       score *= (1.0 + self[idx+1].analysis[:similarity_peak_score]**0.5) if (idx+1) < self.length
-      score *= (1.0 + self[idx  ].analysis[:interval_before].d**0.25) if !self[idx].analysis[:interval_before].nil?
-      score *= (1.0 + self[idx  ].analysis[:interval_after ].d**0.25) if !self[idx].analysis[:interval_after ].nil?
+      score *= (1.0 + self[idx  ].analysis[:interval_before].distance**0.25) if !self[idx].analysis[:interval_before].nil?
+      score *= (1.0 + self[idx  ].analysis[:interval_after ].distance**0.25) if !self[idx].analysis[:interval_after ].nil?
 
       self[idx].analysis[:dist_and_similarity_score] = (1000.0*score).round/1000.0
     end
@@ -222,9 +227,9 @@ module NoteQueuePhraseCandidates_DistanceAndSimilarityAlgorithm
   end
 end
 
-module NoteQueuePhraseCandidates
-  #include NoteQueuePhraseCandidates_LBDMAlgorithm
-  #include NoteQueuePhraseCandidates_DistanceAlgorithm
-  include NoteQueuePhraseCandidates_DistanceAndSimilarityAlgorithm
+module NoteQueuePhraseCandidates# 										HardMiss	NearMiss	FalsePos
+# include NoteQueuePhraseCandidates_LBDMAlgorithm#							0.80		0.51		0.39
+# include NoteQueuePhraseCandidates_DistanceAlgorithm#						0.68		0.17		0.32
+  include NoteQueuePhraseCandidates_DistanceAndSimilarityAlgorithm#			0.31		0.23		0.47
 end
 

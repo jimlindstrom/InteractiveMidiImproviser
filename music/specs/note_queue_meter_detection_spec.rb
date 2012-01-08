@@ -119,6 +119,21 @@ describe Music::NoteQueue do
       nq.detect_meter
       nq.first.analysis[:beat_position].to_hash.inspect.should == vector[:first_beat_position].to_hash.inspect
     end
+
+    it "detects the time signature (amazing grace...)" do
+      vector = $meter_vectors["Amazing Grace"]
+      nq = vector[:note_queue]
+      nq.detect_meter
+      #nq.meter.val.should == vector[:meter].val
+      pending("This one doesn't work yet...")
+    end
+    it "detects the offset (amazing grace...)" do
+      vector = $meter_vectors["Amazing Grace"]
+      nq = vector[:note_queue]
+      nq.detect_meter
+      #nq.first.analysis[:beat_position].to_hash.inspect.should == vector[:first_beat_position].to_hash.inspect
+      pending("This one doesn't work yet...")
+    end
   end
 
 end
