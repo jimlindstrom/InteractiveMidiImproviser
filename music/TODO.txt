@@ -1,1 +1,11 @@
+Phrase detection
+	- Try moving 'split phrase' up a level and choose the spot before arbitrarily
+	  choosing a phrase. This is probably what's causing crappy phrases to 
+	  disintegrate into singletons
+	- Track each phrase's unhappiness along each of the score dimensions. This 
+	  would give a better sorted set of tactic opporunities
+	- Don't choose tactics as randomly.  Create a prioritized list of tactics 
+	  based on the tactic opportunities.  Represent each opportunity as a lambda
+	  with parameters ready to go
+
 Refactor beat_position to just point to / contain a meter

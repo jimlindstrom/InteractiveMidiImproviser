@@ -9,8 +9,10 @@ module Music
       @note_queue = note_queue
     end
 
-    def dump
-      self.collect{|p| "#{p.start_idx}-#{p.end_idx}" }.join(", ")
+    def self.initial(note_queue)
+      pl = PhraseList.new(note_queue)
+      pl.push Phrase.new(note_queue, start_idx=0, end_idx=note_queue.length-1)
+      return pl
     end
 
     def clone
@@ -21,10 +23,8 @@ module Music
       return pl
     end
 
-    def self.initial(note_queue)
-      pl = PhraseList.new(note_queue)
-      pl.push Phrase.new(note_queue, start_idx=0, end_idx=note_queue.length-1)
-      return pl
+    def to_s
+      self.collect{|p| "#{p.start_idx}-#{p.end_idx}" }.join(", ")
     end
 
     def score

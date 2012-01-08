@@ -38,9 +38,14 @@ module Music
     def total_distance
       within_dist = 0.0
       if @end_idx > @start_idx
-        within_dist += notes[0..-2].inject(0.0) { |x, note| x + note.analysis[:distance] }
+        within_dist += notes[0..-2].inject(0.0) { |x, note| x + note.analysis[:interval_after].s }
       end
-      border_dist = notes.last.analysis[:distance]
+
+      border_dist = 0.0
+      if !notes.last.analysis[:interval_after].nil?
+        border_dist = notes.last.analysis[:interval_after].s
+      end
+
       return within_dist - border_dist # or divide by?
     end
 
@@ -86,7 +91,7 @@ module Music
 
       x = Math::RandomVariable.new(@note_queue.length)
       indices.zip(@note_queue[indices]).each do |y|
-        x.add_possible_outcome(outcome=y[0], num_observations=1.0+y[1].analysis[:distance]*2)
+        x.add_possible_outcome(outcome=y[0], num_observations=1.0+((y[1].analysis[:interval_after].s || 0.0)*2))
       end
       idx = x.choose_outcome
       puts "\t\tsplitting at: #{idx}" if LOGGING

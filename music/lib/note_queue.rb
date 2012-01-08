@@ -6,7 +6,8 @@ module Music
     LOGGING = false
 
     include CanDetectMeter
-    include CanDetectPhrases
+    include NoteQueuePhraseCandidates
+    include NoteQueuePhrases
   
     def self.from_event_queue(evq)
       iois = Midi::IOIArray.new( evq.get_interonset_intervals + [ evq.get_last_duration ] )
@@ -56,7 +57,6 @@ module Music
         item.analysis[:notes_left] = self.length - 1 - idx
       end
     end
-
   end
 
 end

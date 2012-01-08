@@ -1,7 +1,7 @@
 #!/usr/bin/env ruby
 
 # assumes it is included in NoteQueue
-module CanDetectPhrases
+module NoteQueuePhrases
   LOGGING = true
  
   attr_accessor :phrases
@@ -9,7 +9,8 @@ module CanDetectPhrases
   def detect_phrases
     return false if self.length < 2 # we need >= 2 per group, and at least one group
 
-    calculate_note_distances
+    create_intervals
+
     @phrases = Music::PhraseList.initial(self)
     best_score = @phrases.score
 
@@ -24,10 +25,10 @@ module CanDetectPhrases
       tactic = choose_tactic
 
       puts "detect_phrases - iteration #{iter}, tactic #{tactic}" if LOGGING
-      puts "\tbefore:       #{@phrases.dump}" if LOGGING
+      puts "\tbefore:       #{@phrases.to_s}" if LOGGING
       cur_attempt = @phrases.clone
       cur_attempt.send(tactic)
-      puts "\tafter:        #{cur_attempt.dump}" if LOGGING
+      puts "\tafter:        #{cur_attempt.to_s}" if LOGGING
       cur_score   = cur_attempt.score
       puts "\tcur_score:    #{cur_score}" if LOGGING
       puts "\tbest_score:   #{best_score}" if LOGGING
@@ -49,6 +50,7 @@ module CanDetectPhrases
   end
 
 private
+
   def choose_tactic
     if @tactics.nil?
       @tactics = [ :split_a_phrase_at_biggest_ioi,
@@ -63,24 +65,23 @@ private
     return next_tactic
   end
 
-  def calculate_note_distances
-    prev = nil
-    self.each do |cur|
-      cur.analysis[:distance] = 10.0 # FIXME?
-      if !prev.nil?
-        prev.analysis[:distance_ioi] = (cur.duration.val - prev.duration.val).to_f.abs / 
-                                       (cur.duration.val + prev.duration.val)
-
-        prev.analysis[:distance_api] = (cur.pitch.val    - prev.pitch.val   ).to_f.abs / 
-                                       (cur.pitch.val    + prev.pitch.val   )
-
-        prev.analysis[:distance]     = prev.analysis[:distance_ioi] + 
-                                       prev.analysis[:distance_api]
-      end
-
-      prev = cur
-    end
-  end
+  #def create_intervals
+  #  prev = nil
+  #  self.each do |cur|
+  #    if !prev.nil?
+  #      i = Music::LBDMInterval.new(prev, cur)
+  #      prev.analysis[:interval_after] = i
+  #      cur.analysis[:interval_before] = i
+  #    end
+  #    prev = cur
+  #  end
+  #  self.each do |cur|
+  #    if !cur.analysis[:interval_before].nil? and !cur.analysis[:interval_after].nil?
+  #      cur.analysis[:interval_after ].prev_interval = cur.analysis[:interval_before]
+  #      cur.analysis[:interval_before].next_interval = cur.analysis[:interval_after ]
+  #    end
+  #  end
+  #end
 
 end
 

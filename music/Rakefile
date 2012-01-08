@@ -1,5 +1,5 @@
 task :test do
-  sh "rspec -c -fd -I. -Ispecs specs/*spec.rb"
+  sh "rspec -c -fd -I. -Ispecs specs/*spec.rb specs/phrase_detection/*spec.rb"
 end
 
 task :test_no_midi do
