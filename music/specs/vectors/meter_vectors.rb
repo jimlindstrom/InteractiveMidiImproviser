@@ -143,7 +143,7 @@ phrases.push({ :start_idx =>  9, :end_idx => 16 })
 phrases.push({ :start_idx => 17, :end_idx => 25 })
 phrases.push({ :start_idx => 26, :end_idx => 33 })
 phrases.push({ :start_idx => 34, :end_idx => 37 })
-phrases.push({ :start_idx => 38, :end_idx => 37 })
+phrases.push({ :start_idx => 38, :end_idx => 47 })
 phrases.push({ :start_idx => 48, :end_idx => 51 })
 phrases.push({ :start_idx => 52, :end_idx => 59 })
 

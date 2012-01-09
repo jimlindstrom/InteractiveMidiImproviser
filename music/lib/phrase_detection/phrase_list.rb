@@ -100,6 +100,7 @@ module Music
     end
 
   private
+
     def calculate_phrase_duration_penalty(do_logging=false)
       self.each { |phrase| phrase.duration_deviance = 0.0 }
 
