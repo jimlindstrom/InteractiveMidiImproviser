@@ -54,6 +54,7 @@ describe Music::PhraseList do
     it "returns a higher value for the correct phrasing than for other phrasings (1 - merged two phrases)" do
       @vector = $phrasing_vectors["Bring back my bonnie to me"]
       @nq = @vector[:note_queue]
+      @nq.create_intervals
       correct_pl = Music::PhraseList.new(@nq)
       @vector[:phrase_boundaries].each do |p|
         correct_pl.push Music::Phrase.new(@nq, p[:start_idx], p[:end_idx])
@@ -74,6 +75,7 @@ describe Music::PhraseList do
     it "returns a higher value for the correct phrasing than for other phrasings (2 - shift all boundaries by 1)" do
       @vector = $phrasing_vectors["Bring back my bonnie to me"]
       @nq = @vector[:note_queue]
+      @nq.create_intervals
       correct_pl = Music::PhraseList.new(@nq)
       @vector[:phrase_boundaries].each do |p|
         correct_pl.push Music::Phrase.new(@nq, p[:start_idx], p[:end_idx])
@@ -95,6 +97,7 @@ describe Music::PhraseList do
     it "returns a higher value for the correct phrasing than for other phrasings (3 - merged pairs of phrases)" do
       @vector = $phrasing_vectors["Bring back my bonnie to me"]
       @nq = @vector[:note_queue]
+      @nq.create_intervals
       correct_pl = Music::PhraseList.new(@nq)
       @vector[:phrase_boundaries].each do |p|
         correct_pl.push Music::Phrase.new(@nq, p[:start_idx], p[:end_idx])
@@ -112,6 +115,7 @@ describe Music::PhraseList do
     it "returns a higher value for the correct phrasing than for other phrasings (4 - merged some phrase pairs)" do
       @vector = $phrasing_vectors["Bach Minuet in G"]
       @nq = @vector[:note_queue]
+      @nq.create_intervals
       correct_pl = Music::PhraseList.new(@nq)
       @vector[:phrase_boundaries].each do |p|
         correct_pl.push Music::Phrase.new(@nq, p[:start_idx], p[:end_idx])
@@ -128,6 +132,7 @@ describe Music::PhraseList do
     it "returns a higher value for the correct phrasing than for other phrasings (5 - split first phrase)" do
       @vector = $phrasing_vectors["Bach Minuet in G"]
       @nq = @vector[:note_queue]
+      @nq.create_intervals
       correct_pl = Music::PhraseList.new(@nq)
       @vector[:phrase_boundaries].each do |p|
         correct_pl.push Music::Phrase.new(@nq, p[:start_idx], p[:end_idx])
@@ -147,6 +152,7 @@ describe Music::PhraseList do
     it "returns a higher value for the correct phrasing than for other phrasings (6 - split all phrases in half)" do
       @vector = $phrasing_vectors["Bach Minuet in G"]
       @nq = @vector[:note_queue]
+      @nq.create_intervals
       correct_pl = Music::PhraseList.new(@nq)
       @vector[:phrase_boundaries].each do |p|
         correct_pl.push Music::Phrase.new(@nq, p[:start_idx], p[:end_idx])
@@ -167,9 +173,10 @@ describe Music::PhraseList do
       incorrect_pl.score.should be < correct_pl.score
     end
 
-    it "returns a higher value for the correct phrasing than for other phrasings (7 - shifted all boundaries by 1)" do
+    it "returns a higher value for the correct phrasing than for other phrasings (7 - shifted all boundaries back by 1)" do
       @vector = $phrasing_vectors["Bach Minuet in G"]
       @nq = @vector[:note_queue]
+      @nq.create_intervals
       correct_pl = Music::PhraseList.new(@nq)
       @vector[:phrase_boundaries].each do |p|
         correct_pl.push Music::Phrase.new(@nq, p[:start_idx], p[:end_idx])
@@ -181,6 +188,69 @@ describe Music::PhraseList do
       incorrect_pl.push Music::Phrase.new(@nq, 17, 21)
       incorrect_pl.push Music::Phrase.new(@nq, 22, 26)
       incorrect_pl.push Music::Phrase.new(@nq, 27, 31)
+
+      incorrect_pl.score.should be < correct_pl.score
+    end
+
+    it "returns a higher value for the correct phrasing than for other phrasings (8 - shifted all boundaries up by 1)" do
+      @vector = $phrasing_vectors["Bach Minuet in G"]
+      @nq = @vector[:note_queue]
+      @nq.create_intervals
+      correct_pl = Music::PhraseList.new(@nq)
+      @vector[:phrase_boundaries].each do |p|
+        correct_pl.push Music::Phrase.new(@nq, p[:start_idx], p[:end_idx])
+      end
+
+      incorrect_pl = Music::PhraseList.new(@nq)
+      incorrect_pl.push Music::Phrase.new(@nq,  0,  6)  # shifted all boundaries up by 1
+      incorrect_pl.push Music::Phrase.new(@nq,  8, 14)
+      incorrect_pl.push Music::Phrase.new(@nq, 15, 19)
+      incorrect_pl.push Music::Phrase.new(@nq, 20, 24)
+      incorrect_pl.push Music::Phrase.new(@nq, 25, 31)
+
+      incorrect_pl.score.should be < correct_pl.score
+    end
+
+    it "returns a higher value for the correct phrasing than for other phrasings (9 - split 1st 2 phrases)" do
+      @vector = $phrasing_vectors["Battle hymn of the republic"]
+      @nq = @vector[:note_queue]
+      @nq.create_intervals
+      correct_pl = Music::PhraseList.new(@nq)
+      @vector[:phrase_boundaries].each do |p|
+        correct_pl.push Music::Phrase.new(@nq, p[:start_idx], p[:end_idx])
+      end
+
+      incorrect_pl = Music::PhraseList.new(@nq)
+      incorrect_pl.push Music::Phrase.new(@nq,  0,  6)
+      incorrect_pl.push Music::Phrase.new(@nq,  7, 13)
+      incorrect_pl.push Music::Phrase.new(@nq, 14, 20)
+      incorrect_pl.push Music::Phrase.new(@nq, 21, 28)
+      incorrect_pl.push Music::Phrase.new(@nq, 29, 43)
+      incorrect_pl.push Music::Phrase.new(@nq, 44, 49)
+
+      incorrect_pl.score.should be < correct_pl.score
+    end
+
+    it "returns a higher value for the correct phrasing than for other phrasings (10 - wrong but totally uniform length)" do
+      @vector = $phrasing_vectors["Battle hymn of the republic"]
+      @nq = @vector[:note_queue]
+      @nq.create_intervals
+      correct_pl = Music::PhraseList.new(@nq)
+      @vector[:phrase_boundaries].each do |p|
+        correct_pl.push Music::Phrase.new(@nq, p[:start_idx], p[:end_idx])
+      end
+
+      incorrect_pl = Music::PhraseList.new(@nq)
+      incorrect_pl.push Music::Phrase.new(@nq,  0,  4)
+      incorrect_pl.push Music::Phrase.new(@nq,  5,  9)
+      incorrect_pl.push Music::Phrase.new(@nq, 10, 14)
+      incorrect_pl.push Music::Phrase.new(@nq, 15, 19)
+      incorrect_pl.push Music::Phrase.new(@nq, 20, 24)
+      incorrect_pl.push Music::Phrase.new(@nq, 25, 29)
+      incorrect_pl.push Music::Phrase.new(@nq, 30, 34)
+      incorrect_pl.push Music::Phrase.new(@nq, 35, 39)
+      incorrect_pl.push Music::Phrase.new(@nq, 40, 44)
+      incorrect_pl.push Music::Phrase.new(@nq, 45, 49)
 
       incorrect_pl.score.should be < correct_pl.score
     end

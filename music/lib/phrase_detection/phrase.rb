@@ -53,12 +53,12 @@ module Music
       end
 
       # finally, subtract a penalty for being significantly different from the mean phrase length
-      total -= 1.0*duration_deviance
+      total -= 40.0*duration_deviance
 
       puts "\t\tscore (#{@start_idx}-#{@end_idx}): 400.0 " +
            "- 3*#{(1000.0*total_distance).round/1000.0} " +
            "+ 2*((#{self.length}^1)*(#{@phrase_similarity.length}^2)/(10.0^(3*#{(1000*mean_similarity).round/1000.0}))) " +
-           "- 1.0*#{(1000.0*duration_deviance).round/1000.0} " +
+           "- 40.0*#{(1000.0*duration_deviance).round/1000.0} " +
            "= 400 " +
            "- #{(1000.0*3*total_distance).round/1000.0} " +
            "+ #{(1000.0*2*similarity).round/1000.0} " +
@@ -127,7 +127,7 @@ module Music
 
     def total_distance_dist
       within_dist = 0.0
-      if @end_idx > @start_idx
+      if length > 1
         within_dist += notes[0..-2].inject(0.0) { |x, note| x + note.analysis[:interval_after].distance }
       end
 
