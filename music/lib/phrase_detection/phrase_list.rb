@@ -30,6 +30,7 @@ module Music
 
       scores = self.collect { |phrase| phrase.score(do_logging=LOGGING) }
       overall_score = scores.inject(0.0) { |x,s| x + s }
+      puts "\t\toverall score: #{overall_score}"
 
       return overall_score
     end
@@ -111,9 +112,9 @@ module Music
 
         self.each do |phrase| 
           if phrase.duration > median_duration
-            phrase.duration_deviance = (phrase.duration / median_duration.to_f)**1.25 
+            phrase.duration_deviance = ((phrase.duration - median_duration) / median_duration.to_f)**1.5
           else
-            phrase.duration_deviance = (median_duration / phrase.duration.to_f)**1.25 
+            phrase.duration_deviance = ((median_duration - phrase.duration) / phrase.duration.to_f)**1.5
           end
         end
       end

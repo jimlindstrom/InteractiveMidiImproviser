@@ -42,27 +42,28 @@ module Music
       total -= 3*total_distance
 
       # now add a premium for similarity to other phrases
-      #similarity = 1.0 - (1.0 / (1.0 + @phrase_similarity))
-      if @phrase_similarity.empty? or (filtered_similarity = @phrase_similarity.select{ |x| x > 0.4 }).empty?
+      if @phrase_similarity.empty? or (filtered_similarity = @phrase_similarity.select{ |x| x > 0.3 }).empty?
         similarity = 0.0
         mean_similarity = 0.0
+        similarity_weight = 0
       else
-        mean_similarity = filtered_similarity.inject(0.0){|x,n| x+n} / filtered_similarity.length.to_f
+        mean_similarity = filtered_similarity.inject(0.0){|s,x| s+x} / filtered_similarity.length.to_f
         similarity = (self.length**1.0) * (filtered_similarity.length**2.0) / (10.0**(3.0*mean_similarity)) 
+        similarity_weight = 2
         total += 2*similarity
       end
 
       # finally, subtract a penalty for being significantly different from the mean phrase length
-      total -= 40.0*duration_deviance
+      total -= 120.0*duration_deviance
 
-      puts "\t\tscore (#{@start_idx}-#{@end_idx}): 400.0 " +
+      puts "\t\tscore (#{@start_idx}-#{@end_idx}): 0.0 " +
            "- 3*#{(1000.0*total_distance).round/1000.0} " +
-           "+ 2*((#{self.length}^1)*(#{@phrase_similarity.length}^2)/(10.0^(3*#{(1000*mean_similarity).round/1000.0}))) " +
-           "- 40.0*#{(1000.0*duration_deviance).round/1000.0} " +
-           "= 400 " +
+           "+ #{similarity_weight}*((#{self.length}^1)*(#{@phrase_similarity.length}^2)/(10.0^(3*#{(1000*mean_similarity).round/1000.0}))) " +
+           "- 120.0*#{(1000.0*duration_deviance).round/1000.0} " +
+           "= 0 " +
            "- #{(1000.0*3*total_distance).round/1000.0} " +
            "+ #{(1000.0*2*similarity).round/1000.0} " +
-           "- #{(1000.0*1*duration_deviance).round/1000.0} " +
+           "- #{(1000.0*120*duration_deviance).round/1000.0} " +
            "= #{(1000.0*total).round/1000.0}" if do_logging
 
       return total
@@ -122,7 +123,7 @@ module Music
         border_dist = notes.last.analysis[:interval_after].s
       end
 
-      return within_dist - border_dist # or divide by?
+      return within_dist - border_dist
     end
 
     def total_distance_dist
@@ -136,7 +137,7 @@ module Music
         border_dist = notes.last.analysis[:interval_after].distance
       end
 
-      return within_dist - border_dist # or divide by?
+      return within_dist - border_dist
     end
 
   end
