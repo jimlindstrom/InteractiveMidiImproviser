@@ -323,6 +323,58 @@ describe Music::PhraseList do
       incorrect_pl.score.should be < correct_pl.score
     end
 
+    it "returns a higher value for the correct phrasing than for other phrasings (15 - merge the two B-section phrases)" do
+      @vector = $phrasing_vectors["This train is bound for glory"]
+      @nq = @vector[:note_queue]
+      @nq.create_intervals
+      correct_pl = Music::PhraseList.new(@nq)
+      @vector[:phrase_boundaries].each do |p|
+        correct_pl.push Music::Phrase.new(@nq, p[:start_idx], p[:end_idx])
+      end
+
+      incorrect_pl = Music::PhraseList.new(@nq)
+      incorrect_pl.push Music::Phrase.new(@nq,  0,  8)
+      incorrect_pl.push Music::Phrase.new(@nq,  9, 17)
+      incorrect_pl.push Music::Phrase.new(@nq, 18, 36)
+      incorrect_pl.push Music::Phrase.new(@nq, 37, 45)
+
+      incorrect_pl.score.should be < correct_pl.score
+    end
+
+    it "returns a higher value for the correct phrasing than for other phrasings (16 - merged pairs/trios of phrases)" do
+      @vector = $phrasing_vectors["Bach Minuet (2)"]
+      @nq = @vector[:note_queue]
+      @nq.create_intervals
+      correct_pl = Music::PhraseList.new(@nq)
+      @vector[:phrase_boundaries].each do |p|
+        correct_pl.push Music::Phrase.new(@nq, p[:start_idx], p[:end_idx])
+      end
+
+      incorrect_pl = Music::PhraseList.new(@nq)
+      incorrect_pl.push Music::Phrase.new(@nq,  0, 11) # merged 0-6 and 7-11
+      incorrect_pl.push Music::Phrase.new(@nq, 12, 26) # merged 12-16, 17-21, and 22-26
+
+      incorrect_pl.score.should be < correct_pl.score
+    end
+
+    it "returns a higher value for the correct phrasing than for other phrasings (17 - shifted and merged)" do
+      @vector = $phrasing_vectors["Bach Minuet in G"]
+      @nq = @vector[:note_queue]
+      @nq.create_intervals
+      correct_pl = Music::PhraseList.new(@nq)
+      @vector[:phrase_boundaries].each do |p|
+        correct_pl.push Music::Phrase.new(@nq, p[:start_idx], p[:end_idx])
+      end
+
+      incorrect_pl = Music::PhraseList.new(@nq)
+      incorrect_pl.push Music::Phrase.new(@nq,  0,  7)
+      incorrect_pl.push Music::Phrase.new(@nq,  8, 13) # shifted end back by 2
+      incorrect_pl.push Music::Phrase.new(@nq, 14, 21) # grew on both ends
+      incorrect_pl.push Music::Phrase.new(@nq, 22, 31) # shifted beginning up by 1. merged w/ next
+
+      incorrect_pl.score.should be < correct_pl.score
+    end
+
  end
 
 end

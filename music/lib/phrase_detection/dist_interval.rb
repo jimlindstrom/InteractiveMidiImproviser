@@ -3,7 +3,7 @@
 module Music
 
   class DistInterval
-    MAX_PITCH_DELTA    = 15
+    MAX_PITCH_DELTA    = 10
     MAX_DURATION_DELTA =  8
 
     PITCH_WEIGHT    = 0.5

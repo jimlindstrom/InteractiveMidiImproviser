@@ -315,8 +315,9 @@ $meter_vectors["Bach Minuet in G"] =
 phrases = [ ]
 phrases.push({ :start_idx =>  0, :end_idx =>  7 })
 phrases.push({ :start_idx =>  8, :end_idx => 15 })
-phrases.push({ :start_idx => 16, :end_idx => 20 })
-phrases.push({ :start_idx => 21, :end_idx => 25 })
+#phrases.push({ :start_idx => 16, :end_idx => 20 })
+#phrases.push({ :start_idx => 21, :end_idx => 25 })
+phrases.push({ :start_idx => 16, :end_idx => 25 })
 phrases.push({ :start_idx => 26, :end_idx => 31 })
 
 $phrasing_vectors["Bach Minuet in G"] =
@@ -470,7 +471,8 @@ $meter_vectors["This train is bound for glory"] =
 
 phrases = [ ]
 phrases.push({ :start_idx =>  0, :end_idx =>  8 })
-phrases.push({ :start_idx =>  9, :end_idx => 24 })
+phrases.push({ :start_idx =>  9, :end_idx => 17 })
+phrases.push({ :start_idx => 18, :end_idx => 24 })
 phrases.push({ :start_idx => 25, :end_idx => 36 })
 phrases.push({ :start_idx => 37, :end_idx => 45 })
 

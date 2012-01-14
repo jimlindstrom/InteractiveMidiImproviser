@@ -102,12 +102,22 @@ module Music
 
   private
 
+    def median_phrase_duration
+      phrase_durations = self.collect{ |p| p.duration }.sort
+
+      median_duration = case (phrase_durations.length%2)
+        when 0 then (phrase_durations[(phrase_durations.length/2)-1] + phrase_durations[phrase_durations.length/2]) / 2.0
+        when 1 then phrase_durations[phrase_durations.length/2]
+      end
+
+      return median_duration
+    end
+
     def calculate_phrase_duration_penalty(do_logging=false)
       self.each { |phrase| phrase.duration_deviance = 0.0 }
 
       if self.length > 1
-        phrase_durations = self.collect{ |p| p.duration }
-        median_duration = phrase_durations[(phrase_durations.length/2).round]
+        median_duration = median_phrase_duration
         puts "\t\tmedian_duration = #{median_duration}" if do_logging
 
         self.each do |phrase| 
