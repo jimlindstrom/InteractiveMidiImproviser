@@ -17,7 +17,7 @@ describe Music::NoteQueue do
       $phrasing_vectors.keys.each do |key|
         vector = $phrasing_vectors[key]
         nq = vector[:note_queue]
-        nq.create_intervals
+        nq.detect_phrases
 
         actual_boundaries = vector[:phrase_boundaries].collect{ |p| p[:start_idx] }
         calced_boundaries = nq.phrases.collect{ |p| p.start_idx }
@@ -30,11 +30,11 @@ describe Music::NoteQueue do
     end
 
     it "should only include actual boundary candidates" do
-      pct_found = true_pos / exp_true_pos.to_f
+      pct_found = @true_pos / @exp_true_pos.to_f
       pct_found.should be_within(0.10).of(1.0)
     end
     it "should only include actual boundary candidates" do
-      pct_extra = false_pos / exp_true_pos.to_f
+      pct_extra = @false_pos / @exp_true_pos.to_f
       pct_extra.should be_within(0.10).of(0.0)
     end
   end
