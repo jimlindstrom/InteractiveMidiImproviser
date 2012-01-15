@@ -1,4 +1,13 @@
 Phrase detection
+	- Changing the way similarity factors into scoring. Right now, the algorithm 
+	  is filtering low similarity scores and summing the remainder. That means 
+	  that a phrase candidate with mediocre similarity to every other phrase is
+	  treated just as high as a phrase with above-average similarity to exactly
+	  one other phrase.
+	- Don't let there be instances of phrase candidates A,B (consecutively) and
+	  then multiple other occurances of A,B (consecutively).  These are probably
+	  a single phrase that's has two different endings.  [this rule is too black-
+	  and-white, and would lump the entire Blues verse into a single phrase.]
 	- Try moving 'split phrase' up a level and choose the spot before arbitrarily
 	  choosing a phrase. This is probably what's causing crappy phrases to 
 	  disintegrate into singletons
