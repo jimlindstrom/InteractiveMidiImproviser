@@ -15,7 +15,7 @@ module NoteQueuePhrases
     @phrases = Music::PhraseList.initial(self)
     phrases_score = @phrases.score
 
-    1.times do |meta_iter| # was 8
+    5.times do |meta_iter|
       best_phrases = Music::PhraseList.initial(self)
       best_score   = best_phrases.score
   
