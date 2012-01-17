@@ -30,7 +30,10 @@ module Music
 
       scores = self.collect { |phrase| phrase.score(do_logging=LOGGING) }
       overall_score = scores.inject(0.0) { |x,s| x + s }
-      puts "\t\toverall score: #{overall_score}"
+      puts "\t\toverall score:                     " +
+           "                                       " +
+           "                                       " + 
+           " #{sprintf("% 6.1f", overall_score)}"
 
       return overall_score
     end
@@ -137,17 +140,20 @@ module Music
         beat_arrays = self.collect { |phrase| Music::NoteQueue.new(phrase.notes).beat_array }
 
         puts "\t\tbeat_similarity =" if do_logging
+        padding = "x     " if do_logging
         (0..(self.length-2)).each do |x|
           similarities = [] if do_logging
           ((x+1)..(self.length-1)).each do |y|
             matrix = BeatCrossSimilarityMatrix.new(beat_arrays[x], beat_arrays[y])
-            #s = matrix.arithmetic_mean_of_diag(0)
-            s = matrix.max_arithmetic_mean_of_diag
+            #s = matrix.arithmetic_mean_of_diag(0) # this would force the phrases to start on the same note
+            s = matrix.max_arithmetic_mean_of_diag # this looks for the sliding window w/ best overlap
             similarities.push s if do_logging
             self[x].phrase_similarity.push s
             self[y].phrase_similarity.push s
           end
-          puts "\t\t\t" + similarities.map{ |x| String(((x*100).floor)/100.0) }.join(", ") if do_logging
+          #puts "\t\t\t" + padding + similarities.map{ |x| String(((x*100).floor)/100.0) }.join(", ") if do_logging
+          puts "\t\t\t" + padding + similarities.map{ |x| sprintf("%0.2f", x) }.join(", ") if do_logging
+          padding = "      " + padding if do_logging
         end
       end
     end
