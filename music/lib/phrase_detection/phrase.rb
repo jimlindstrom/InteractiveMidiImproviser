@@ -56,15 +56,16 @@ module Music
       # finally, subtract a penalty for being significantly different from the mean phrase length
       total -= 120.0*duration_deviance
 
-      puts "\t\tscore (#{@start_idx}-#{@end_idx}): 0.0 " +
-           "- 3*#{(1000.0*total_distance).round/1000.0} " +
-           "+ #{similarity_weight}*((#{self.length}^1)*(#{@phrase_similarity.length}^2)/(10.0^(3*#{(1000*mean_similarity).round/1000.0}))) " +
-           "- 120.0*#{(1000.0*duration_deviance).round/1000.0} " +
+      puts "\t\tscore (#{sprintf("%2d", @start_idx)}-#{sprintf("%2d", @end_idx)}): 0.0 " +
+           "- 3*#{sprintf("% 5.1f", total_distance)} " +
+           "+ #{similarity_weight}*((#{sprintf("%2d", self.length)}^1)*(#{@phrase_similarity.length}^2)" + 
+           "/(10.0^(3*#{sprintf("% 4.3f", mean_similarity)}))) " +
+           "- 120.0*#{sprintf("%5.3f", duration_deviance)} " +
            "= 0 " +
-           "- #{(1000.0*3*total_distance).round/1000.0} " +
-           "+ #{(1000.0*2*similarity).round/1000.0} " +
-           "- #{(1000.0*120*duration_deviance).round/1000.0} " +
-           "= #{(1000.0*total).round/1000.0}" if do_logging
+           "- #{sprintf("% 6.1f", 3*total_distance)} " +
+           "+ #{sprintf("% 7.3f", 2*similarity)} " +
+           "- #{sprintf("% 6.1f", 120*duration_deviance)} " +
+           "= #{sprintf("% 6.1f", total)}" if do_logging
 
       return total
     end
