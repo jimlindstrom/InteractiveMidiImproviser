@@ -1,20 +1,34 @@
 Phrase detection
+	- Similarity is currently looked at on a note-by-note basis. But phrases
+	  exhibit patterns of similarity that are not evident in simple note-by-note
+	  comparisons.
+		- Instead of looking at overall phrase duration and penalizing the outliers,
+		  we could view duration as a property of phrase. It's not that we want to
+		  penalize outliers from the mean; it's more that we want to penalize 
+		  phrases which bear no similarity (including duration) to others.
+		- What kinds of properties do phrases have? Overall duration, overall 
+		  contour/shape, weighted pitch class set, duration set, 1st order markov
+		  stats, surprise
+	- It might cause less spurious similarity to penalize BSM diagnoals that are 
+	  further away from the central diagonal. They're already penalized by having
+	  no wrapping (fewer notes to sum across), but it's possible that there is still
+	  too much noise from shifting phrases to an unrelated match.
 	- Changing the way similarity factors into scoring. Right now, the algorithm 
 	  is filtering low similarity scores and summing the remainder. That means 
 	  that a phrase candidate with mediocre similarity to every other phrase is
 	  treated just as high as a phrase with above-average similarity to exactly
 	  one other phrase.
 	- Don't let there be instances of phrase candidates A,B (consecutively) and
-	  then multiple other occurances of A,B (consecutively).  These are probably
-	  a single phrase that's has two different endings.  [this rule is too black-
+	  then multiple other occurances of A,B (consecutively). These are probably
+	  a single phrase that's has two different endings. [this rule is too black-
 	  and-white, and would lump the entire Blues verse into a single phrase.]
 	- Try moving 'split phrase' up a level and choose the spot before arbitrarily
 	  choosing a phrase. This is probably what's causing crappy phrases to 
 	  disintegrate into singletons
 	- Track each phrase's unhappiness along each of the score dimensions. This 
 	  would give a better sorted set of tactic opporunities
-	- Don't choose tactics as randomly.  Create a prioritized list of tactics 
-	  based on the tactic opportunities.  Represent each opportunity as a lambda
+	- Don't choose tactics as randomly. Create a prioritized list of tactics 
+	  based on the tactic opportunities. Represent each opportunity as a lambda
 	  with parameters ready to go
 
 Refactor beat_position to just point to / contain a meter
