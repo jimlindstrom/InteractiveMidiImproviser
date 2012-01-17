@@ -7,7 +7,7 @@ describe Music::NoteQueue do
   before(:each) do
   end
 
-  describe "detect_phrases" do
+  describe "detect_phrases", :high_level_stats=>true do
     before(:all) do
       @false_pos    = 0
       @false_neg    = 0
