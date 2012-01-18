@@ -35,11 +35,17 @@ module Music
       notes.inject(0.0) { |x, note| x + note.duration.val }
     end
 
+    DIST_WEIGHT = 3.0
+    SIM_A = 1.0
+    SIM_B = 2.0
+    SIM_C = 3.0
+    DUR_DEV_WEIGHT = 250.0
+
     def score(do_logging=false)
       total = 0.0 
 
       # first penalize for the total distance
-      total -= 3*total_distance
+      total -= DIST_WEIGHT*total_distance
 
       # now add a premium for similarity to other phrases
       if @phrase_similarity.empty? or (filtered_similarity = @phrase_similarity.select{ |x| x > 0.3 }).empty?
@@ -48,23 +54,23 @@ module Music
         similarity_weight = 0
       else
         mean_similarity = filtered_similarity.inject(0.0){|s,x| s+x} / filtered_similarity.length.to_f
-        similarity = (self.length**1.0) * (filtered_similarity.length**2.0) / (10.0**(3.0*mean_similarity)) 
+        similarity = (self.length**SIM_A) * (filtered_similarity.length**SIM_B) / (10.0**(SIM_C*mean_similarity)) 
         similarity_weight = 2
-        total += 2*similarity
+        total += similarity_weight*similarity
       end
 
       # finally, subtract a penalty for being significantly different from the mean phrase length
-      total -= 120.0*duration_deviance
+      total -= DUR_DEV_WEIGHT*duration_deviance
 
       puts "\t\tscore (#{sprintf("%2d", @start_idx)}-#{sprintf("%2d", @end_idx)}): 0.0 " +
-           "- 3*#{sprintf("% 5.1f", total_distance)} " +
-           "+ #{similarity_weight}*((#{sprintf("%2d", self.length)}^1)*(#{@phrase_similarity.length}^2)" + 
-           "/(10.0^(3*#{sprintf("% 4.3f", mean_similarity)}))) " +
-           "- 120.0*#{sprintf("%5.3f", duration_deviance)} " +
+           "- #{DIST_WEIGHT}*#{sprintf("% 5.1f", total_distance)} " +
+           "+ #{similarity_weight}*((#{sprintf("%2d", self.length)}^#{SIM_A.round})*(#{@phrase_similarity.length}^#{SIM_B.round})" + 
+           "/(10.0^(#{SIM_C.round}*#{sprintf("% 4.3f", mean_similarity)}))) " +
+           "- #{DUR_DEV_WEIGHT}*#{sprintf("%5.3f", duration_deviance)} " +
            "= 0 " +
-           "- #{sprintf("% 6.1f", 3*total_distance)} " +
-           "+ #{sprintf("% 7.3f", 2*similarity)} " +
-           "- #{sprintf("% 6.1f", 120*duration_deviance)} " +
+           "- #{sprintf("% 6.1f", DIST_WEIGHT*total_distance)} " +
+           "+ #{sprintf("% 7.3f", similarity_weight*similarity)} " +
+           "- #{sprintf("% 6.1f", DUR_DEV_WEIGHT*duration_deviance)} " +
            "= #{sprintf("% 6.1f", total)}" if do_logging
 
       return total
