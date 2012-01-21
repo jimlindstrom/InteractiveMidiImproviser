@@ -429,6 +429,54 @@ describe Music::PhraseList do
       incorrect_pl.score.should be < correct_pl.score
     end
 
+    it "returns a higher value for the correct phrasing than for other phrasings (21 - merge down to just two phrases)" do
+      @vector = $phrasing_vectors["Bring back my bonnie to me"]
+      @nq = @vector[:note_queue]
+      @nq.create_intervals
+      correct_pl = Music::PhraseList.new(@nq)
+      @vector[:phrase_boundaries].each do |p|
+        correct_pl.push Music::Phrase.new(@nq, p[:start_idx], p[:end_idx])
+      end
+
+      incorrect_pl = Music::PhraseList.new(@nq)
+      incorrect_pl.push Music::Phrase.new(@nq,  0, 33) 
+      incorrect_pl.push Music::Phrase.new(@nq, 34, 59)
+
+      incorrect_pl.score.should be < correct_pl.score
+    end
+
+    it "returns a higher value for the correct phrasing than for other phrasings (22 - merged down to just two phrases)" do
+      @vector = $phrasing_vectors["Battle hymn of the republic"]
+      @nq = @vector[:note_queue]
+      @nq.create_intervals
+      correct_pl = Music::PhraseList.new(@nq)
+      @vector[:phrase_boundaries].each do |p|
+        correct_pl.push Music::Phrase.new(@nq, p[:start_idx], p[:end_idx])
+      end
+
+      incorrect_pl = Music::PhraseList.new(@nq)
+      incorrect_pl.push Music::Phrase.new(@nq,  0, 27)
+      incorrect_pl.push Music::Phrase.new(@nq, 28, 49)
+
+      incorrect_pl.score.should be < correct_pl.score
+    end
+
+    it "returns a higher value for the correct phrasing than for other phrasings (23 - merged down to just two phrases)" do
+      @vector = $phrasing_vectors["Somewhere over the rainbow"]
+      @nq = @vector[:note_queue]
+      @nq.create_intervals
+      correct_pl = Music::PhraseList.new(@nq)
+      @vector[:phrase_boundaries].each do |p|
+        correct_pl.push Music::Phrase.new(@nq, p[:start_idx], p[:end_idx])
+      end
+
+      incorrect_pl = Music::PhraseList.new(@nq)
+      incorrect_pl.push Music::Phrase.new(@nq,  0,  9)
+      incorrect_pl.push Music::Phrase.new(@nq, 10, 22)
+
+      incorrect_pl.score.should be < correct_pl.score
+    end
+
  end
 
 end
