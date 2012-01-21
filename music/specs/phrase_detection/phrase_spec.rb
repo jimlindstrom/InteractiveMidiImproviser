@@ -79,4 +79,36 @@ describe Music::Phrase do
     end
   end
 
+  context "split_at_a_big_interval" do
+    before(:each) do
+      vector = $phrasing_vectors["Bring back my bonnie to me"]
+      @nq = vector[:note_queue]
+      @nq.create_intervals
+    end
+    it "should raise an error for phrases with fewer than two notes" do
+      p = Music::Phrase.new(@nq, idx1=2, idx2=2)
+      expect { p.split_at_a_big_interval }.to raise_error
+    end
+    it "should return a new phrase, for phrases containing two or more notes" do
+      p = Music::Phrase.new(@nq, idx1=2, idx2=3)
+      p.split_at_a_big_interval.should be_an_instance_of Music::Phrase
+    end
+    it "should decrement its own ending index by at least 1" do
+      p = Music::Phrase.new(@nq, idx1=2, idx2=3)
+      p.split_at_a_big_interval
+      p.end_idx.should be < 3
+    end
+    it "should return a new phrase starting right after the newly-split current phrase" do
+      p = Music::Phrase.new(@nq, idx1=2, idx2=7)
+      p2 = p.split_at_a_big_interval
+      p.end_idx.should == (p2.start_idx-1)
+    end
+    it "should return a new phrase ending at the end of the original phrase" do
+      p = Music::Phrase.new(@nq, idx1=2, idx2=7)
+      p2 = p.split_at_a_big_interval
+      p2.end_idx.should == idx2
+    end
+  end
+
+
 end
