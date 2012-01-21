@@ -35,11 +35,11 @@ module Music
       notes.inject(0.0) { |x, note| x + note.duration.val }
     end
 
-    DIST_WEIGHT = 3.0
-    SIM_A = 1.0
-    SIM_B = 2.0
-    SIM_C = 3.0
-    DUR_DEV_WEIGHT = 250.0
+    DIST_WEIGHT = 3.0 # increasing this favors phrases that contain low-distance intervals
+    SIM_A = 1.0 # increasing this favors phrases that are longer
+    SIM_B = 2.0 # increasing this favors phrases that are similar to a high number of phrases
+    SIM_C = 3.0 # ?
+    DUR_DEV_WEIGHT = 250.0 # increases this favors phrases that are closer to the mean duration
 
     def score(do_logging=false)
       total = 0.0 
@@ -48,7 +48,8 @@ module Music
       total -= DIST_WEIGHT*total_distance
 
       # now add a premium for similarity to other phrases
-      if @phrase_similarity.empty? or (filtered_similarity = @phrase_similarity.select{ |x| x > 0.3 }).empty?
+      filtered_similarity = @phrase_similarity.select{ |x| x > 0.3 }
+      if filtered_similarity.empty?
         similarity = 0.0
         mean_similarity = 0.0
         similarity_weight = 0
@@ -64,7 +65,7 @@ module Music
 
       puts "\t\tscore (#{sprintf("%2d", @start_idx)}-#{sprintf("%2d", @end_idx)}): 0.0 " +
            "- #{DIST_WEIGHT}*#{sprintf("% 5.1f", total_distance)} " +
-           "+ #{similarity_weight}*((#{sprintf("%2d", self.length)}^#{SIM_A.round})*(#{@phrase_similarity.length}^#{SIM_B.round})" + 
+           "+ #{similarity_weight}*((#{sprintf("%2d", self.length)}^#{SIM_A.round})*(#{filtered_similarity.length}^#{SIM_B.round})" + 
            "/(10.0^(#{SIM_C.round}*#{sprintf("% 4.3f", mean_similarity)}))) " +
            "- #{DUR_DEV_WEIGHT}*#{sprintf("%5.3f", duration_deviance)} " +
            "= 0 " +
@@ -76,10 +77,8 @@ module Music
       return total
     end
 
-    # UNTESTED
-
-    def split_at_a_big_ioi
-      puts "\tsplit_at_a_big_ioi" if LOGGING
+    def split_at_a_big_interval ### FIXME Add some test coverage around this, because I'm not convinced it's working
+      puts "\tsplit_at_a_big_interval" if LOGGING
 
       # choose a spot to split it
       indices = @start_idx..(@end_idx-1)
@@ -97,11 +96,6 @@ module Music
       end
       idx = x.choose_outcome
       puts "\t\tsplitting at: #{idx}" if LOGGING
-
-      # flip a coin to decide which side of the IOI we're going to break the phrase at
-      if (rand > 0.5) and ((idx+2) <= @end_idx)
-        idx += 1
-      end
 
       # generate the new phrase
       new_phrase = Phrase.new(@note_queue, idx+1, @end_idx)
@@ -137,6 +131,7 @@ module Music
       within_dist = 0.0
       if length > 1
         within_dist += notes[0..-2].inject(0.0) { |x, note| x + note.analysis[:interval_after].distance }
+        #within_dist = within_dist * 0.99**length # tried adding this to incentivize MORE phrase boundaries. couldn't make it work though..
       end
 
       border_dist = 0.0
