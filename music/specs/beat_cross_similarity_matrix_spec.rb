@@ -92,14 +92,14 @@ describe Music::BeatCrossSimilarityMatrix do
         end
 
         @incorrect_pl = Music::PhraseList.new(@nq)
-        @incorrect_pl.push Music::Phrase.new(@nq,  2,  8)
+        @incorrect_pl.push Music::Phrase.new(@nq,  1,  7)
         @incorrect_pl.push Music::Phrase.new(@nq,  9, 11)
-        @incorrect_pl.push Music::Phrase.new(@nq, 12, 21)
+        @incorrect_pl.push Music::Phrase.new(@nq, 12, 22)
       end
 
       it "should return >= 25% higher similarity for real phrases than for fake phrases (somewhere 1)" do
         beat_array1 = Music::NoteQueue.new(  @correct_pl[0].notes).beat_array
-        beat_array2 = Music::NoteQueue.new(  @correct_pl[1].notes).beat_array
+        beat_array2 = Music::NoteQueue.new(  @correct_pl[2].notes).beat_array
         beat_array3 = Music::NoteQueue.new(@incorrect_pl[0].notes).beat_array
   
         m12 = Music::BeatCrossSimilarityMatrix.new(beat_array1, beat_array2)
@@ -126,9 +126,9 @@ describe Music::BeatCrossSimilarityMatrix do
       end
 
       it "should return >= 25% higher similarity for real phrases than for fake phrases (somewhere 3)" do
-        beat_array1 = Music::NoteQueue.new(  @correct_pl[1].notes).beat_array
-        beat_array2 = Music::NoteQueue.new(  @correct_pl[2].notes).beat_array
-        beat_array3 = Music::NoteQueue.new(@incorrect_pl[2].notes).beat_array
+        beat_array1 = Music::NoteQueue.new(  @correct_pl[0].notes).beat_array #   7- 9
+        beat_array2 = Music::NoteQueue.new(  @correct_pl[2].notes).beat_array #  10-16
+        beat_array3 = Music::NoteQueue.new(@incorrect_pl[2].notes).beat_array #  12-21
   
         m12 = Music::BeatCrossSimilarityMatrix.new(beat_array1, beat_array2)
         m23 = Music::BeatCrossSimilarityMatrix.new(beat_array2, beat_array3)

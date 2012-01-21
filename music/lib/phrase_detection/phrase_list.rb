@@ -174,13 +174,7 @@ module Music
           ((x+1)..(self.length-1)).each do |y|
             matrix = BeatCrossSimilarityMatrix.new(beat_arrays[x], beat_arrays[y])
 
-            # allow similarity at offsets other than the starting note,
-            # but penalize slightly for each delta
-            penalty=1.5
-            s = (0..([4, matrix.width-1].min)).map{ |x| matrix.arithmetic_mean_of_diag(x)/(penalty**x) }.max
-
-            #s = matrix.arithmetic_mean_of_diag(0) # this would force the phrases to start on the same note
-            #s = matrix.max_arithmetic_mean_of_diag # this looks for the sliding window w/ best overlap
+            s = matrix.max_arithmetic_mean_of_diag(penalize_for_overhang=true)
 
             similarities.push s if do_logging
             self[x].phrase_similarity.push s

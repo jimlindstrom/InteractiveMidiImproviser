@@ -18,7 +18,7 @@ module Music
       (0..(beat_array1.size-1)).each do |x|
         @matrix[x] = []
         (0..x).each do |y|
-          if beat_array1[x].nil?
+          if beat_array1[x].nil? 
             @matrix[x][y] = 0.0
           else
             @matrix[x][y] = beat_array1[x].similarity_to beat_array2[y] 
@@ -31,8 +31,8 @@ module Music
       return val(y, x) if x < y
       return @matrix[x][y]
     end
-   
-    def arithmetic_mean_of_diag(i)
+
+    def arithmetic_mean_of_diag(i, penalize_overhanging_notes=true)
       x = i
       y = 0
       sum = 0.0
@@ -43,6 +43,9 @@ module Music
         y += 1
         count += 1
       end
+
+      return (sum-i) / @width.to_f if penalize_overhanging_notes
+     
       return sum / count.to_f
     end
 
@@ -58,14 +61,14 @@ module Music
       return prod
     end
 
-    def max_arithmetic_mean_of_diag
-      data = (0..(@width-1)).map{ |i| arithmetic_mean_of_diag(i) }
-      return data.max
+    def max_arithmetic_mean_of_diag(penalize_overhanging_notes=true)
+      means = (0..(@width-1)).map{ |i| arithmetic_mean_of_diag(i, penalize_overhanging_notes) }
+      return means.max
     end
 
     def max_geometric_mean_of_diag
-      data = (0..(@width-1)).map{ |i| geometric_mean_of_diag(i) }
-      return data.max
+      means = (0..(@width-1)).map{ |i| geometric_mean_of_diag(i) }
+      return means.max
     end
   
     def autocorrel_of_main_diag(len)
@@ -75,6 +78,22 @@ module Music
       end
       return correls
     end
+
+    def print
+      puts "\tmatrix:"
+      (0..(@width-1)).each do |x|
+        row = []
+        (0..(@width-1)).each do |y|
+          row.push sprintf("%4.2f", val(x,y))
+        end
+        puts "\t\t" + row.join(", ")
+      end
+
+      puts "\tarithmetic means:"
+      means = (0..(@width-1)).map{ |i| arithmetic_mean_of_diag(i) }
+      puts "\t\t" + means.map{ |x| sprintf("%5.3f", x) }.join(", ")
+    end
+
   end
 
   class BeatSimilarityMatrix < BeatCrossSimilarityMatrix
