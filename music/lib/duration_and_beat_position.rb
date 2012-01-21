@@ -34,7 +34,7 @@ module Music
       end
     end
   
-    def val # this is only used to compare equality. FIXME: it might also be used to instantiate
+    def val
       v = {}
       v[:duration] = @duration.val
       v[:beat] = @beat_position.beat
