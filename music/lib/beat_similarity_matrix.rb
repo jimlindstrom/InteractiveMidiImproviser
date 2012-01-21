@@ -3,7 +3,7 @@
 module Music
   
   class BeatCrossSimilarityMatrix
-    attr_accessor :width, :height
+    attr_accessor :width
   
     def initialize(beat_array1, beat_array2)
       while beat_array1.length < beat_array2.length
@@ -32,7 +32,7 @@ module Music
       return @matrix[x][y]
     end
    
-    def arithmetic_mean_of_diag(i) # FIXME: the other one should be renamed to geometric mean...
+    def arithmetic_mean_of_diag(i)
       x = i
       y = 0
       sum = 0.0
@@ -46,7 +46,7 @@ module Music
       return sum / count.to_f
     end
 
-    def mean_of_diag(i)
+    def geometric_mean_of_diag(i)
       x = i
       y = 0
       prod = 1.0
@@ -63,8 +63,8 @@ module Music
       return data.max
     end
 
-    def max_mean_of_diag
-      data = (0..(@width-1)).map{ |i| mean_of_diag(i) }
+    def max_geometric_mean_of_diag
+      data = (0..(@width-1)).map{ |i| geometric_mean_of_diag(i) }
       return data.max
     end
   
@@ -102,7 +102,7 @@ module Music
   private
   
     def save_meter_candidates(f, marker_idx)
-      data = (1..20).map{ |i| mean_of_diag(i) }
+      data = (1..20).map{ |i| geometric_mean_of_diag(i) }
       m = data.max
       data.map!{|x| x / m }
       data.map!{|x| (x*80.0).round }
@@ -110,7 +110,7 @@ module Music
       f.puts "<img style='border: 1px solid #a0a0a0;' src=\"https://chart.googleapis.com/chart?cht=ls&chd=s:underp&chm=N,000000,0,-1,11|s,3399CC,0,#{marker_idx-1}.0,11.0&chxt=x&chxr=0,1,20,1&chd=t:#{data.join(',')}&chs=500x200\">"
       f.puts "<br/>"
   
-      return (1..20).map{ |i| {:offset=>i,:score=>mean_of_diag(i) } }.sort{|x,y| y[:score]<=>x[:score]}[1][:offset]
+      return (1..20).map{ |i| {:offset=>i,:score=>geometric_mean_of_diag(i) } }.sort{|x,y| y[:score]<=>x[:score]}[1][:offset]
     end
   
     def save_offset_candidates(f, meter, marker_idx)

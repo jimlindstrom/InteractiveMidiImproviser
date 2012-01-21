@@ -28,7 +28,7 @@ module CanDetectMeter
     confidences = []
 
     bsm = Music::BeatSimilarityMatrix.new(self.beat_array)
-    bsm_diags = (1..20).map{ |i| { :beat=>i, :score=>bsm.mean_of_diag(i) } }.sort{ |x,y| y[:score] <=> x[:score] }
+    bsm_diags = (1..20).map{ |i| { :beat=>i, :score=>bsm.geometric_mean_of_diag(i) } }.sort{ |x,y| y[:score] <=> x[:score] }
     confidences[0] = Float(bsm_diags[0][:score]) / bsm_diags[1][:score]
 
     return false if bsm_diags[1][:beat] % bsm_diags[0][:beat] != 0 # abort if not an integer number of beats per measure

@@ -187,7 +187,7 @@ module NoteQueuePhraseCandidates_DistanceAndSimilarityAlgorithm
     cur_diag = 0
     notes_left = self.length+1
     self.each do |note|
-      note.analysis[:bsm_score] = 10000.0 * ( (bsm.mean_of_diag(cur_diag) ** 0.5) / notes_left**2.5 )
+      note.analysis[:bsm_score] = 10000.0 * ( (bsm.geometric_mean_of_diag(cur_diag) ** 0.5) / notes_left**2.5 )
       cur_diag += note.duration.val
       notes_left -= 1
     end

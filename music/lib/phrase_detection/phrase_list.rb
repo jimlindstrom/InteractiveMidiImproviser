@@ -177,7 +177,7 @@ module Music
             # allow similarity at offsets other than the starting note,
             # but penalize slightly for each delta
             penalty=1.5
-            s = (0..([4, matrix.height-1, matrix.width-1].min)).map{ |x| matrix.arithmetic_mean_of_diag(x)/(penalty**x) }.max
+            s = (0..([4, matrix.width-1].min)).map{ |x| matrix.arithmetic_mean_of_diag(x)/(penalty**x) }.max
 
             #s = matrix.arithmetic_mean_of_diag(0) # this would force the phrases to start on the same note
             #s = matrix.max_arithmetic_mean_of_diag # this looks for the sliding window w/ best overlap
