@@ -1,7 +1,7 @@
 #!/usr/bin/env ruby
 
 $LOAD_PATH << '.'
-require 'improvisor'
+require 'rubymusic_music'
 
 $LOAD_PATH << "./specs/vectors"
 require 'meter_vectors'
@@ -10,7 +10,7 @@ def do_auto_correl(key, expected, meter_idx, offset_idx)
   vector = $meter_vectors[key]
   nq = vector[:note_queue]
   beat_arr = nq.beat_array
-  bsm = BeatSimilarityMatrix.new(beat_arr)
+  bsm = Music::BeatSimilarityMatrix.new(beat_arr)
   bsm.save(key, expected, meter_idx, offset_idx)
 end
 

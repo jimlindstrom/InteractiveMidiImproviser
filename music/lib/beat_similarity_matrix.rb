@@ -9,7 +9,7 @@ module Music
     end
   
     def save(filename, expected, meter_idx, offset_idx)
-      f = File.new("html/"+filename+".html", "w")
+      f = File.new("../html/"+filename+".html", "w")
       f.puts "<html>"
       f.puts "<body>"
   
