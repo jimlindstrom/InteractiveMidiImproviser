@@ -71,7 +71,8 @@ private
 
   def choose_tactic
     if @tactics.nil?
-      @tactics = [ :split_a_phrase_at_biggest_ioi,
+      @tactics = [ :split_a_phrase,
+                   :split_all_phrases,
                    :merge_two_phrases,
                    :shift_boundary_between_two_phrases ]
     end
