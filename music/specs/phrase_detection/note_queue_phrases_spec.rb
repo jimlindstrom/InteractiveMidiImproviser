@@ -31,11 +31,11 @@ describe Music::NoteQueue do
 
     it "should only include actual boundary candidates" do
       pct_found = @true_pos / @exp_true_pos.to_f
-      pct_found.should be_within(0.10).of(1.0)
+      pct_found.should be_within(0.05).of(1.0)
     end
     it "should only include actual boundary candidates" do
       pct_extra = @false_pos / @exp_true_pos.to_f
-      pct_extra.should be_within(0.10).of(0.0)
+      pct_extra.should be_within(0.05).of(0.0)
     end
   end
 
