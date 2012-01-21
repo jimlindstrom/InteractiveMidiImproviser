@@ -21,6 +21,7 @@ require File.join(File.dirname(__FILE__), 'lib', 'beat_position')
 require File.join(File.dirname(__FILE__), 'lib', 'duration_and_beat_position')
 
 require File.join(File.dirname(__FILE__), 'lib', 'beat')
+require File.join(File.dirname(__FILE__), 'lib', 'beat_cross_similarity_matrix')
 require File.join(File.dirname(__FILE__), 'lib', 'beat_similarity_matrix')
 
 require File.join(File.dirname(__FILE__), 'lib', 'pitch_class')
