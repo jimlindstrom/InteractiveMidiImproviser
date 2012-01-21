@@ -44,13 +44,25 @@ module Music
 
     # UNTESTED
 
-    def split_a_phrase_at_biggest_ioi
-      orig_phrase = self[choose_phrase_idx_weighted_by_score]
+    def split_a_phrase # should be useful when there's one outlier that's too long
+      orig_phrase = self[choose_phrase_idx_weighted_by_duration_deviance]
       if orig_phrase.length > 1
-        new_phrase = orig_phrase.split_at_a_big_ioi
+        new_phrase = orig_phrase.split_at_a_big_interval
         push new_phrase
         resort!
       end
+    end
+
+    def split_all_phrases # should be useful for when we zero in on a good, but too-high-level solution
+      new_phrases = []
+      self.each do |orig_phrase|
+        if orig_phrase.length > 1
+          new_phrase = orig_phrase.split_at_a_big_interval
+          new_phrases.push new_phrase
+        end
+      end
+      concat new_phrases
+      resort!
     end
 
     def merge_two_phrases
@@ -93,13 +105,29 @@ module Music
       end
 
       if self[phrase1_idx].length>1 and rand>0.5
-        puts "\t\tgiving a note from phrases #{phrase1_idx} to #{phrase2_idx}" if LOGGING
-        self[phrase1_idx].end_idx -= 1
-        self[phrase2_idx].start_idx -= 1
+
+        possible_num_notes = Array(1..self[phrase1_idx].length)
+        x = Math::RandomVariable.new(num_outcomes=possible_num_notes.length+2)
+        possible_num_notes.each do |num_notes|
+          x.add_possible_outcome(outcome=num_notes, num_observations=1.0/num_notes)
+        end
+        num_notes = x.choose_outcome
+
+        puts "\t\tgiving #{num_notes} note(s) from phrases #{phrase1_idx} to #{phrase2_idx}" if LOGGING
+        self[phrase1_idx].end_idx -= num_notes
+        self[phrase2_idx].start_idx -= num_notes
       elsif self[phrase2_idx].length>1
-        puts "\t\tgiving a note from phrases #{phrase2_idx} to #{phrase1_idx}" if LOGGING
-        self[phrase1_idx].end_idx += 1
-        self[phrase2_idx].start_idx += 1
+
+        possible_num_notes = Array(1..self[phrase2_idx].length)
+        x = Math::RandomVariable.new(num_outcomes=possible_num_notes.length+2)
+        possible_num_notes.each do |num_notes|
+          x.add_possible_outcome(outcome=num_notes, num_observations=1.0/num_notes)
+        end
+        num_notes = x.choose_outcome
+
+        puts "\t\tgiving #{num_notes} note(s) from phrases #{phrase2_idx} to #{phrase1_idx}" if LOGGING
+        self[phrase1_idx].end_idx += num_notes
+        self[phrase2_idx].start_idx += num_notes
       end
     end
 
@@ -146,14 +174,12 @@ module Music
           ((x+1)..(self.length-1)).each do |y|
             matrix = BeatCrossSimilarityMatrix.new(beat_arrays[x], beat_arrays[y])
 
+            # allow similarity at offsets other than the starting note,
+            # but penalize slightly for each delta
             penalty=1.5
-            s = [ matrix.arithmetic_mean_of_diag(0)/penalty**0, # allow similarity at offsets other than the starting note,
-                  matrix.arithmetic_mean_of_diag(1)/penalty**1, # but penalize slightly for each delta
-                  matrix.arithmetic_mean_of_diag(2)/penalty**2,
-                  matrix.arithmetic_mean_of_diag(3)/penalty**3,
-                  matrix.arithmetic_mean_of_diag(4)/penalty**4 ].max
+            s = (0..([4, matrix.height-1, matrix.width-1].min)).map{ |x| matrix.arithmetic_mean_of_diag(x)/(penalty**x) }.max
 
-            s = matrix.arithmetic_mean_of_diag(0) # this would force the phrases to start on the same note
+            #s = matrix.arithmetic_mean_of_diag(0) # this would force the phrases to start on the same note
             #s = matrix.max_arithmetic_mean_of_diag # this looks for the sliding window w/ best overlap
 
             similarities.push s if do_logging
@@ -166,25 +192,36 @@ module Music
       end
     end
 
+    def choose_phrase_idx_weighted_by_duration_deviance
+      choose_phrase_idx_weighted_by_lambda(lambda{|phrase| phrase.duration_deviance})
+    end
+
     def choose_phrase_idx_weighted_by_score
+      choose_phrase_idx_weighted_by_lambda(lambda{|phrase| -phrase.score})
+    end
+
+    def choose_phrase_idx_weighted_by_lambda(l)
       raise RuntimeError.new("can't choose phrase index for empty phrase list") if self.length==0
       return 0 if self.length==1
 
       calculate_phrase_similarity
       calculate_phrase_duration_penalty
 
-      scores = self.collect{ |phrase| phrase.score }
+      scores = self.collect{ |phrase| l.call(phrase) }
       min_score = scores.min
       translated_scores = scores.map{ |s| s-min_score }
-      max_score = translated_scores.max
-      inverse_scores = translated_scores.map{ |s| max_score-s }
+      #max_score = translated_scores.max
+      #inverse_scores = translated_scores.map{ |s| max_score-s }
 
       x = Math::RandomVariable.new(num_outcomes=self.length)
-      inverse_scores.each_with_index do |score, idx|
-        x.add_possible_outcome(outcome=idx, num_observations=score)
+      #inverse_scores.each_with_index do |score, idx|
+      translated_scores.each_with_index do |score, idx|
+        avoid_zero_observations = 0.01
+        x.add_possible_outcome(outcome=idx, num_observations=avoid_zero_observations+score)
       end
       idx = x.choose_outcome
 
+      raise RuntimeError.new("idx must be not be nil. #{translated_scores.inspect}") if idx.nil?
       raise RuntimeError.new("idx #{idx} must be in [0, #{self.length-1}]") if idx<0 or idx>=self.length
       return idx
     end
