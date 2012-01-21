@@ -77,7 +77,7 @@ module Music
       return total
     end
 
-    def split_at_a_big_interval ### FIXME Add some test coverage around this, because I'm not convinced it's working
+    def split_at_a_big_interval
       puts "\tsplit_at_a_big_interval" if LOGGING
 
       # choose a spot to split it
