@@ -92,18 +92,7 @@ module Music
       puts "\tmerge_two_phrases" if LOGGING
       return if self.length < 2
 
-      phrase1_idx = choose_phrase_idx_weighted_by_score
-      if phrase1_idx == (self.length-1)
-        phrase1_idx -= 1
-        phrase2_idx = phrase1_idx + 1
-      elsif phrase1_idx == 0
-        phrase2_idx = phrase1_idx + 1
-      elsif rand>0.5
-        phrase1_idx -= 1
-        phrase2_idx = phrase1_idx + 1
-      else
-        phrase2_idx = phrase1_idx + 1
-      end
+      phrase1_idx, phrase2_idx = choose_two_phrases_weighted_by_score
 
       puts "\t\tmerging phrases #{phrase1_idx} and #{phrase2_idx}" if LOGGING
       self[phrase1_idx].end_idx = self[phrase2_idx].end_idx
@@ -116,18 +105,7 @@ module Music
       puts "\tshift_boundary_between_two_phrases" if LOGGING
       return if self.length < 2
 
-      phrase1_idx = choose_phrase_idx_weighted_by_score
-      if phrase1_idx == (self.length-1)
-        phrase1_idx -= 1
-        phrase2_idx = phrase1_idx + 1
-      elsif phrase1_idx == 0
-        phrase2_idx = phrase1_idx + 1
-      elsif rand>0.5
-        phrase1_idx -= 1
-        phrase2_idx = phrase1_idx + 1
-      else
-        phrase2_idx = phrase1_idx + 1
-      end
+      phrase1_idx, phrase2_idx = choose_two_phrases_weighted_by_score
 
       if self[phrase1_idx].length>1 and rand>0.5
 
@@ -141,6 +119,7 @@ module Music
         puts "\t\tgiving #{num_notes} note(s) from phrases #{phrase1_idx} to #{phrase2_idx}" if LOGGING
         self[phrase1_idx].end_idx -= num_notes
         self[phrase2_idx].start_idx -= num_notes
+
       elsif self[phrase2_idx].length>1
 
         possible_num_notes = Array(1..self[phrase2_idx].length)
@@ -209,6 +188,18 @@ module Music
           padding = "     " + padding if do_logging
         end
       end
+    end
+
+    def choose_two_phrases_weighted_by_score
+      phrase1_idx = choose_phrase_idx_weighted_by_score
+      if phrase1_idx == (self.length-1)
+        phrase1_idx -= 1
+      elsif (phrase1_idx > 0) and (rand > 0.5)
+        phrase1_idx -= 1
+      end
+      phrase2_idx = phrase1_idx + 1
+
+      return [phrase1_idx, phrase2_idx]
     end
 
     def choose_phrase_idx_weighted_by_duration_deviance
