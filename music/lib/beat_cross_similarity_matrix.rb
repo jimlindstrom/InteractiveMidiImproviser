@@ -3,8 +3,9 @@
 module Music
   
   class BeatCrossSimilarityMatrix
-    attr_accessor :width
-  
+    attr_reader :width
+    attr_reader :val #2d array of [0..(width-1)][0..(1st index)]
+
     def initialize(beat_array1, beat_array2)
       while beat_array1.length < beat_array2.length
         beat_array1.push nil
@@ -14,22 +15,17 @@ module Music
       end
 
       @width = beat_array1.size
-      @matrix = []
+      @val = []
       (0..(beat_array1.size-1)).each do |x|
-        @matrix[x] = []
+        @val[x] = []
         (0..x).each do |y|
           if beat_array1[x].nil? 
-            @matrix[x][y] = 0.0
+            @val[x][y] = 0.0
           else
-            @matrix[x][y] = beat_array1[x].similarity_to beat_array2[y] 
+            @val[x][y] = beat_array1[x].similarity_to beat_array2[y] 
           end
         end
       end
-    end
-  
-    def val(x,y)
-      return val(y, x) if x < y
-      return @matrix[x][y]
     end
 
     def arithmetic_mean_of_diag(i, penalize_overhanging_notes=true)
@@ -38,7 +34,7 @@ module Music
       sum = 0.0
       count = 0
       while x < @width
-        sum += val(x, y)
+        sum += @val[x][y]
         x += 1
         y += 1
         count += 1
@@ -54,7 +50,7 @@ module Music
       y = 0
       prod = 1.0
       while x < @width
-        prod = prod * (1.0 + val(x, y))
+        prod = prod * (1.0 + @val[x][y])
         x += 1
         y += 1
       end
@@ -74,7 +70,7 @@ module Music
     def autocorrel_of_main_diag(len)
       correls = [0.0]*len
       (0..(@width-1)).each do |i|
-        correls[len - 1 - ((len -1 + i) % len)] += @matrix[i][i]
+        correls[len - 1 - ((len -1 + i) % len)] += @val[i][i]
       end
       return correls
     end
@@ -84,7 +80,7 @@ module Music
       (0..(@width-1)).each do |x|
         row = []
         (0..(@width-1)).each do |y|
-          row.push sprintf("%4.2f", val(x,y))
+          row.push sprintf("%4.2f", @val[x][y])
         end
         puts "\t\t" + row.join(", ")
       end

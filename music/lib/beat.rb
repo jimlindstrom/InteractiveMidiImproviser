@@ -1,6 +1,8 @@
 #!/usr/bin/env ruby
 
 module Music
+
+  $beat_similarity_cache = { }
   
   class Beat
     attr_accessor :prev_note, :cur_note
@@ -13,9 +15,21 @@ module Music
       end
       return @interval
     end
+
+    def hash_key
+      if @prev_note.nil?
+        return "nil,#{@cur_note.pitch.val},#{@cur_note.duration.val}"
+      else
+        return "#{@prev_note.pitch.val},#{@cur_note.pitch.val},#{@cur_note.duration.val}"
+      end
+    end
    
     def similarity_to(b) # returns 1 for identical; 0 for totally different
       return 0.00 if b.nil?
+
+      # see if we've already cached this
+      cache_key = self.hash_key + ";" + b.hash_key
+      return $beat_similarity_cache[cache_key] if !$beat_similarity_cache[cache_key].nil?
 
       if @cur_note.pitch.val == b.cur_note.pitch.val # this should really be moved to note.similarity_to
         # if exactly same pitches, give them a match of 1.00
@@ -34,7 +48,9 @@ module Music
 
       duration_similarity = @cur_note.duration.similarity_to b.cur_note.duration
 
-      return 0.6*pitch_similarity + 0.4*duration_similarity
+      beat_similarity = 0.6*pitch_similarity + 0.4*duration_similarity
+      $beat_similarity_cache[cache_key] = beat_similarity
+      return beat_similarity
     end
   
   end

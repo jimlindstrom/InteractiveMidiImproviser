@@ -27,17 +27,22 @@ module Music
     end
   
     def simplified_val
-      new_val =  8 if (@val >   8)
-      new_val =  4 if (@val >   4) and (@val <= 8)
-      new_val =  2 if (@val >   1) and (@val <= 4)
-      new_val =  1 if (@val ==  1)
-      new_val =  0 if (@val ==  0)
-      new_val = -1 if (@val == -1)
-      new_val = -2 if (@val <  -1) and (@val >= -4)
-      new_val = -4 if (@val <  -4) and (@val >= -8)
-      new_val = -8 if (@val <  -8)
+      return @simplified_val if !@simplified_val.nil?
+
+      @simplified_val = case @val
+        when 9..127   then  8
+        when 5..8     then  4
+        when 2..4     then  2
+        when 1        then  1
+        when 0        then  0
+        when -1       then -1
+        when -4..-2   then -2
+        when -8..-5   then -4
+        when -127..-9 then -8
+        else raise RuntimeError.new("Eek! unexpected val of #{@val}")
+      end
   
-      @val = new_val
+      return @simplified_val 
     end
   
     def similarity_to(p) # returns 1 for identical; 0 for totally different

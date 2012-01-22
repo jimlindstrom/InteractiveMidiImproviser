@@ -1,16 +1,23 @@
 #!/usr/bin/env ruby
 
+module Music
+  $phrase_similarity_cache = {}
+end
+
 module CanDetectPhrases
   LOGGING = false # true
  
   attr_accessor :phrases
 
+  MAX_ATTEMPTS = 3
+
   def detect_phrases
     return false if self.length < 2 # we need >= 2 per group, and at least one group
 
     analyze!
+    $phrase_similarity_cache = {} # reset the phase similarity queue (FIXME: not threadsafe or well architected)
     @phrases = Music::PhraseList.initial(self)
-    attempts = 5.times.collect { new_phrase_detection_attempt }
+    attempts = MAX_ATTEMPTS.times.collect { new_phrase_detection_attempt }
 
     if LOGGING
       puts "\tSummary of best attempts:"
@@ -22,8 +29,8 @@ module CanDetectPhrases
 
 private
 
-  MAX_RETRIES =   25
-  MAX_ITERS   = 1000
+  MAX_RETRIES =  35
+  MAX_ITERS   = 150
 
   def new_phrase_detection_attempt
     best_phrases = Music::PhraseList.initial(self)
@@ -50,6 +57,7 @@ private
       end
       iter += 1
     end
+    puts  "iter: #{iter}, retries: #{retries}"
 
     if best_phrases.score > @phrases.score
       @phrases = best_phrases

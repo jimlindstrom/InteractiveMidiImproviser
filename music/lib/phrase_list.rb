@@ -175,15 +175,22 @@ module Music
         padding = "x    " if do_logging
         (0..(self.length-2)).each do |x|
           similarities = [] if do_logging
-          ((x+1)..(self.length-1)).each do |y|
-            matrix = BeatCrossSimilarityMatrix.new(beat_arrays[x], beat_arrays[y])
+          cache_subkey = "#{self[x].start_idx},#{self[x].end_idx};"
 
-            s = matrix.max_arithmetic_mean_of_diag(penalize_for_overhang=true)
+          ((x+1)..(self.length-1)).each do |y|
+            cache_key = cache_subkey + "#{self[y].start_idx},#{self[y].end_idx}"
+            s = if !$phrase_similarity_cache[cache_key].nil?
+              $phrase_similarity_cache[cache_key]
+            else
+              matrix = BeatCrossSimilarityMatrix.new(beat_arrays[x], beat_arrays[y])
+              $phrase_similarity_cache[cache_key] = matrix.max_arithmetic_mean_of_diag(penalize_for_overhang=true)
+            end
 
             similarities.push s if do_logging
             self[x].phrase_similarity.push s
             self[y].phrase_similarity.push s
           end
+
           puts "\t\t\t" + padding + similarities.map{ |x| sprintf("%0.2f", x) }.join(" ") if do_logging
           padding = "     " + padding if do_logging
         end
