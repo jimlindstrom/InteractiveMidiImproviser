@@ -3,7 +3,7 @@
 module Music
 
   class PhraseList < Array
-    LOGGING = true
+    LOGGING = false # true
 
     def initialize(note_queue)
       @note_queue = note_queue
@@ -24,18 +24,20 @@ module Music
     end
 
     def score
+      return @score if !@score.nil?
+
       puts "\tscoring phrases:" if LOGGING
       calculate_phrase_duration_penalty(do_logging=LOGGING)
       calculate_phrase_similarity(do_logging=LOGGING)
 
       scores = self.collect { |phrase| phrase.score(do_logging=LOGGING) }
-      overall_score = scores.inject(0.0) { |x,s| x + s }
+      @score = scores.inject(0.0) { |x,s| x + s }
       puts "\t\toverall score:                     " +
            "                                       " +
            "                                       " + 
-           "   #{sprintf("% 6.1f", overall_score)}"
+           "   #{sprintf("% 6.1f", @score)}" if LOGGING
 
-      return overall_score
+      return @score
     end
 
     def to_s
@@ -44,7 +46,24 @@ module Music
 
     # UNTESTED
 
+    def choose_tactic
+      if @tactics.nil?
+        @tactics = [ :split_a_phrase,
+                     :split_all_phrases,
+                     :merge_two_phrases,
+                     :shift_boundary_between_two_phrases ]
+      end
+  
+      # round robin through the tactics
+      next_tactic = @tactics.shift
+      @tactics.push next_tactic
+  
+      return next_tactic
+    end
+  
     def split_a_phrase # should be useful when there's one outlier that's too long
+      @score = nil # if we had scored this phrase list it's now invalidated
+
       orig_phrase = self[choose_phrase_idx_weighted_by_duration_deviance]
       if orig_phrase.length > 1
         new_phrase = orig_phrase.split_at_a_big_interval
@@ -54,6 +73,8 @@ module Music
     end
 
     def split_all_phrases # should be useful for when we zero in on a good, but too-high-level solution
+      @score = nil # if we had scored this phrase list it's now invalidated
+
       new_phrases = []
       self.each do |orig_phrase|
         if orig_phrase.length > 1
@@ -66,6 +87,8 @@ module Music
     end
 
     def merge_two_phrases
+      @score = nil # if we had scored this phrase list it's now invalidated
+
       puts "\tmerge_two_phrases" if LOGGING
       return if self.length < 2
 
@@ -88,6 +111,8 @@ module Music
     end
 
     def shift_boundary_between_two_phrases
+      @score = nil # if we had scored this phrase list it's now invalidated
+
       puts "\tshift_boundary_between_two_phrases" if LOGGING
       return if self.length < 2
 

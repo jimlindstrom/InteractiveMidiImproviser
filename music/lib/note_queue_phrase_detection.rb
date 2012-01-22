@@ -1,7 +1,7 @@
 #!/usr/bin/env ruby
 
 module CanDetectPhrases
-  LOGGING = true
+  LOGGING = false # true
  
   attr_accessor :phrases
 
@@ -9,78 +9,53 @@ module CanDetectPhrases
     return false if self.length < 2 # we need >= 2 per group, and at least one group
 
     analyze!
-
-    attempts = []
     @phrases = Music::PhraseList.initial(self)
-    phrases_score = @phrases.score
+    attempts = 5.times.collect { new_phrase_detection_attempt }
 
-    5.times do |meta_iter|
-      best_phrases = Music::PhraseList.initial(self)
-      best_score   = best_phrases.score
-  
-      max_retries = 25
-      retries     = max_retries
-  
-      max_iters = 1000
-      iter      = 0
-  
-      try_again = true
-      while try_again
-        tactic = choose_tactic
-  
-        puts "detect_phrases - meta iteration #{meta_iter}, iteration #{iter}, tactic #{tactic}" if LOGGING
-        puts "\tbefore:       #{best_phrases.to_s}" if LOGGING
-        cur_attempt = best_phrases.clone
-        cur_attempt.send(tactic)
-        puts "\tafter:        #{cur_attempt.to_s}" if LOGGING
-        cur_score   = cur_attempt.score
-        puts "\tcur_score:    #{cur_score}" if LOGGING
-        puts "\tbest_score:   #{best_score}" if LOGGING
-  
-        if cur_score > best_score
-          retries = max_retries
-          try_again = true
-          best_phrases = cur_attempt
-          best_score   = cur_score
-        else
-          try_again = (retries -= 1) > 0
-        end
-        if (iter += 1) >= max_iters
-          try_again = false
-        end
-      end
-
-      attempts.push best_phrases
-      if best_score > phrases_score
-        @phrases = best_phrases
-        phrases_score = best_score
-      end
-  
+    if LOGGING
+      puts "\tSummary of best attempts:"
+      attempts.each { |cur_phrases| puts "\t\t#{cur_phrases.to_s}" }
     end
 
-    puts "\tSummary of best attempts:" if LOGGING
-    attempts.each do |cur_attempt|
-      puts "\t\t#{cur_attempt.to_s}" if LOGGING
-    end
-
-    return true
+    return true # FIXME: under what condition could we return false?
   end
 
 private
 
-  def choose_tactic
-    if @tactics.nil?
-      @tactics = [ :split_a_phrase,
-                   :split_all_phrases,
-                   :merge_two_phrases,
-                   :shift_boundary_between_two_phrases ]
+  MAX_RETRIES =   25
+  MAX_ITERS   = 1000
+
+  def new_phrase_detection_attempt
+    best_phrases = Music::PhraseList.initial(self)
+
+    retries = 0
+    iter    = 0
+
+    while (iter < MAX_ITERS) and (retries < MAX_RETRIES)
+      tactic = best_phrases.choose_tactic
+
+      puts "detect_phrases - iteration #{iter}, tactic #{tactic}" if LOGGING
+      puts "\tbefore:       #{best_phrases.to_s}" if LOGGING
+      cur_phrases = best_phrases.clone
+      cur_phrases.send(tactic)
+      puts "\tafter:        #{cur_phrases.to_s}" if LOGGING
+      puts "\tcur_score:    #{cur_phrases.score}" if LOGGING
+      puts "\tbest_score:   #{best_phrases.score}" if LOGGING
+
+      if cur_phrases.score > best_phrases.score
+        retries = 0
+        best_phrases = cur_phrases
+      else
+        retries += 1
+      end
+      iter += 1
     end
 
-    # round robin through the tactics
-    next_tactic = @tactics.shift
-    @tactics.push next_tactic
+    if best_phrases.score > @phrases.score
+      @phrases = best_phrases
+    end
 
-    return next_tactic
+    return best_phrases
   end
 
 end
