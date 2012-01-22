@@ -1,7 +1,6 @@
 #!/usr/bin/env ruby
 
-# assumes it is included in NoteQueue
-module NoteQueuePhrases
+module CanDetectPhrases
   LOGGING = true
  
   attr_accessor :phrases
@@ -9,7 +8,7 @@ module NoteQueuePhrases
   def detect_phrases
     return false if self.length < 2 # we need >= 2 per group, and at least one group
 
-    create_intervals
+    analyze!
 
     attempts = []
     @phrases = Music::PhraseList.initial(self)

@@ -2,7 +2,7 @@
 
 module Music
 
-  class DistInterval
+  class DistanceInterval
     MAX_PITCH_DELTA    =  6
     MAX_DURATION_DELTA =  8
 

@@ -86,13 +86,7 @@ module Music
 
       x = Math::RandomVariable.new(@note_queue.length)
       indices.zip(@note_queue[indices]).each do |y|
-        if y[1].analysis[:interval_after].class == Music::LBDMInterval
-          x.add_possible_outcome(outcome=y[0], num_observations=1.0+((y[1].analysis[:interval_after].s || 0.0)*2))
-        elsif y[1].analysis[:interval_after].class == Music::DistInterval
-          x.add_possible_outcome(outcome=y[0], num_observations=1.0+((y[1].analysis[:interval_after].distance || 0.0)*2))
-        else
-          raise RuntimeError.new("Unknown interval type #{y[1].analysis[:interval_after].class}")
-        end
+        x.add_possible_outcome(outcome=y[0], num_observations=1.0+((y[1].analysis[:distance_interval_after].distance || 0.0)*2))
       end
       idx = x.choose_outcome
       puts "\t\tsplitting at: #{idx}" if LOGGING
@@ -106,37 +100,15 @@ module Music
     private
 
     def total_distance
-      return total_distance_lbdm if notes.first.analysis[:interval_after].class == Music::LBDMInterval
-      return total_distance_dist if notes.first.analysis[:interval_after].class == Music::DistInterval
-      return 0.0                 if notes.first.analysis[:interval_after].class == NilClass
-
-      raise RuntimeError.new("Unknown interval type #{notes.first.analysis[:interval_after].class}")
-    end
-
-    def total_distance_lbdm
-      within_dist = 0.0
-      if @end_idx > @start_idx
-        within_dist += notes[0..-2].inject(0.0) { |x, note| x + note.analysis[:interval_after].s }
-      end
-
-      border_dist = 0.0
-      if !notes.last.analysis[:interval_after].nil?
-        border_dist = notes.last.analysis[:interval_after].s
-      end
-
-      return within_dist - border_dist
-    end
-
-    def total_distance_dist
       within_dist = 0.0
       if length > 1
-        within_dist += notes[0..-2].inject(0.0) { |x, note| x + note.analysis[:interval_after].distance }
+        within_dist += notes[0..-2].inject(0.0) { |x, note| x + note.analysis[:distance_interval_after].distance }
         #within_dist = within_dist * 0.99**length # tried adding this to incentivize MORE phrase boundaries. couldn't make it work though..
       end
 
       border_dist = 0.0
-      if !notes.last.analysis[:interval_after].nil?
-        border_dist = notes.last.analysis[:interval_after].distance
+      if !notes.last.analysis[:distance_interval_after].nil?
+        border_dist = notes.last.analysis[:distance_interval_after].distance
       end
 
       return within_dist - border_dist

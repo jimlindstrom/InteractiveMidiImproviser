@@ -6,8 +6,7 @@ module Music
     LOGGING = false
 
     include CanDetectMeter
-    include NoteQueuePhraseCandidates
-    include NoteQueuePhrases
+    include CanDetectPhrases
   
     def self.from_event_queue(evq)
       iois = Midi::IOIArray.new( evq.get_interonset_intervals + [ evq.get_last_duration ] )
@@ -51,12 +50,38 @@ module Music
   
       return eq
     end
+
+    def analyze!
+      return if !@have_done_analysis.nil?    
+      @have_done_analysis = true
+  
+      tag_with_notes_left
+      create_intervals
+    end
   
     def tag_with_notes_left
       self.each_with_index do |item, idx|
         item.analysis[:notes_left] = self.length - 1 - idx
       end
     end
+
+    def create_intervals
+      prev = nil
+      self.each do |cur|
+        if !prev.nil?
+          i = Music::Interval.calculate(prev.pitch, cur.pitch)
+          prev.analysis[:interval_after] = i
+          cur.analysis[:interval_before] = i
+
+          di = Music::DistanceInterval.new(prev, cur)
+          prev.analysis[:distance_interval_after] = di
+          cur.analysis[:distance_interval_before] = di
+        end
+        prev = cur
+      end
+    end
+
+
   end
 
 end
