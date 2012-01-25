@@ -652,4 +652,116 @@ $phrasing_vectors["Amazing Grace"] =
     :phrase_boundaries   => phrases
   }
 
+###############################################################################
+# 
+###############################################################################
+
+nq = Music::NoteQueue.new
+nq.tempo = 100
+
+nq.push Music::Note.new(Music::Pitch.new(PB4), Music::Duration.new( 2))		#  0 ++
+nq.push Music::Note.new(Music::Pitch.new(PB4), Music::Duration.new( 2))		#  1
+nq.push Music::Note.new(Music::Pitch.new(PC5), Music::Duration.new( 2))		#  2
+nq.push Music::Note.new(Music::Pitch.new(PD5), Music::Duration.new( 2))		#  3
+
+nq.push Music::Note.new(Music::Pitch.new(PD5), Music::Duration.new( 2))		#  4
+nq.push Music::Note.new(Music::Pitch.new(PC5), Music::Duration.new( 2))		#  5
+nq.push Music::Note.new(Music::Pitch.new(PB4), Music::Duration.new( 2))		#  6
+nq.push Music::Note.new(Music::Pitch.new(PA4), Music::Duration.new( 2))		#  7
+
+nq.push Music::Note.new(Music::Pitch.new(PG4), Music::Duration.new( 2))		#  8
+nq.push Music::Note.new(Music::Pitch.new(PG4), Music::Duration.new( 2))		#  9
+nq.push Music::Note.new(Music::Pitch.new(PA4), Music::Duration.new( 2))		# 10
+nq.push Music::Note.new(Music::Pitch.new(PB4), Music::Duration.new( 2))		# 11
+
+nq.push Music::Note.new(Music::Pitch.new(PB4), Music::Duration.new( 3))		# 12
+nq.push Music::Note.new(Music::Pitch.new(PA4), Music::Duration.new( 1))		# 13
+nq.push Music::Note.new(Music::Pitch.new(PA4), Music::Duration.new( 4))		# 14 --
+
+nq.push Music::Note.new(Music::Pitch.new(PB4), Music::Duration.new( 2))		# 15 ++
+nq.push Music::Note.new(Music::Pitch.new(PB4), Music::Duration.new( 2))		# 16
+nq.push Music::Note.new(Music::Pitch.new(PC5), Music::Duration.new( 2))		# 17
+nq.push Music::Note.new(Music::Pitch.new(PD5), Music::Duration.new( 2))		# 18
+
+nq.push Music::Note.new(Music::Pitch.new(PD5), Music::Duration.new( 2))		# 19
+nq.push Music::Note.new(Music::Pitch.new(PC5), Music::Duration.new( 2))		# 20
+nq.push Music::Note.new(Music::Pitch.new(PB4), Music::Duration.new( 2))		# 21
+nq.push Music::Note.new(Music::Pitch.new(PA4), Music::Duration.new( 2))		# 22
+
+nq.push Music::Note.new(Music::Pitch.new(PG4), Music::Duration.new( 2))		# 23
+nq.push Music::Note.new(Music::Pitch.new(PG4), Music::Duration.new( 2))		# 24
+nq.push Music::Note.new(Music::Pitch.new(PA4), Music::Duration.new( 2))		# 25
+nq.push Music::Note.new(Music::Pitch.new(PB4), Music::Duration.new( 2))		# 26
+
+nq.push Music::Note.new(Music::Pitch.new(PA4), Music::Duration.new( 3))		# 27
+nq.push Music::Note.new(Music::Pitch.new(PG4), Music::Duration.new( 1))		# 28
+nq.push Music::Note.new(Music::Pitch.new(PG4), Music::Duration.new( 4))		# 29 --
+
+nq.push Music::Note.new(Music::Pitch.new(PA4), Music::Duration.new( 2))		# 30 ++
+nq.push Music::Note.new(Music::Pitch.new(PA4), Music::Duration.new( 2))		# 31
+nq.push Music::Note.new(Music::Pitch.new(PB4), Music::Duration.new( 2))		# 32
+nq.push Music::Note.new(Music::Pitch.new(PG4), Music::Duration.new( 2))		# 33
+
+nq.push Music::Note.new(Music::Pitch.new(PA4), Music::Duration.new( 2))		# 34
+nq.push Music::Note.new(Music::Pitch.new(PB4), Music::Duration.new( 1))		# 35
+nq.push Music::Note.new(Music::Pitch.new(PC5), Music::Duration.new( 1))		# 36
+nq.push Music::Note.new(Music::Pitch.new(PB4), Music::Duration.new( 2))		# 37
+nq.push Music::Note.new(Music::Pitch.new(PG4), Music::Duration.new( 2))		# 38
+
+nq.push Music::Note.new(Music::Pitch.new(PA4), Music::Duration.new( 2))		# 39
+nq.push Music::Note.new(Music::Pitch.new(PB4), Music::Duration.new( 1))		# 40
+nq.push Music::Note.new(Music::Pitch.new(PC5), Music::Duration.new( 1))		# 41
+nq.push Music::Note.new(Music::Pitch.new(PB4), Music::Duration.new( 2))		# 42
+nq.push Music::Note.new(Music::Pitch.new(PA4), Music::Duration.new( 2))		# 43
+
+nq.push Music::Note.new(Music::Pitch.new(PG4), Music::Duration.new( 2))		# 44
+nq.push Music::Note.new(Music::Pitch.new(PA4), Music::Duration.new( 2))		# 45
+nq.push Music::Note.new(Music::Pitch.new(PD4), Music::Duration.new( 4))		# 46 --
+
+nq.push Music::Note.new(Music::Pitch.new(PB4), Music::Duration.new( 2))		# 47 ++
+nq.push Music::Note.new(Music::Pitch.new(PB4), Music::Duration.new( 2))		# 48
+nq.push Music::Note.new(Music::Pitch.new(PC5), Music::Duration.new( 2))		# 49
+nq.push Music::Note.new(Music::Pitch.new(PD5), Music::Duration.new( 2))		# 50
+
+nq.push Music::Note.new(Music::Pitch.new(PD5), Music::Duration.new( 2))		# 51
+nq.push Music::Note.new(Music::Pitch.new(PC5), Music::Duration.new( 2))		# 52
+nq.push Music::Note.new(Music::Pitch.new(PB4), Music::Duration.new( 2))		# 53
+nq.push Music::Note.new(Music::Pitch.new(PA4), Music::Duration.new( 2))		# 54
+
+nq.push Music::Note.new(Music::Pitch.new(PG4), Music::Duration.new( 2))		# 55
+nq.push Music::Note.new(Music::Pitch.new(PG4), Music::Duration.new( 2))		# 56
+nq.push Music::Note.new(Music::Pitch.new(PA4), Music::Duration.new( 2))		# 57
+nq.push Music::Note.new(Music::Pitch.new(PB4), Music::Duration.new( 2))		# 58
+
+nq.push Music::Note.new(Music::Pitch.new(PA4), Music::Duration.new( 3))		# 59
+nq.push Music::Note.new(Music::Pitch.new(PG4), Music::Duration.new( 1))		# 60
+nq.push Music::Note.new(Music::Pitch.new(PG4), Music::Duration.new( 4))		# 61 --
+
+m = Music::Meter.new(4, 4, 2) # 3/4 time, eighth note pulses
+b = Music::BeatPosition.new
+b.measure     = 0
+b.beat        = 0 # 0-based: first beat
+b.subbeat     = 0 # 0-based: first eight not
+b.beats_per_measure = 4 # 4 beats
+b.subbeats_per_beat = 2 # half of quarter notes (eighth notes)
+
+$meter_vectors["Ode to Joy"] =
+  {
+    :meter               => m,
+    :first_beat_position => b,
+    :note_queue          => nq
+  }
+
+phrases = [ ]
+phrases.push({ :start_idx =>  0, :end_idx => 14 })
+phrases.push({ :start_idx => 15, :end_idx => 29 })
+phrases.push({ :start_idx => 30, :end_idx => 46 })
+phrases.push({ :start_idx => 47, :end_idx => 61 })
+
+$phrasing_vectors["Ode to Joy"] =
+  {
+    :note_queue          => nq,
+    :phrase_boundaries   => phrases
+  }
+
 
