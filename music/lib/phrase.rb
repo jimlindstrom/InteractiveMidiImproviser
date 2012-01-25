@@ -42,7 +42,20 @@ module Music
     DUR_DEV_WEIGHT = 250.0 # increases this favors phrases that are closer to the mean duration
 
     def score(do_logging=false)
-      total = 0.0 
+      # penalize really short or long phrases
+      duration_penalty = case 
+        when duration >= 4 then    0
+        when duration == 3 then -100
+        when duration == 2 then -400
+        when duration <= 1 then -800
+      end
+      duration_penalty += case 
+        when  length >= 12                  then   -1*((length*4)**1.25)
+        when (length >=  3 and length < 12) then    0
+        when  length ==  2                  then -150
+        when  length <=  1                  then -400
+      end
+      total = duration_penalty
 
       # first penalize for the total distance
       total -= DIST_WEIGHT*total_distance
@@ -63,12 +76,12 @@ module Music
       # finally, subtract a penalty for being significantly different from the mean phrase length
       total -= DUR_DEV_WEIGHT*duration_deviance
 
-      puts "\t\tscore (#{sprintf("%2d", @start_idx)}-#{sprintf("%2d", @end_idx)}): 0.0 " +
-           "- #{DIST_WEIGHT}*#{sprintf("% 5.1f", total_distance)} " +
+      puts "\t\tscore (#{sprintf("%2d", @start_idx)}-#{sprintf("%2d", @end_idx)}): #{sprintf("% 4d", duration_penalty)} " +
+           "- #{DIST_WEIGHT}*#{sprintf("%5.1f", total_distance)} " +
            "+ #{similarity_weight}*((#{sprintf("%2d", self.length)}^#{SIM_A.round})*(#{filtered_similarity.length}^#{SIM_B.round})" + 
-           "/(10.0^(#{SIM_C.round}*#{sprintf("% 4.3f", mean_similarity)}))) " +
+           "/(10.0^(#{SIM_C.round}*#{sprintf("%4.3f", mean_similarity)}))) " +
            "- #{DUR_DEV_WEIGHT}*#{sprintf("%5.3f", duration_deviance)} " +
-           "= 0 " +
+           "= #{sprintf("% 4d", duration_penalty)} " +
            "- #{sprintf("% 6.1f", DIST_WEIGHT*total_distance)} " +
            "+ #{sprintf("% 7.3f", similarity_weight*similarity)} " +
            "- #{sprintf("% 6.1f", DUR_DEV_WEIGHT*duration_deviance)} " +

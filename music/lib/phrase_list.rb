@@ -48,11 +48,26 @@ module Music
 
     def choose_tactic
       if @tactics.nil?
-        @tactics = [ :split_a_phrase,
-                     :split_all_phrases,
+        @tactics = [ :split_all_phrases,
+                     :shift_boundary_between_two_phrases,
                      :merge_two_phrases,
+                     :shift_boundary_between_two_phrases,
+                     :split_a_phrase,
                      :shift_boundary_between_two_phrases ]
       end
+
+#      # Try to rig this so that smarter choices are made
+#      # if shortest phrase is quite long, bias toward splitting
+#      lengths = self.collect{ |p| p.duration }
+#      if lengths.min > 16 and rand > 0.7
+#        return :split_all_phrases if rand > 0.4
+#        return :split_a_phrase
+#      end
+#
+#      # if long phrase is quite shot, bias toward merging
+#      if lengths.max < 5 and rand > 0.7
+#        return :merge_two_phrases
+#      end
   
       # round robin through the tactics
       next_tactic = @tactics.shift
