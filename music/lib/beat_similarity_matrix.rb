@@ -60,7 +60,12 @@ module Music
       (0..(@width-1)).each do |x|
         f.puts "<tr style='padding:0;margin:0;border:0;'>"
         (0..(@width-1)).each do |y|
-          f.puts "<td style=\"border:0;width:4px;height:4px;background:#{val_to_color(val(x,y))};\">"
+          v = case
+            when x >  y then @val[x][y]
+            when x <  y then @val[y][x]
+            when x == y then 1.0
+          end
+          f.puts "<td style=\"border:0;width:4px;height:4px;background:#{val_to_color(v)};\">"
           f.puts "</td>"
         end
         f.puts "</tr>"

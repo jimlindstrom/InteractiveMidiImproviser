@@ -32,3 +32,9 @@ do_auto_correl(key, "[4, 4], 4, 0", 16, 0)
 key = "Bach Minuet (2)"
 do_auto_correl(key, "[3, 4], 2, 0", 6, 0)
 
+key = "Amazing Grace"
+do_auto_correl(key, "[3, 4], 2, 0", 6, 0)
+
+key = "Ode to Joy"
+do_auto_correl(key, "[4, 4], 2, 0", 8, 0)
+
