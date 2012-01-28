@@ -4,11 +4,19 @@ module Music
   
   class Meter
     attr_accessor :beats_per_measure, :beat_unit, :subbeats_per_beat
+
+    ALLOWED_BEAT_UNITS        = [2, 4, 8]
+    ALLOWED_BEATS_PER_MEASURE = Array(2..6)
+    ALLOWED_SUBBEATS_PER_BEAT = [1, 2, 4]
+
+    COMMON_BEAT_UNITS         = [4]
+    COMMON_BEATS_PER_MEASURE  = [3, 4]
+    COMMON_SUBBEATS_PER_BEAT  = [1, 2]
   
     def initialize(beats_per_measure, beat_unit, subbeats_per_beat)
-      raise ArgumentError.new("beats_per_measure must be in 2..6") if beats_per_measure < 2 or beats_per_measure > 6
-      raise ArgumentError.new("beat_unit must be in [2, 4, 8]") if [2, 4, 8].index(beat_unit).nil?
-      raise ArgumentError.new("subbeats_per_beat must be in [1, 2, 4]") if [1, 2, 4].index(subbeats_per_beat).nil?
+      raise ArgumentError.new("invalid beats_per_measure: #{beats_per_measure}") if ALLOWED_BEATS_PER_MEASURE.index(beats_per_measure).nil?
+      raise ArgumentError.new("invalid beat_unit: #{beat_unit}") if ALLOWED_BEAT_UNITS.index(beat_unit).nil?
+      raise ArgumentError.new("invalid subbeats_per_beat: #{subbeats_per_beat}") if ALLOWED_SUBBEATS_PER_BEAT.index(subbeats_per_beat).nil?
   
       @beats_per_measure = beats_per_measure
       @beat_unit         = beat_unit
@@ -16,35 +24,32 @@ module Music
     end
   
     def self.random
-      # this is the whole set of possibilities
-      #beats_per_measure = Array(2..6).sample
-      #beat_unit         = [2, 4, 8].sample
-      #subbeats_per_beat = [1, 2, 4].sample
-      #return Meter.new(beats_per_measure, beat_unit, subbeats_per_beat)
-  
-      # this is a more common, constrained set of possibilities
-      beats_per_measure = [3, 4].sample
-      beat_unit         = [4].sample
-      subbeats_per_beat = [1, 2].sample
-      return Meter.new(beats_per_measure, beat_unit, subbeats_per_beat)
+      return Meter.new( COMMON_BEATS_PER_MEASURE.sample,
+                        COMMON_BEAT_UNITS.sample,
+                        COMMON_SUBBEATS_PER_BEAT.sample)
     end
   
     def self.num_values
-      return Array(2..6).length * [2, 4, 8].length * [1, 2, 4].length
+      n  = ALLOWED_BEAT_UNITS.length
+      n *= ALLOWED_BEATS_PER_MEASURE.length
+      n *= ALLOWED_SUBBEATS_PER_BEAT.length
+      return n
     end
   
     def initial_beat_position
       b = BeatPosition.new
-      b.measure = 0
-      b.beat = 0
+      b.measure           = 0
+      b.beat              = 0
       b.beats_per_measure = @beats_per_measure
-      b.subbeat = 0
+      b.subbeat           = 0
       b.subbeats_per_beat = @subbeats_per_beat
       return b
     end
   
     def val
-      { :beats_per_measure => @beats_per_measure, :beat_unit => @beat_unit, :subbeats_per_beat => @subbeats_per_beat }
+      { :beats_per_measure => @beats_per_measure, 
+        :beat_unit         => @beat_unit, 
+        :subbeats_per_beat => @subbeats_per_beat }
     end
   
   end
