@@ -50,7 +50,7 @@ private
     confidences = []
 
     bsm = Music::BeatSimilarityMatrix.new(self.beat_array)
-    bsm_diags = (1..20).map{ |i| { :beat=>i, :score=>bsm.geometric_mean_of_diag(i) } }.sort{ |x,y| y[:score] <=> x[:score] }
+    bsm_diags = (1..20).map{ |i| { :subbeat=>i, :score=>bsm.geometric_mean_of_diag(i) } }.sort{ |x,y| y[:score] <=> x[:score] }
 
     confidence = bsm_diags[0][:score].to_f / bsm_diags[1][:score]
     if confidence < 2.0
@@ -58,7 +58,7 @@ private
       return false
     end
 
-    case bsm_diags[0][:beat] # FIXME: this assumes that the meter can only be 2/4, 3/4 or 4/4
+    case subbeats_per_measure = bsm_diags[0][:subbeat] # FIXME: this assumes that the meter can only be 2/4, 3/4 or 4/4
       when 2
         beats_per_measure = 2
         subbeats_per_beat = 1
@@ -89,7 +89,6 @@ private
         puts "\t\tunexpected subbeats_per_measure: #{bsm_diags[0][:beat]}" if LOGGING
         return false
     end
-    subbeats_per_measure = beats_per_measure * subbeats_per_beat
 
     beat_unit = 4
     puts "\t\tbsm_diags: #{bsm_diags.inspect.gsub(/, {/, "\n\t\t            {")}" if LOGGING
@@ -102,11 +101,11 @@ private
     end
 
     correls = bsm.autocorrel_of_main_diag(subbeats_per_measure)
-    correls = (0..(correls.length-1)).collect { |i| { :offset=>i, :score=>correls[i] } }.sort{ |x,y| y[:score]<=>x[:score] }
+    correls = (0..(correls.length-1)).collect { |i| { :subbeat=>i, :score=>correls[i] } }.sort{ |x,y| y[:score]<=>x[:score] }
     confidence = correls[0][:score].to_f / correls[1][:score]
     puts "\t\tcorrels: #{correls.inspect.gsub(/, {/, "\n\t\t          {")}" if LOGGING
     if confidence < 1.5
-      puts "\t\tConfidence (#{confidence}) about starting subbeat (#{correls[0][:offset]}) is too low" if LOGGING
+      puts "\t\tConfidence (#{confidence}) about starting subbeat (#{correls[0][:subbeat]}) is too low" if LOGGING
       return false
     end
 
@@ -114,8 +113,8 @@ private
     b.measure           = 0
     b.beats_per_measure = beats_per_measure
     b.subbeats_per_beat = subbeats_per_beat
-    b.beat              = Float(correls[0][:offset] / subbeats_per_beat).floor
-    b.subbeat           = correls[0][:offset] % subbeats_per_beat
+    b.beat              = Float(correls[0][:subbeat] / subbeats_per_beat).floor
+    b.subbeat           = correls[0][:subbeat] % subbeats_per_beat
 
     set_beat_position_of_all_notes(b)
 
@@ -126,13 +125,13 @@ private
     confidences = []
 
     bsm = Music::BeatSimilarityMatrix.new(self.beat_array)
-    bsm_diags = (1..20).map{ |i| { :beat=>i, :score=>bsm.geometric_mean_of_diag(i) } }.sort{ |x,y| y[:score] <=> x[:score] }
+    bsm_diags = (1..20).map{ |i| { :subbeat=>i, :score=>bsm.geometric_mean_of_diag(i) } }.sort{ |x,y| y[:score] <=> x[:score] }
     confidences[0] = Float(bsm_diags[0][:score]) / bsm_diags[1][:score]
 
-    return false if bsm_diags[1][:beat] % bsm_diags[0][:beat] != 0 # abort if not an integer number of beats per measure
+    return false if bsm_diags[1][:subbeat] % bsm_diags[0][:subbeat] != 0 # abort if not an integer number of beats per measure
 
-    subbeats_per_beat    = bsm_diags[0][:beat]
-    subbeats_per_measure = bsm_diags[1][:beat] 
+    subbeats_per_beat    = bsm_diags[0][:subbeat]
+    subbeats_per_measure = bsm_diags[1][:subbeat] 
     beats_per_measure    = subbeats_per_measure / subbeats_per_beat
     beat_unit            = 4
     puts "\t\tbsm_diags: #{bsm_diags.inspect.gsub(/, {/, "\n\t\t            {")}" if LOGGING
@@ -145,15 +144,15 @@ private
     end
 
     correls = bsm.autocorrel_of_main_diag(subbeats_per_measure)
-    correls = (0..(correls.length-1)).collect { |i| { :offset=>i, :score=>correls[i] } }.sort{ |x,y| y[:score]<=>x[:score] }
+    correls = (0..(correls.length-1)).collect { |i| { :subbeat=>i, :score=>correls[i] } }.sort{ |x,y| y[:score]<=>x[:score] }
     confidences[1] = Float(correls[0][:score]) / correls[1][:score]
 
     b = Music::BeatPosition.new
     b.measure           = 0
     b.beats_per_measure = beats_per_measure
     b.subbeats_per_beat = subbeats_per_beat
-    b.beat              = Float(correls[0][:offset] / subbeats_per_beat).floor
-    b.subbeat           = correls[0][:offset] % subbeats_per_beat
+    b.beat              = Float(correls[0][:subbeat] / subbeats_per_beat).floor
+    b.subbeat           = correls[0][:subbeat] % subbeats_per_beat
 
     set_beat_position_of_all_notes(b)
 
