@@ -2,13 +2,12 @@
 
 module Music
   
-  class Note
-    attr_accessor :pitch, :duration, :analysis
+  class Note < Event
+    attr_accessor :pitch
   
     def initialize(pitch, duration)
+      super(duration)
       @pitch = pitch 
-      @duration = duration
-      @analysis = {}
     end
   
   end
