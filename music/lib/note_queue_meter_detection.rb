@@ -25,33 +25,66 @@ module CanDetectMeter
   end
 
   def detect_meter
+    bsm = Music::BeatSimilarityMatrix.new(self.beat_array)
+    bsm_diags = (1..20).map{ |i| { :subbeat=>i, :score=>bsm.geometric_mean_of_diag(i) } }.sort{ |x,y| y[:score] <=> x[:score] }
+    puts "\t\tbsm_diags: #{bsm_diags.inspect.gsub(/, {/, "\n\t\t            {")}" if LOGGING
+
+    return false if !detect_meter_period(bsm, bsm_diags)
+    return false if (initial_beat_position = detect_initial_beat_position(bsm)).nil?
+
+    set_beat_position_of_all_notes(initial_beat_position)
+
+    return true
+  end
+
+private
+
+  def detect_meter_period(bsm, bsm_diags)
     success = false
 
-    if success == false
+    if !success
       puts "\ttrying to detect meter using tactus:" if LOGGING
-      success = detect_meter__assuming_tactus_pulse_is_dominant
-      puts "\t\tfailed."    if !success and LOGGING
-      puts "\t\tsucceeded." if  success and LOGGING
+      success = detect_meter_period__assuming_tactus_pulse_is_dominant(bsm, bsm_diags)
+      puts "\t\t#{success ? "suceeded" : "failed"}." if LOGGING
     end
 
-    if success == false
+    if !success
       puts "\ttrying to detect meter using meter pulse:" if LOGGING
-      success = detect_meter__assuming_meter_pulse_is_dominant
-      puts "\t\tfailed."    if !success and LOGGING
-      puts "\t\tsucceeded." if  success and LOGGING
+      success = detect_meter_period__assuming_meter_pulse_is_dominant(bsm, bsm_diags)
+      puts "\t\t#{success ? "suceeded" : "failed"}." if LOGGING
     end
 
     return success
   end
 
-private
+  def detect_meter_period__assuming_tactus_pulse_is_dominant(bsm, bsm_diags)
+    confidence = bsm_diags[0][:score].to_f / bsm_diags[1][:score]
+    if confidence < 1.5
+      puts "\t\tpeak-to-next-peak ratio (#{confidence}) is too low" if LOGGING
+      return false
+    end
 
-  def detect_meter__assuming_meter_pulse_is_dominant
-    confidences = []
+    subbeats_per_beat    = bsm_diags[0][:subbeat]
+    subbeats_per_measure = bsm_diags[1][:subbeat] 
+    if subbeats_per_measure % subbeats_per_beat != 0
+      puts "\t\tsubbeats/measure (#{subbeats_per_measure}) not a multiple of subbeats/beat (#{subbeats_per_beat})" if LOGGING
+      return false 
+    end
 
-    bsm = Music::BeatSimilarityMatrix.new(self.beat_array)
-    bsm_diags = (1..20).map{ |i| { :subbeat=>i, :score=>bsm.geometric_mean_of_diag(i) } }.sort{ |x,y| y[:score] <=> x[:score] }
+    beats_per_measure    = subbeats_per_measure / subbeats_per_beat
+    beat_unit            = 4
+    puts "\t\tMeter.new(#{beats_per_measure}, #{beat_unit}, #{subbeats_per_beat})" if LOGGING
+    begin
+      @meter = Music::Meter.new(beats_per_measure, beat_unit, subbeats_per_beat)
+    rescue ArgumentError
+      puts "\t\tFailed to instantiate meter" if LOGGING
+      return false # if any of the params were bogus, just return and fail
+    end
 
+    return true
+  end
+
+  def detect_meter_period__assuming_meter_pulse_is_dominant(bsm, bsm_diags)
     confidence = bsm_diags[0][:score].to_f / bsm_diags[1][:score]
     if confidence < 2.0
       puts "\t\tpeak-to-next-peak ratio (#{confidence}) is too low" if LOGGING
@@ -59,39 +92,25 @@ private
     end
 
     case subbeats_per_measure = bsm_diags[0][:subbeat] # FIXME: this assumes that the meter can only be 2/4, 3/4 or 4/4
-      when 2
-        beats_per_measure = 2
+      when 2 .. 4
         subbeats_per_beat = 1
-      when 3
-        beats_per_measure = 3
-        subbeats_per_beat = 1
-      when 4
-        beats_per_measure = 4
-        subbeats_per_beat = 1
-      when 6
-        beats_per_measure = 3
-        subbeats_per_beat = 2
-      when 8
-        beats_per_measure = 4
+      when 6, 8
         subbeats_per_beat = 2
       when 12
         if bsm.geometric_mean_of_diag(3) > bsm.geometric_mean_of_diag(4)
-          beats_per_measure = 4
           subbeats_per_beat = 3
         else
-          beats_per_measure = 3
           subbeats_per_beat = 4
         end
       when 16
-        beats_per_measure = 4
         subbeats_per_beat = 4
       else
         puts "\t\tunexpected subbeats_per_measure: #{bsm_diags[0][:beat]}" if LOGGING
         return false
     end
 
+    beats_per_measure = subbeats_per_measure/subbeats_per_beat
     beat_unit = 4
-    puts "\t\tbsm_diags: #{bsm_diags.inspect.gsub(/, {/, "\n\t\t            {")}" if LOGGING
     puts "\t\tMeter.new(#{beats_per_measure}, #{beat_unit}, #{subbeats_per_beat})" if LOGGING
     begin
       @meter = Music::Meter.new(beats_per_measure, beat_unit, subbeats_per_beat)
@@ -99,78 +118,44 @@ private
       puts "\t\tFailed to instantiate meter" if LOGGING
       return false # if any of the params were bogus, just return and fail
     end
-
-    correls = bsm.autocorrel_of_main_diag(subbeats_per_measure)
-    correls = (0..(correls.length-1)).collect { |i| { :subbeat=>i, :score=>correls[i] } }.sort{ |x,y| y[:score]<=>x[:score] }
-    confidence = correls[0][:score].to_f / correls[1][:score]
-    puts "\t\tcorrels: #{correls.inspect.gsub(/, {/, "\n\t\t          {")}" if LOGGING
-    if confidence < 1.5
-      puts "\t\tConfidence (#{confidence}) about starting subbeat (#{correls[0][:subbeat]}) is too low" if LOGGING
-      return false
-    end
-
-    b = Music::BeatPosition.new
-    b.measure           = 0
-    b.beats_per_measure = beats_per_measure
-    b.subbeats_per_beat = subbeats_per_beat
-    b.beat              = Float(correls[0][:subbeat] / subbeats_per_beat).floor
-    b.subbeat           = correls[0][:subbeat] % subbeats_per_beat
-
-    set_beat_position_of_all_notes(b)
 
     return true
   end
+ 
+  def detect_initial_beat_position(bsm)
+    puts "\ttrying to detect initial beat position:" if LOGGING
 
-  def detect_meter__assuming_tactus_pulse_is_dominant
-    confidences = []
-
-    bsm = Music::BeatSimilarityMatrix.new(self.beat_array)
-    bsm_diags = (1..20).map{ |i| { :subbeat=>i, :score=>bsm.geometric_mean_of_diag(i) } }.sort{ |x,y| y[:score] <=> x[:score] }
-    confidences[0] = Float(bsm_diags[0][:score]) / bsm_diags[1][:score]
-
-    return false if bsm_diags[1][:subbeat] % bsm_diags[0][:subbeat] != 0 # abort if not an integer number of beats per measure
-
-    subbeats_per_beat    = bsm_diags[0][:subbeat]
-    subbeats_per_measure = bsm_diags[1][:subbeat] 
-    beats_per_measure    = subbeats_per_measure / subbeats_per_beat
-    beat_unit            = 4
-    puts "\t\tbsm_diags: #{bsm_diags.inspect.gsub(/, {/, "\n\t\t            {")}" if LOGGING
-    puts "\t\tMeter.new(#{beats_per_measure}, #{beat_unit}, #{subbeats_per_beat})" if LOGGING
-    begin
-      @meter = Music::Meter.new(beats_per_measure, beat_unit, subbeats_per_beat)
-    rescue ArgumentError
-      puts "\t\tFailed to instantiate meter" if LOGGING
-      return false # if any of the params were bogus, just return and fail
-    end
-
-    correls = bsm.autocorrel_of_main_diag(subbeats_per_measure)
+    correls = bsm.autocorrel_of_main_diag(@meter.beats_per_measure * @meter.subbeats_per_beat)
     correls = (0..(correls.length-1)).collect { |i| { :subbeat=>i, :score=>correls[i] } }.sort{ |x,y| y[:score]<=>x[:score] }
-    confidences[1] = Float(correls[0][:score]) / correls[1][:score]
+    puts "\t\tcorrels: #{correls.inspect.gsub(/, {/, "\n\t\t          {")}" if LOGGING
+
+    initial_subbeat = correls[0][:subbeat]
+    confidence = correls[0][:score].to_f / correls[1][:score]
+
+    if confidence < 1.10 and correls[0][:subbeat] > 0
+      puts "\t\tConfidence (#{confidence}) about starting subbeat (#{initial_subbeat}) is too low" if LOGGING
+      return nil
+    end
 
     b = Music::BeatPosition.new
     b.measure           = 0
-    b.beats_per_measure = beats_per_measure
-    b.subbeats_per_beat = subbeats_per_beat
-    b.beat              = Float(correls[0][:subbeat] / subbeats_per_beat).floor
-    b.subbeat           = correls[0][:subbeat] % subbeats_per_beat
+    b.beats_per_measure = @meter.beats_per_measure
+    b.subbeats_per_beat = @meter.subbeats_per_beat
+    b.beat              = initial_subbeat / @meter.subbeats_per_beat
+    b.subbeat           = initial_subbeat % @meter.subbeats_per_beat
+    puts "\t\tinitial beat pos: #{b.inspect}" if LOGGING
 
-    set_beat_position_of_all_notes(b)
-
-    confidence = confidences.inject(:*)
-    confidence = 0.0 if (confidence.infinite? != nil)
-    is_confident = (confidence > 1.5)
-    puts "\t\t#{confidences.inspect} -> #{confidence.inspect} -> #{is_confident.inspect}" if LOGGING
-    return is_confident
+    return b
   end
- 
-  def set_beat_position_of_all_notes(first_beat_pos)
-    beat_pos = first_beat_pos
+
+  def set_beat_position_of_all_notes(initial_beat_position)
+    beat_pos = initial_beat_position
     self.each do |n|
       n.analysis[:beat_position] = beat_pos.dup
 
       beat_pos.subbeat += n.duration.val
       while beat_pos.subbeat >= beat_pos.subbeats_per_beat
-        beat_pos.beat   += 1
+        beat_pos.beat    += 1
         beat_pos.subbeat -= beat_pos.subbeats_per_beat
       end
       while beat_pos.beat >= beat_pos.beats_per_measure

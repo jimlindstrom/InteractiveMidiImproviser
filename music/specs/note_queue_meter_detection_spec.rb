@@ -43,94 +43,94 @@ describe Music::NoteQueue do
     it "detects the time signature (my bonnie lies...)" do
       vector = $meter_vectors["Bring back my bonnie to me"]
       nq = vector[:note_queue]
-      nq.detect_meter
+      nq.detect_meter.should == true
       nq.meter.val.should == vector[:meter].val
     end
     it "detects the offset (my bonnie lies...)" do
       vector = $meter_vectors["Bring back my bonnie to me"]
       nq = vector[:note_queue]
-      nq.detect_meter
+      nq.detect_meter.should == true
       nq.first.analysis[:beat_position].to_hash.inspect.should == vector[:first_beat_position].to_hash.inspect
     end
 
     it "detects the time signature (battle hymn...)" do
       vector = $meter_vectors["Battle hymn of the republic"]
       nq = vector[:note_queue]
-      nq.detect_meter
+      nq.detect_meter.should == true
       nq.meter.val.should == vector[:meter].val
     end
     it "detects the offset (battle hymn...)" do
       vector = $meter_vectors["Battle hymn of the republic"]
       nq = vector[:note_queue]
-      nq.detect_meter
+      nq.detect_meter.should == true
       nq.first.analysis[:beat_position].to_hash.inspect.should == vector[:first_beat_position].to_hash.inspect
     end
 
     it "detects the time signature (minuet...)" do
       vector = $meter_vectors["Bach Minuet in G"]
       nq = vector[:note_queue]
-      nq.detect_meter
+      nq.detect_meter.should == true
       nq.meter.val.should == vector[:meter].val
     end
     it "detects the offset (minuet...)" do
       vector = $meter_vectors["Bach Minuet in G"]
       nq = vector[:note_queue]
-      nq.detect_meter
+      nq.detect_meter.should == true
       nq.first.analysis[:beat_position].to_hash.inspect.should == vector[:first_beat_position].to_hash.inspect
     end
 
     it "detects the time signature (minuet (2)...)" do
       vector = $meter_vectors["Bach Minuet (2)"]
       nq = vector[:note_queue]
-      nq.detect_meter
+      nq.detect_meter.should == true
       nq.meter.val.should == vector[:meter].val
     end
     it "detects the offset (minuet (2)...)" do
       vector = $meter_vectors["Bach Minuet (2)"]
       nq = vector[:note_queue]
-      nq.detect_meter
+      nq.detect_meter.should == true
       nq.first.analysis[:beat_position].to_hash.inspect.should == vector[:first_beat_position].to_hash.inspect
     end
 
     it "detects the time signature (somewhere over...)" do
       vector = $meter_vectors["Somewhere over the rainbow"]
       nq = vector[:note_queue]
-      nq.detect_meter
+      nq.detect_meter.should == true
       nq.meter.val.should == vector[:meter].val
       #pending("This one doesn't work yet...")
     end
     it "detects the offset (somewhere over...)" do
       vector = $meter_vectors["Somewhere over the rainbow"]
       nq = vector[:note_queue]
-      nq.detect_meter
+      nq.detect_meter.should == true
       nq.first.analysis[:beat_position].to_hash.inspect.should == vector[:first_beat_position].to_hash.inspect
     end
 
     it "detects the time signature (this train...)" do
       vector = $meter_vectors["This train is bound for glory"]
       nq = vector[:note_queue]
-      nq.detect_meter
+      nq.detect_meter.should == true
       nq.meter.val.should == vector[:meter].val
       #pending("This one doesn't work yet...")
     end
     it "detects the offset (this train...)" do
       vector = $meter_vectors["This train is bound for glory"]
       nq = vector[:note_queue]
-      nq.detect_meter
+      nq.detect_meter.should == true
       nq.first.analysis[:beat_position].to_hash.inspect.should == vector[:first_beat_position].to_hash.inspect
     end
 
     it "detects the time signature (amazing grace...)" do
       vector = $meter_vectors["Amazing Grace"]
       nq = vector[:note_queue]
-      nq.detect_meter
+      nq.detect_meter.should == true
       nq.meter.val.should == vector[:meter].val
       #pending("This one doesn't work yet...")
     end
     it "detects the offset (amazing grace...)" do
       vector = $meter_vectors["Amazing Grace"]
       nq = vector[:note_queue]
-      nq.detect_meter
+      nq.detect_meter.should == true
       nq.first.analysis[:beat_position].to_hash.inspect.should == vector[:first_beat_position].to_hash.inspect
       #pending("This one doesn't work yet...")
     end
@@ -138,14 +138,14 @@ describe Music::NoteQueue do
     it "detects the time signature (ode to joy...)" do
       vector = $meter_vectors["Ode to Joy"]
       nq = vector[:note_queue]
-      nq.detect_meter
+      nq.detect_meter.should == true
       nq.meter.val.should == vector[:meter].val
       #pending("This one doesn't work yet...")
     end
     it "detects the offset (ode to joy...)" do
       vector = $meter_vectors["Ode to Joy"]
       nq = vector[:note_queue]
-      nq.detect_meter
+      nq.detect_meter.should == true
       nq.first.analysis[:beat_position].to_hash.inspect.should == vector[:first_beat_position].to_hash.inspect
       #pending("This one doesn't work yet...")
     end
@@ -153,14 +153,14 @@ describe Music::NoteQueue do
     it "detects the time signature (auld lang syne)" do
       vector = $meter_vectors["Auld Lang Syne"]
       nq = vector[:note_queue]
-      nq.detect_meter
+      nq.detect_meter.should == true
       nq.meter.val.should == vector[:meter].val
       #pending("This one doesn't work yet...")
     end
     it "detects the offset (auld lang syne)" do
       vector = $meter_vectors["Auld Lang Syne"]
       nq = vector[:note_queue]
-      nq.detect_meter
+      nq.detect_meter.should == true
       nq.first.analysis[:beat_position].to_hash.inspect.should == vector[:first_beat_position].to_hash.inspect
       #pending("This one doesn't work yet...")
     end
@@ -168,14 +168,14 @@ describe Music::NoteQueue do
     it "detects the time signature (oh my darling, clementine)" do
       vector = $meter_vectors["Clementine"]
       nq = vector[:note_queue]
-      nq.detect_meter
+      nq.detect_meter.should == true
       nq.meter.val.should == vector[:meter].val
       #pending("This one doesn't work yet...")
     end
     it "detects the offset (oh my darling, clementine)" do
       vector = $meter_vectors["Clementine"]
       nq = vector[:note_queue]
-      nq.detect_meter
+      nq.detect_meter.should == true
       nq.first.analysis[:beat_position].to_hash.inspect.should == vector[:first_beat_position].to_hash.inspect
       #pending("This one doesn't work yet...")
     end
