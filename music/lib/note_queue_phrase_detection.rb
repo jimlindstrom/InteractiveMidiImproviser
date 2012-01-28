@@ -57,7 +57,7 @@ private
       end
       iter += 1
     end
-    puts  "iter: #{iter}, retries: #{retries}"
+    puts  "iter: #{iter}, retries: #{retries}, score: #{best_phrases.score}"
 
     if best_phrases.score > @phrases.score
       @phrases = best_phrases

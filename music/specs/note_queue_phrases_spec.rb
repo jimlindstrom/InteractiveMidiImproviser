@@ -100,6 +100,12 @@ describe Music::NoteQueue do
       nq.detect_phrases
       nq.phrases.collect{|p| p.start_idx }.should == vector[:phrase_boundaries].collect{|p| p[:start_idx] }
     end
+    it "detects the phrase onsets (auld lang syne)" do
+      vector = $phrasing_vectors["Auld Lang Syne"]
+      nq = vector[:note_queue]
+      nq.detect_phrases
+      nq.phrases.collect{|p| p.start_idx }.should == vector[:phrase_boundaries].collect{|p| p[:start_idx] }
+    end
   end
 
 end

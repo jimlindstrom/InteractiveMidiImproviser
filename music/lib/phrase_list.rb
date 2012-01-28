@@ -47,33 +47,12 @@ module Music
     # UNTESTED
 
     def choose_tactic
-      if @tactics.nil?
-        @tactics = [ :split_all_phrases,
-                     :shift_boundary_between_two_phrases,
-                     :merge_two_phrases,
-                     :shift_boundary_between_two_phrases,
-                     :split_a_phrase,
-                     :shift_boundary_between_two_phrases ]
-      end
-
-#      # Try to rig this so that smarter choices are made
-#      # if shortest phrase is quite long, bias toward splitting
-#      lengths = self.collect{ |p| p.duration }
-#      if lengths.min > 16 and rand > 0.7
-#        return :split_all_phrases if rand > 0.4
-#        return :split_a_phrase
-#      end
-#
-#      # if long phrase is quite shot, bias toward merging
-#      if lengths.max < 5 and rand > 0.7
-#        return :merge_two_phrases
-#      end
-  
-      # round robin through the tactics
-      next_tactic = @tactics.shift
-      @tactics.push next_tactic
-  
-      return next_tactic
+      return [ :split_all_phrases,
+               :split_a_phrase,
+               :merge_two_phrases,
+               :shift_boundary_between_two_phrases,
+               :shift_boundary_between_two_phrases,
+               :shift_boundary_between_two_phrases ].sample
     end
   
     def split_a_phrase # should be useful when there's one outlier that's too long
@@ -242,11 +221,8 @@ module Music
       scores = self.collect{ |phrase| l.call(phrase) }
       min_score = scores.min
       translated_scores = scores.map{ |s| s-min_score }
-      #max_score = translated_scores.max
-      #inverse_scores = translated_scores.map{ |s| max_score-s }
 
       x = Math::RandomVariable.new(num_outcomes=self.length)
-      #inverse_scores.each_with_index do |score, idx|
       translated_scores.each_with_index do |score, idx|
         avoid_zero_observations = 0.01
         x.add_possible_outcome(outcome=idx, num_observations=avoid_zero_observations+score)

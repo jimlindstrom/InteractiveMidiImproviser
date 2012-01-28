@@ -1,6 +1,25 @@
+A very different (and more cognitively plausible) approach would be to go left-
+to-right, building up a phrase structure as we go. This would have the advantage
+of weighting the initial material, which is almost always the most important
+phrase. It would avoid randomly walking into weird phrase-structure space and
+then trying to course-correct back to something sensible.
+
+What we're getting from the phrase detection isn't sufficient to do composition
+in the way I was expecting. It doesn't draw correspondences between phrases. If
+we were to track correspondences, we could use that to perform similar 
+operations on groups of phrases.  E.g., if two phrases are highly similar and 
+we're exploring tactics, we should perform the same tactic on both of them.
+
 It still surprises the hell out of of me that this isn't TRIVIAL. "My Bonnie 
 lies over the ocean" is practically verbatim AAAA BA'BA'.  Why isn't that a
 trivial win?
+
+It's remarkable to me that both meter detection and phrase detection are 
+relying heavily on BSMs, yet don't share information, and rely on totally 
+separate algorithms. They both depend on structure, and both seem likely to 
+benefit from a more sophisticated analysis of the BSM.
+	- what do squares mean?
+	- what do think vert/horiz stripes mean?
 
 Phrase List Scoring
 	- It could be helpful to run the listeners and incorporate surprise into
