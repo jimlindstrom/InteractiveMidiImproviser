@@ -877,3 +877,116 @@ $phrasing_vectors["Auld Lang Syne"] =
   }
 
 
+###############################################################################
+# Oh my darling, Clementine
+###############################################################################
+
+nq = Music::NoteQueue.new
+nq.tempo = 100
+
+nq.push Music::Note.new(Music::Pitch.new(PG4), Music::Duration.new( 3))		#  0   In		++
+nq.push Music::Note.new(Music::Pitch.new(PG4), Music::Duration.new( 1))		#  1   a
+
+nq.push Music::Note.new(Music::Pitch.new(PG4), Music::Duration.new( 4))		#  2   ca-
+nq.push Music::Note.new(Music::Pitch.new(PD4), Music::Duration.new( 4))		#  3   vern,
+nq.push Music::Note.new(Music::Pitch.new(PB4), Music::Duration.new( 3))		#  4   in
+nq.push Music::Note.new(Music::Pitch.new(PB4), Music::Duration.new( 1))		#  5   a
+
+nq.push Music::Note.new(Music::Pitch.new(PB4), Music::Duration.new( 4))		#  6   can-
+nq.push Music::Note.new(Music::Pitch.new(PG4), Music::Duration.new( 4))		#  7   yon,
+nq.push Music::Note.new(Music::Pitch.new(PG4), Music::Duration.new( 2))		#  8   ex-
+nq.push Music::Note.new(Music::Pitch.new(PB4), Music::Duration.new( 2))		#  8   ca-
+
+nq.push Music::Note.new(Music::Pitch.new(PD5), Music::Duration.new( 6))		#  9   va-
+nq.push Music::Note.new(Music::Pitch.new(PD5), Music::Duration.new( 2))		# 10   ting
+nq.push Music::Note.new(Music::Pitch.new(PC5), Music::Duration.new( 2))		# 11   for
+nq.push Music::Note.new(Music::Pitch.new(PB4), Music::Duration.new( 2))		# 12   a
+
+nq.push Music::Note.new(Music::Pitch.new(PA4), Music::Duration.new( 8))		# 13   mine,	--
+nq.push Music::Note.new(Music::Pitch.new(PA4), Music::Duration.new( 2))		# 14   Dwelt	++
+nq.push Music::Note.new(Music::Pitch.new(PB4), Music::Duration.new( 2))		# 15   a
+
+nq.push Music::Note.new(Music::Pitch.new(PC5), Music::Duration.new( 4))		# 16   mi-
+nq.push Music::Note.new(Music::Pitch.new(PC5), Music::Duration.new( 4))		# 17   ner
+nq.push Music::Note.new(Music::Pitch.new(PB4), Music::Duration.new( 2))		# 18   for-
+nq.push Music::Note.new(Music::Pitch.new(PA4), Music::Duration.new( 2))		# 19   ty
+
+nq.push Music::Note.new(Music::Pitch.new(PB4), Music::Duration.new( 4))		# 20   nin-
+nq.push Music::Note.new(Music::Pitch.new(PG4), Music::Duration.new( 4))		# 21   er
+nq.push Music::Note.new(Music::Pitch.new(PG4), Music::Duration.new( 2))		# 22   and
+nq.push Music::Note.new(Music::Pitch.new(PB4), Music::Duration.new( 2))		# 23   his
+
+nq.push Music::Note.new(Music::Pitch.new(PA4), Music::Duration.new( 4))		# 24   daugh-
+nq.push Music::Note.new(Music::Pitch.new(PD4), Music::Duration.new( 4))		# 25   ter,
+nq.push Music::Note.new(Music::Pitch.new(PFs4),Music::Duration.new( 2))		# 26   Clem-
+nq.push Music::Note.new(Music::Pitch.new(PA4), Music::Duration.new( 2))		# 27   en-
+
+nq.push Music::Note.new(Music::Pitch.new(PG4), Music::Duration.new( 8))		# 28   tine.	--
+nq.push Music::Note.new(Music::Pitch.new(PG4), Music::Duration.new( 2))		# 29   Oh		++
+nq.push Music::Note.new(Music::Pitch.new(PG4), Music::Duration.new( 2))		# 30   my
+
+nq.push Music::Note.new(Music::Pitch.new(PG4), Music::Duration.new( 4))		# 31   dar-
+nq.push Music::Note.new(Music::Pitch.new(PD4), Music::Duration.new( 4))		# 32   ling,
+nq.push Music::Note.new(Music::Pitch.new(PB4), Music::Duration.new( 3))		# 33   oh
+nq.push Music::Note.new(Music::Pitch.new(PB4), Music::Duration.new( 1))		# 34   my
+
+nq.push Music::Note.new(Music::Pitch.new(PB4), Music::Duration.new( 4))		# 35   dar-
+nq.push Music::Note.new(Music::Pitch.new(PG4), Music::Duration.new( 4))		# 36   ling,
+nq.push Music::Note.new(Music::Pitch.new(PG4), Music::Duration.new( 3))		# 37   oh
+nq.push Music::Note.new(Music::Pitch.new(PB4), Music::Duration.new( 1))		# 38   my
+
+nq.push Music::Note.new(Music::Pitch.new(PD5), Music::Duration.new( 6))		# 39   dar-
+nq.push Music::Note.new(Music::Pitch.new(PD5), Music::Duration.new( 2))		# 40   ling
+nq.push Music::Note.new(Music::Pitch.new(PC5), Music::Duration.new( 2))		# 41   Clem-
+nq.push Music::Note.new(Music::Pitch.new(PB4), Music::Duration.new( 2))		# 42   en-
+
+nq.push Music::Note.new(Music::Pitch.new(PA4), Music::Duration.new( 8))		# 43   tine,	--
+nq.push Music::Note.new(Music::Pitch.new(PA4), Music::Duration.new( 2))		# 44   You		++
+nq.push Music::Note.new(Music::Pitch.new(PB4), Music::Duration.new( 2))		# 45   are
+
+nq.push Music::Note.new(Music::Pitch.new(PC5), Music::Duration.new( 6))		# 46   Lost
+nq.push Music::Note.new(Music::Pitch.new(PC5), Music::Duration.new( 2))		# 47   and
+nq.push Music::Note.new(Music::Pitch.new(PB4), Music::Duration.new( 2))		# 48   gone
+nq.push Music::Note.new(Music::Pitch.new(PA4), Music::Duration.new( 2))		# 49   for-
+
+nq.push Music::Note.new(Music::Pitch.new(PB4), Music::Duration.new( 4))		# 50   ev-
+nq.push Music::Note.new(Music::Pitch.new(PG4), Music::Duration.new( 4))		# 51   er.
+nq.push Music::Note.new(Music::Pitch.new(PG4), Music::Duration.new( 2))		# 52   Dread-
+nq.push Music::Note.new(Music::Pitch.new(PB4), Music::Duration.new( 2))		# 53   ful
+
+nq.push Music::Note.new(Music::Pitch.new(PA4), Music::Duration.new( 4))		# 54   sor-
+nq.push Music::Note.new(Music::Pitch.new(PD4), Music::Duration.new( 4))		# 55   ry,
+nq.push Music::Note.new(Music::Pitch.new(PFs4),Music::Duration.new( 2))		# 56   Clem-
+nq.push Music::Note.new(Music::Pitch.new(PA4), Music::Duration.new( 2))		# 57   en-
+
+nq.push Music::Note.new(Music::Pitch.new(PG4), Music::Duration.new( 8))		# 58   tine.	--
+
+m = Music::Meter.new(3, 4, 4) # 3/4 time, sixteenth note pulses
+b = Music::BeatPosition.new
+b.measure     = 0
+b.beat        = 2 # 0-based: third beat
+b.subbeat     = 0 # 0-based: first eight note
+b.beats_per_measure = 3 # 4 beats
+b.subbeats_per_beat = 4 # quarter of quarter notes (sixteenth notes)
+
+$meter_vectors["Clementine"] =
+  {
+    :meter               => m,
+    :first_beat_position => b,
+    :note_queue          => nq
+  }
+
+phrases = [ ]
+phrases.push({ :start_idx =>  0, :end_idx => 13 })
+phrases.push({ :start_idx => 14, :end_idx => 28 })
+phrases.push({ :start_idx => 29, :end_idx => 43 })
+phrases.push({ :start_idx => 44, :end_idx => 58 })
+
+$phrasing_vectors["Clementine"] =
+  {
+    :note_queue          => nq,
+    :phrase_boundaries   => phrases
+  }
+
+
+

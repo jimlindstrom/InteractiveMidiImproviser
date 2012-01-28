@@ -38,3 +38,9 @@ do_auto_correl(key, "[3, 4], 2, 0", 6, 0)
 key = "Ode to Joy"
 do_auto_correl(key, "[4, 4], 2, 0", 8, 0)
 
+key = "Auld Lang Syne"
+do_auto_correl(key, "[4, 4], 2, 0", 8, 0)
+
+key = "Clementine"
+do_auto_correl(key, "[3, 4], 4, 8", 12, 8)
+
