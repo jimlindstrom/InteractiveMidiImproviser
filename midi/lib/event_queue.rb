@@ -28,6 +28,19 @@ module Midi
 
       return last_note_off.timestamp - last_note_on.timestamp
     end
+
+    def get_durations
+      durations = []
+
+      self.each_with_index do |e1, idx|
+        if e1.message==Midi::Event::NOTE_ON
+          e2=self[idx..-1].find{ |x| x.message==Midi::Event::NOTE_OFF and x.pitch==e1.pitch }
+          durations.push e2.timestamp - e1.timestamp
+        end
+      end
+
+      return durations
+    end
   end
 
 end

@@ -76,6 +76,22 @@ describe Midi::EventQueue do
     end
   end
 
+  describe ".get_durations" do
+    it "should return an array of the durations of all notes, sorted by note-on time" do
+      @evq = Midi::EventQueue.new
+      @evq.enqueue(Midi::NoteOnEvent.new( { :pitch => 40, :velocity => 100, :timestamp => 1000 }))
+      @evq.enqueue(Midi::NoteOnEvent.new( { :pitch => 50, :velocity => 100, :timestamp => 2000 }))
+      @evq.enqueue(Midi::NoteOffEvent.new({ :pitch => 40, :velocity => 100, :timestamp => 3000 }))
+      @evq.enqueue(Midi::NoteOnEvent.new( { :pitch => 42, :velocity => 100, :timestamp => 4000 }))
+      @evq.enqueue(Midi::NoteOffEvent.new({ :pitch => 50, :velocity => 100, :timestamp => 5000 }))
+      @evq.enqueue(Midi::NoteOnEvent.new( { :pitch => 60, :velocity => 100, :timestamp => 6000 }))
+      @evq.enqueue(Midi::NoteOffEvent.new({ :pitch => 42, :velocity => 100, :timestamp => 7000 }))
+      @evq.enqueue(Midi::NoteOffEvent.new({ :pitch => 60, :velocity => 100, :timestamp => 8000 }))
+                                   # 40,        50,        42,        60
+      @evq.get_durations.should == [ 3000-1000, 5000-2000, 7000-4000, 8000-6000 ]
+    end
+  end
+
   describe ".get_last_duration" do
     it "should return the duration (note-on to note-off time) of the last note" do
       @evq = Midi::EventQueue.new
