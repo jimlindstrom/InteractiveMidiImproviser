@@ -2,12 +2,27 @@
 
 require 'spec_helper'
 
+shared_examples "detects the meter" do |vector|
+  before(:all) do
+    @nq = vector[:note_queue]
+    @success = @nq.detect_meter
+  end
+  it "detects the time signature" do
+    @success.should == true
+    @nq.meter.val.should == vector[:meter].val
+  end
+  it "detects the offset" do
+    @success.should == true
+    @nq.first.analysis[:beat_position].to_hash.inspect.should == vector[:first_beat_position].to_hash.inspect
+  end
+end
+
 describe Music::NoteQueue do
 
   before(:each) do
   end
 
-  describe "beat_array" do
+  describe ".beat_array" do
     before(:each) do
       @nq = Music::NoteQueue.new
       @nq.tempo = 100
@@ -27,7 +42,7 @@ describe Music::NoteQueue do
     
   end
 
-  describe "detect_meter" do
+  describe ".detect_meter" do
     it "returns true if it's confident about the detected meter" do
       vector = $meter_vectors["Bring back my bonnie to me"]
       nq = vector[:note_queue]
@@ -39,145 +54,43 @@ describe Music::NoteQueue do
       nq = nq[0..0] # something so short it's guaranteed to be metrically ambiguous
       nq.detect_meter.should == false
     end
+  end
 
-    it "detects the time signature (my bonnie lies...)" do
-      vector = $meter_vectors["Bring back my bonnie to me"]
-      nq = vector[:note_queue]
-      nq.detect_meter.should == true
-      nq.meter.val.should == vector[:meter].val
-    end
-    it "detects the offset (my bonnie lies...)" do
-      vector = $meter_vectors["Bring back my bonnie to me"]
-      nq = vector[:note_queue]
-      nq.detect_meter.should == true
-      nq.first.analysis[:beat_position].to_hash.inspect.should == vector[:first_beat_position].to_hash.inspect
-    end
 
-    it "detects the time signature (battle hymn...)" do
-      vector = $meter_vectors["Battle hymn of the republic"]
-      nq = vector[:note_queue]
-      nq.detect_meter.should == true
-      nq.meter.val.should == vector[:meter].val
+  describe ".detect_meter" do
+    context "my bonnie lies..." do
+      it_should_behave_like "detects the meter", $meter_vectors["Bring back my bonnie to me"]
     end
-    it "detects the offset (battle hymn...)" do
-      vector = $meter_vectors["Battle hymn of the republic"]
-      nq = vector[:note_queue]
-      nq.detect_meter.should == true
-      nq.first.analysis[:beat_position].to_hash.inspect.should == vector[:first_beat_position].to_hash.inspect
+    context "battle hymn..." do
+      it_should_behave_like "detects the meter", $meter_vectors["Battle hymn of the republic"]
     end
-
-    it "detects the time signature (minuet...)" do
-      vector = $meter_vectors["Bach Minuet in G"]
-      nq = vector[:note_queue]
-      nq.detect_meter.should == true
-      nq.meter.val.should == vector[:meter].val
+    context "bach minuet..." do
+      it_should_behave_like "detects the meter", $meter_vectors["Bach Minuet in G"]
     end
-    it "detects the offset (minuet...)" do
-      vector = $meter_vectors["Bach Minuet in G"]
-      nq = vector[:note_queue]
-      nq.detect_meter.should == true
-      nq.first.analysis[:beat_position].to_hash.inspect.should == vector[:first_beat_position].to_hash.inspect
+    context "somewhere over..." do
+      it_should_behave_like "detects the meter", $meter_vectors["Somewhere over the rainbow"]
     end
-
-    it "detects the time signature (minuet (2)...)" do
-      vector = $meter_vectors["Bach Minuet (2)"]
-      nq = vector[:note_queue]
-      nq.detect_meter.should == true
-      nq.meter.val.should == vector[:meter].val
+    context "this train..." do
+      it_should_behave_like "detects the meter", $meter_vectors["This train is bound for glory"]
     end
-    it "detects the offset (minuet (2)...)" do
-      vector = $meter_vectors["Bach Minuet (2)"]
-      nq = vector[:note_queue]
-      nq.detect_meter.should == true
-      nq.first.analysis[:beat_position].to_hash.inspect.should == vector[:first_beat_position].to_hash.inspect
+    context "bach minuet 2..." do
+      it_should_behave_like "detects the meter", $meter_vectors["Bach Minuet (2)"]
     end
-
-    it "detects the time signature (somewhere over...)" do
-      vector = $meter_vectors["Somewhere over the rainbow"]
-      nq = vector[:note_queue]
-      nq.detect_meter.should == true
-      nq.meter.val.should == vector[:meter].val
-      #pending("This one doesn't work yet...")
+    context "amazing grace..." do
+      it_should_behave_like "detects the meter", $meter_vectors["Amazing Grace"]
     end
-    it "detects the offset (somewhere over...)" do
-      vector = $meter_vectors["Somewhere over the rainbow"]
-      nq = vector[:note_queue]
-      nq.detect_meter.should == true
-      nq.first.analysis[:beat_position].to_hash.inspect.should == vector[:first_beat_position].to_hash.inspect
+    context "ode to joy..." do
+      it_should_behave_like "detects the meter", $meter_vectors["Ode to Joy"]
     end
-
-    it "detects the time signature (this train...)" do
-      vector = $meter_vectors["This train is bound for glory"]
-      nq = vector[:note_queue]
-      nq.detect_meter.should == true
-      nq.meter.val.should == vector[:meter].val
-      #pending("This one doesn't work yet...")
+    context "auld lang syne" do
+      it_should_behave_like "detects the meter", $meter_vectors["Auld Lang Syne"]
     end
-    it "detects the offset (this train...)" do
-      vector = $meter_vectors["This train is bound for glory"]
-      nq = vector[:note_queue]
-      nq.detect_meter.should == true
-      nq.first.analysis[:beat_position].to_hash.inspect.should == vector[:first_beat_position].to_hash.inspect
+    context "oh my darling clementine" do
+      it_should_behave_like "detects the meter", $meter_vectors["Clementine"]
     end
-
-    it "detects the time signature (amazing grace...)" do
-      vector = $meter_vectors["Amazing Grace"]
-      nq = vector[:note_queue]
-      nq.detect_meter.should == true
-      nq.meter.val.should == vector[:meter].val
-      #pending("This one doesn't work yet...")
-    end
-    it "detects the offset (amazing grace...)" do
-      vector = $meter_vectors["Amazing Grace"]
-      nq = vector[:note_queue]
-      nq.detect_meter.should == true
-      nq.first.analysis[:beat_position].to_hash.inspect.should == vector[:first_beat_position].to_hash.inspect
-      #pending("This one doesn't work yet...")
-    end
-
-    it "detects the time signature (ode to joy...)" do
-      vector = $meter_vectors["Ode to Joy"]
-      nq = vector[:note_queue]
-      nq.detect_meter.should == true
-      nq.meter.val.should == vector[:meter].val
-      #pending("This one doesn't work yet...")
-    end
-    it "detects the offset (ode to joy...)" do
-      vector = $meter_vectors["Ode to Joy"]
-      nq = vector[:note_queue]
-      nq.detect_meter.should == true
-      nq.first.analysis[:beat_position].to_hash.inspect.should == vector[:first_beat_position].to_hash.inspect
-      #pending("This one doesn't work yet...")
-    end
-
-    it "detects the time signature (auld lang syne)" do
-      vector = $meter_vectors["Auld Lang Syne"]
-      nq = vector[:note_queue]
-      nq.detect_meter.should == true
-      nq.meter.val.should == vector[:meter].val
-      #pending("This one doesn't work yet...")
-    end
-    it "detects the offset (auld lang syne)" do
-      vector = $meter_vectors["Auld Lang Syne"]
-      nq = vector[:note_queue]
-      nq.detect_meter.should == true
-      nq.first.analysis[:beat_position].to_hash.inspect.should == vector[:first_beat_position].to_hash.inspect
-      #pending("This one doesn't work yet...")
-    end
-
-    it "detects the time signature (oh my darling, clementine)" do
-      vector = $meter_vectors["Clementine"]
-      nq = vector[:note_queue]
-      nq.detect_meter.should == true
-      nq.meter.val.should == vector[:meter].val
-      #pending("This one doesn't work yet...")
-    end
-    it "detects the offset (oh my darling, clementine)" do
-      vector = $meter_vectors["Clementine"]
-      nq = vector[:note_queue]
-      nq.detect_meter.should == true
-      nq.first.analysis[:beat_position].to_hash.inspect.should == vector[:first_beat_position].to_hash.inspect
-      #pending("This one doesn't work yet...")
+    context "when the saints..." do
+      #it_should_behave_like "detects the meter", $meter_vectors["When the Saints"]
+      pending "Can't handle rests in the note queue yet"
     end
   end
 

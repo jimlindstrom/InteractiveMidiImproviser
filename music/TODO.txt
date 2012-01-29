@@ -1,3 +1,6 @@
+It might be cleaner to not represent Rests explicitly, but rather to let notes
+have an IOI (which would include the rest's duration) as well as a duration.
+
 A very different (and more cognitively plausible) approach would be to go left-
 to-right, building up a phrase structure as we go. This would have the advantage
 of weighting the initial material, which is almost always the most important

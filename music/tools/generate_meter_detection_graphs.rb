@@ -44,3 +44,6 @@ do_auto_correl(key, "[4, 4], 2, 0", 8, 0)
 key = "Clementine"
 do_auto_correl(key, "[3, 4], 4, 8", 12, 8)
 
+#key = "When the Saints"
+#do_auto_correl(key, "[4, 4], 1, 0", 4, 0)
+
