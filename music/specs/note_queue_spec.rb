@@ -25,11 +25,12 @@ describe Music::NoteQueue do
       nq.tempo = 100
       nq.to_event_queue.should be_an_instance_of Midi::EventQueue
     end
-    it "converts each note into a note_on / note_off pair" do
+    it "converts each note (but not rest) into a note_on / note_off pair" do
       nq = Music::NoteQueue.new
       nq.tempo = 100
       nq.push Music::Note.new(Music::Pitch.new(1), Music::Duration.new(1))
       nq.push Music::Note.new(Music::Pitch.new(2), Music::Duration.new(4))
+      nq.push Music::Rest.new(                     Music::Duration.new(3))
       nq.push Music::Note.new(Music::Pitch.new(3), Music::Duration.new(2))
       eq = nq.to_event_queue
       eq.map{ |x| x.message }.should == [Midi::Event::NOTE_ON, Midi::Event::NOTE_OFF]*3
@@ -39,18 +40,20 @@ describe Music::NoteQueue do
       nq.tempo = 100
       nq.push Music::Note.new(Music::Pitch.new(1), Music::Duration.new(1))
       nq.push Music::Note.new(Music::Pitch.new(2), Music::Duration.new(4))
+      nq.push Music::Rest.new(                     Music::Duration.new(3))
       nq.push Music::Note.new(Music::Pitch.new(3), Music::Duration.new(2))
       eq = nq.to_event_queue
       eq.map{ |x| x.pitch }.should == [1,1, 2,2, 3,3]
     end
-    it "correctly sets the durations (with 100% duty cycle), with the given tempo" do
+    it "correctly sets the durations (with 100% duty cycle; leaving gaps for rests), with the given tempo" do
       nq = Music::NoteQueue.new
       nq.tempo = 100
       nq.push Music::Note.new(Music::Pitch.new(1), Music::Duration.new(1))
       nq.push Music::Note.new(Music::Pitch.new(2), Music::Duration.new(4))
+      nq.push Music::Rest.new(                     Music::Duration.new(3))
       nq.push Music::Note.new(Music::Pitch.new(3), Music::Duration.new(2))
       eq = nq.to_event_queue
-      eq.map{ |x| x.timestamp }.should == [0,100, 100,500, 500,700]
+      eq.map{ |x| x.timestamp }.should == [0,100, 100,500, 800,1000]
     end
   end
 
@@ -65,34 +68,17 @@ describe Music::NoteQueue do
   end
 
   describe ".from_event_queue" do
-    before (:each) do
+    before (:all) do
       @test_events = [
-        Midi::NoteOnEvent.new({
-          :pitch     => 40,
-          :velocity  => 100,
-          :timestamp => 1000 }),
-        Midi::NoteOffEvent.new({
-          :pitch     => 40,
-          :velocity  => 100,
-          :timestamp => 2000 }),
+        Midi::NoteOnEvent.new( { :pitch => 40, :velocity => 100, :timestamp => 1000 }),
+        Midi::NoteOffEvent.new({ :pitch => 40, :velocity => 100, :timestamp => 2000 }),
   
-        Midi::NoteOnEvent.new({
-          :pitch     => 42,
-          :velocity  => 100,
-          :timestamp => 2000 }),
-        Midi::NoteOffEvent.new({
-          :pitch     => 42,
-          :velocity  => 100,
-          :timestamp => 3000 }),
+        Midi::NoteOnEvent.new( { :pitch => 42, :velocity => 100, :timestamp => 2000 }),
+        Midi::NoteOffEvent.new({ :pitch => 42, :velocity => 100, :timestamp => 3000 }),
   
-        Midi::NoteOnEvent.new({
-          :pitch     => 44,
-          :velocity  => 100,
-          :timestamp => 3000 }),
-        Midi::NoteOffEvent.new({
-          :pitch     => 44,
-          :velocity  => 100,
-          :timestamp => 4000 }) ]
+        Midi::NoteOnEvent.new( { :pitch => 44, :velocity => 100, :timestamp => 3000 }),
+        Midi::NoteOffEvent.new({ :pitch => 44, :velocity => 100, :timestamp => 4000 }) ]
+
       @evq = Midi::EventQueue.new
       @test_events.each { |e| @evq.enqueue e }
       @nq = Music::NoteQueue.from_event_queue(@evq)
@@ -109,6 +95,27 @@ describe Music::NoteQueue do
     end
     it "calculates tempo" do
       @nq.tempo.should == 1000
+    end
+
+    it "insert rests where there are gaps in the quantized durations" do
+      test_events_with_gap = [
+        Midi::NoteOnEvent.new( { :pitch => 40, :velocity => 100, :timestamp => 1000 }),
+        Midi::NoteOffEvent.new({ :pitch => 40, :velocity => 100, :timestamp => 2000 }),
+  
+        Midi::NoteOnEvent.new( { :pitch => 42, :velocity => 100, :timestamp => 2000 }),
+        Midi::NoteOffEvent.new({ :pitch => 42, :velocity => 100, :timestamp => 3000 }),
+  
+        Midi::NoteOnEvent.new( { :pitch => 44, :velocity => 100, :timestamp => 4000 }),
+        Midi::NoteOffEvent.new({ :pitch => 44, :velocity => 100, :timestamp => 5000 }),
+  
+        Midi::NoteOnEvent.new( { :pitch => 45, :velocity => 100, :timestamp => 5000 }),
+        Midi::NoteOffEvent.new({ :pitch => 45, :velocity => 100, :timestamp => 6000 }) ]
+
+      evq = Midi::EventQueue.new
+      test_events_with_gap.each { |e| evq.enqueue e }
+      nq = Music::NoteQueue.from_event_queue(evq)
+
+      nq.map { |x| x.class }.should == [Music::Note, Music::Note, Music::Rest, Music::Note, Music::Note]
     end
   end
 
