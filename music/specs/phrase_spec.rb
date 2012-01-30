@@ -58,7 +58,7 @@ describe Music::Phrase do
 
   describe ".score" do
     before(:each) do
-      @nq.create_intervals
+      @nq.analyze!
       @p = Music::Phrase.new(@nq, @idx1=2, @idx2=8)
     end
     it "should return a floating point value" do
@@ -68,7 +68,7 @@ describe Music::Phrase do
 
   describe ".split_at_a_big_interval" do
     before(:each) do
-      @nq.create_intervals
+      @nq.analyze!
     end
     context "for phrases with 0 or 1 notes" do
       it "should raise an error" do

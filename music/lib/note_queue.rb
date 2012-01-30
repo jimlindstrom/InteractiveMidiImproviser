@@ -79,14 +79,16 @@ module Music
       tag_with_notes_left
       create_intervals
     end
+
+  private
   
-    def tag_with_notes_left # FIXME: make private (use analyze! instead)
+    def tag_with_notes_left
       self.each_with_index do |item, idx|
         item.analysis[:notes_left] = self.length - 1 - idx
       end
     end
 
-    def create_intervals # FIXME: make private (use analyze! instead)
+    def create_intervals
       prev = nil
       self.each do |cur|
         if !prev.nil?

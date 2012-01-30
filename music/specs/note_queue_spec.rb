@@ -60,14 +60,14 @@ describe Music::NoteQueue do
     end
   end
 
-  describe "tag_with_notes_left" do
-    it "adds analysis to each note indicating how many notes follow it" do
-      vector = $meter_vectors["Bring back my bonnie to me"]
-      nq = vector[:note_queue]
-      nq.tag_with_notes_left
-      nq.map { |n| n.analysis[:notes_left] }[-6..-1].should == [ 5, 4, 3, 2, 1, 0 ]
-    end
-  end
+#  describe "tag_with_notes_left" do
+#    it "adds analysis to each note indicating how many notes follow it" do
+#      vector = $meter_vectors["Bring back my bonnie to me"]
+#      nq = vector[:note_queue]
+#      nq.tag_with_notes_left
+#      nq.map { |n| n.analysis[:notes_left] }[-6..-1].should == [ 5, 4, 3, 2, 1, 0 ]
+#    end
+#  end
 
   describe ".from_event_queue" do
     before (:all) do

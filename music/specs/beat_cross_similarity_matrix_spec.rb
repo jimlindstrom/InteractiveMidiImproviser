@@ -24,7 +24,6 @@ describe Music::BeatCrossSimilarityMatrix do
       before(:all) do
         @vector = $phrasing_vectors["This train is bound for glory"]
         @nq = @vector[:note_queue]
-        @nq.create_intervals
 
         @correct_pl = Music::PhraseList.new(@nq)
         @vector[:phrase_boundaries].each do |p|
@@ -84,7 +83,6 @@ describe Music::BeatCrossSimilarityMatrix do
       before(:all) do
         @vector = $phrasing_vectors["Somewhere over the rainbow"]
         @nq = @vector[:note_queue]
-        @nq.create_intervals
 
         @correct_pl = Music::PhraseList.new(@nq)
         @vector[:phrase_boundaries].each do |p|
