@@ -3,9 +3,6 @@
 require 'spec_helper'
 
 describe Music::Pitch do
-  before do
-  end
-
   context "new" do
     it "should take an integer from 0 to 127" do
       Music::Pitch.new(0).should be_an_instance_of Music::Pitch
@@ -43,19 +40,24 @@ describe Music::Pitch do
   end
 
   context "similarity_to" do
-    it "should return 0.0 when compared to nil" do
-      p1 = Music::Pitch.new(0)
-      p1.similarity_to(nil).should be_within(0.01).of(0.0)
+    before(:each) do
+      @p1 = Music::Pitch.new(0)
     end
-    it "should return 0.0 when compared to a radically different pitch" do
-      p1 = Music::Pitch.new(0)
-      p2 = Music::Pitch.new(100)
-      p1.similarity_to(p2).should be_within(0.01).of(0.0)
+    context "when compared to nil" do
+      it "should return 0.0" do
+        @p1.similarity_to(nil).should be_within(0.01).of(0.0)
+      end
     end
-    it "should return 1.0 when compared to itself" do
-      p1 = Music::Pitch.new(0)
-      p2 = Music::Pitch.new(0)
-      p1.similarity_to(p2).should be_within(0.01).of(1.0)
+    context "when compared to a radically differen pitch" do
+      it "should return 0.0" do
+        p2 = Music::Pitch.new(100)
+        @p1.similarity_to(p2).should be_within(0.01).of(0.0)
+      end
+    end
+    context "when compared to itself" do
+      it "should return 1.0" do
+        @p1.similarity_to(@p1).should be_within(0.01).of(1.0)
+      end
     end
   end
 
