@@ -7,7 +7,7 @@ describe Listener do
     @vector = $meter_vectors["Bring back my bonnie to me"]
     @nq = @vector[:note_queue]
     @nq.detect_meter
-    @nq.tag_with_notes_left
+    @nq.analyze!
   end
 
   context ".add_critic" do

@@ -30,7 +30,7 @@ describe Music::MeterSymbol do
       m = Music::MeterSymbol.new(0)
       m.to_object.beats_per_measure.should equal 2
       m.to_object.beat_unit.should equal 2
-      m.to_object.subdivs_per_beat.should equal 1
+      m.to_object.subbeats_per_beat.should equal 1
     end
   end
 

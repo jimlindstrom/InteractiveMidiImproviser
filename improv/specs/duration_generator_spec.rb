@@ -16,7 +16,7 @@ describe DurationGenerator do
     n.analysis[:beat_position] = @notes.first.analysis[:beat_position] + @notes.first.duration
     @notes.push n
 
-    @notes.tag_with_notes_left
+    @notes.analyze!
   end
 
   context ".get_critics" do

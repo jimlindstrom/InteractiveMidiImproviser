@@ -63,7 +63,7 @@ class Listener
       puts "\tfailed to detect meter. ignoring stimulus." if LOGGING
       return false # FIXME: figure out a way to listen with only partial info (no meter)
     end
-    notes.tag_with_notes_left
+    notes.analyze!
     return true
   end
 

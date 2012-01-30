@@ -6,11 +6,11 @@ describe PitchAndPitchClassSetCritic do
   before(:each) do
     @vector = $meter_vectors["Bring back my bonnie to me"]
     @nq1 = @vector[:note_queue]
-    @nq1.tag_with_notes_left
+    @nq1.analyze!
 
     @vector = $meter_vectors["Battle hymn of the republic"]
     @nq2 = @vector[:note_queue]
-    @nq2.tag_with_notes_left
+    @nq2.analyze!
   end
 
   before(:all) do

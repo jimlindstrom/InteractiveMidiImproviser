@@ -19,7 +19,7 @@ shared_examples_for "a critic" do
     @notes.push Music::Note.new(Music::Pitch.new(77), Music::Duration.new(12))
     @notes.push Music::Note.new(Music::Pitch.new(89), Music::Duration.new(14))
 
-    @notes.tag_with_notes_left
+    @notes.analyze!
 
     # since this is unlikely to have any real meter, just make up one and apply it
     meter = Music::Meter.random
