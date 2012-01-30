@@ -7,15 +7,15 @@ describe Improvisor do
   end
 
   context ".get_critics" do
-    it "should return an array containing critics" do
+    before(:all) do
       i = Improvisor.new
-      critics = i.get_critics
-      critics.should be_an_instance_of Array
+      @critics = i.get_critics
     end
     it "should return an array containing critics" do
-      i = Improvisor.new
-      critics = i.get_critics
-      critics.each do |critic|
+      @critics.should be_an_instance_of Array
+    end
+    it "should return an array containing critics" do
+      @critics.each do |critic|
         critic.should be_a_kind_of Critic
       end
     end

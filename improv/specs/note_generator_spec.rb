@@ -20,42 +20,37 @@ describe NoteGenerator do
   end
 
   context ".get_critics" do
-    it "should return an array containing critics" do
+    before(:all) do
       ng = NoteGenerator.new
-      critics = ng.get_critics
-      critics.should be_an_instance_of Array
+      @critics = ng.get_critics
     end
     it "should return an array containing critics" do
-      ng = NoteGenerator.new
-      critics = ng.get_critics
-      critics.each do |critic|
+      @critics.should be_an_instance_of Array
+    end
+    it "should return an array containing critics" do
+      @critics.each do |critic|
         critic.should be_a_kind_of Critic
       end
     end
   end
 
   context ".reset" do
-    it "should cause the next pitch (the first in a seq) to be an observed starting pitch" do
-      ng = NoteGenerator.new
-      critics = ng.get_critics
+    before(:each) do
+      @ng = NoteGenerator.new
+      critics = @ng.get_critics
       critics.each do |critic|
         @notes.each do |note|
           critic.listen note
         end
       end
-      ng.reset
-      ng.generate.pitch.val.should == 50
+    end
+    it "should cause the next pitch (the first in a seq) to be an observed starting pitch" do
+      @ng.reset
+      @ng.generate.pitch.val.should == 50
     end
     it "should cause the next duration (the first in a seq) to be an observed starting duration" do
-      ng = NoteGenerator.new
-      critics = ng.get_critics
-      critics.each do |critic|
-        @notes.each do |note|
-          critic.listen note
-        end
-      end
-      ng.reset
-      ng.generate.duration.val.should == 1
+      @ng.reset
+      @ng.generate.duration.val.should == 1
     end
   end
 
