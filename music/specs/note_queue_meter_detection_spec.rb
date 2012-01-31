@@ -54,6 +54,13 @@ describe Music::NoteQueue do
       nq = nq[0..0] # something so short it's guaranteed to be metrically ambiguous
       nq.detect_meter.should == false
     end
+    it "returns false if the note queue contains rests" do
+      vector = $meter_vectors["Bring back my bonnie to me"]
+      nq = vector[:note_queue]
+      nq.push Music::Rest.new(Music::Duration.new(2))
+      nq.detect_meter.should == false
+    end
+
   end
 
 
