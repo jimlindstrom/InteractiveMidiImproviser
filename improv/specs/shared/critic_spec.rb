@@ -2,11 +2,7 @@
 
 require 'spec_helper'
 
-# assumes the following have been defined:
-#   @class_type - the name of the class (e.g. PitchClass)
-#   @params_for_new - an array of the parameters for ClassType.new(...), e.g., [order=1]
-#   @filename - the name of the file that this critic will save itself to
-shared_examples_for "a critic" do
+shared_examples_for "a critic" do |class_type, params_for_new, filename|
 
   before(:each) do
     @notes = Music::NoteQueue.new
@@ -32,53 +28,48 @@ shared_examples_for "a critic" do
 
   context ".new" do
     it "should return a critic" do
-      order = 1
-      @class_type.new(*@params_for_new).should be_an_instance_of @class_type
+      class_type.new(*params_for_new).should be_an_instance_of class_type
     end
   end
 
   context ".information_content" do
-    it "should return the information_content associated with the given note" do
-      c = @class_type.new(*@params_for_new)
-
-	  info_content = nil
-      while info_content.nil? and !@notes.empty?
-	    n = @notes.shift
-	    info_content = c.information_content n
-	    c.listen n
-      end
-
-	  info_content.should == Math::RandomVariable.max_information_content
-	end
-    it "should add the information_content associated with the given note to the cumulative total" do
-      c = @class_type.new(*@params_for_new)
-
-	  info_content = nil
-      while info_content.nil? and !@notes.empty?
-	    n = @notes.shift
-	    info_content = c.information_content n
-	    c.listen n
-      end
-
-	  c.cumulative_information_content.should == Math::RandomVariable.max_information_content
-	end
-    it "should be less surprised the second time it hears a sequence" do
-      c = @class_type.new(*@params_for_new)
-
-      info_contents = []
-
-      2.times do
-        @notes.each do |n|
-          info_content = c.information_content n
-          c.listen n
-        end
-        info_contents.push c.cumulative_information_content
+    context "the first time it hears a sequence" do
+      before(:each) do
+        @c = class_type.new(*params_for_new)
   
-        c.reset
-        c.reset_cumulative_information_content
+        @info_content = nil
+        while @info_content.nil? and !@notes.empty?
+          n = @notes.shift
+          @info_content = @c.information_content n
+          @c.listen n
+        end
       end
-
-      info_contents.last.should < info_contents.first
+      it "should return the information_content associated with the given note" do
+        @info_content.should == Math::RandomVariable.max_information_content
+      end
+      it "should add the information_content associated with the given note to the cumulative total" do
+        @c.cumulative_information_content.should == Math::RandomVariable.max_information_content
+      end
+    end
+    context "the first time it hears a sequence" do
+      it "should be less surprised" do
+        c = class_type.new(*params_for_new)
+  
+        info_contents = []
+  
+        2.times do
+          @notes.each do |n|
+            info_content = c.information_content n
+            c.listen n
+          end
+          info_contents.push c.cumulative_information_content
+    
+          c.reset
+          c.reset_cumulative_information_content
+        end
+  
+        info_contents.last.should < info_contents.first
+      end
     end
   end
 
@@ -94,16 +85,16 @@ shared_examples_for "a critic" do
 
   context ".save" do
     it "should save a file, named <folder>/<critic_name>_<params>.yml" do
-      c = @class_type.new(*@params_for_new)
-      File.delete @filename if FileTest.exists? @filename
+      c = class_type.new(*params_for_new)
+      File.delete filename if FileTest.exists? filename
       c.save "data/test"
-      FileTest.exists?(@filename).should == true
+      FileTest.exists?(filename).should == true
     end
   end
 
   context ".load" do
     before(:each) do
-      @c = @class_type.new(*@params_for_new)
+      @c = class_type.new(*params_for_new)
 
       @notes.each do |n|
         info_content = @c.information_content n
@@ -118,7 +109,7 @@ shared_examples_for "a critic" do
 
       @c.save "data/test"
 
-      @c2 = @class_type.new(*@params_for_new)
+      @c2 = class_type.new(*params_for_new)
       @c2.load "data/test"
     end
     it "should load a saved file, but have zero cumulative info content" do
@@ -130,49 +121,48 @@ shared_examples_for "a critic" do
   end
 
   context ".cumulative_information_content" do
-    it "should return zero initially" do
-      c = @class_type.new(*@params_for_new)
-      c.cumulative_information_content.should be_within(0.0001).of(0.0)
+    before(:each) do
+      @c = class_type.new(*params_for_new)
     end
-    it "should return the sum of all information_content (since last reset)" do
-      c = @class_type.new(*@params_for_new)
-
-      cum_info_content = 0.0
-      3.times do
-        @notes.each do |n|
-          cum_info_content += (c.information_content(n) || 0.0)
-          c.listen n
-        end
-        c.reset
+    context "initially" do
+      it "should return zero" do
+        @c.cumulative_information_content.should be_within(0.0001).of(0.0)
       end
-
-      c.cumulative_information_content.should be_within(0.0001).of(cum_info_content)
     end
-    it "should return zero after calling reset_cumulative_information_content" do
-      c = @class_type.new(*@params_for_new)
-
-      3.times do
-        @notes.each do |n|
-          dummy = c.information_content(n)
-          c.listen n
+    context "after resetting" do
+      before(:each) do
+        @cum_info_content = 0.0
+        3.times do
+          @notes.each do |n|
+            @cum_info_content += (@c.information_content(n) || 0.0)
+            @c.listen n
+          end
+          @c.reset
         end
-        c.reset
       end
-
-      c.reset_cumulative_information_content
-      c.cumulative_information_content.should be_within(0.0001).of(0.0)
+      it "should return the sum of all information_content (since last reset)" do
+        @c.cumulative_information_content.should be_within(0.0001).of(@cum_info_content)
+      end
+      context "after calling reset_cumulative_information_content" do
+        before(:each) do
+          @c.reset_cumulative_information_content
+        end
+        it "should return zero" do
+          @c.cumulative_information_content.should be_within(0.0001).of(0.0)
+        end
+      end
     end
   end
 
   context ".get_expectations" do
     it "returns a random variable (or nil, initially)" do 
-      c = @class_type.new(*@params_for_new)
+      c = class_type.new(*params_for_new)
 
       # IntervalCritic, e.g., needs to queue up 1 note before having expectations
       while c.get_expectations.nil? and !@notes.empty? 
-	    n = @notes.shift
-	    info_content = c.information_content n
-	    c.listen n
+        n = @notes.shift
+        info_content = c.information_content n
+        c.listen n
       end
 
       c.get_expectations.should be_an_instance_of Math::RandomVariable

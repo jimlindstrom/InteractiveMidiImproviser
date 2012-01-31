@@ -3,12 +3,7 @@
 require 'spec_helper'
 
 describe IntervalCritic do
-  before(:all) do
-    @class_type = IntervalCritic
-    @params_for_new = [order=2, lookahead=1]
-    @filename = "data/test/interval_critic_#{order}_#{lookahead}.yml"
-  end
-  it_should_behave_like "a critic"
+  it_should_behave_like "a critic", IntervalCritic, [order=2, lookahead=1], "data/test/interval_critic_#{order}_#{lookahead}.yml"
 
   context ".reset" do
     it "should reset to the state in which no notes have been heard yet" do

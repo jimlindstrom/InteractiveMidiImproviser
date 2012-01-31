@@ -3,12 +3,7 @@
 require 'spec_helper'
 
 describe DurationCritic do
-  before(:all) do
-    @class_type = DurationCritic
-    @params_for_new = [order=1]
-    @filename = "data/test/duration_critic_#{order}.yml"
-  end
-  it_should_behave_like "a critic"
+  it_should_behave_like "a critic", DurationCritic, [order=1], "data/test/duration_critic_#{order}.yml"
 
   context ".reset" do
     it "should reset to the state in which no notes have been heard yet" do

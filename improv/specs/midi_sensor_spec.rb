@@ -43,7 +43,7 @@ describe MidiSensor, :midi_tests => true do
     Midi::Loopback.destroy
   end
 
-  it_should_behave_like "a sensor"
+  it_should_behave_like "a sensor", @sensor, @expected_num_responses
 
 end
 

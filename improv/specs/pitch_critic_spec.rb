@@ -4,12 +4,7 @@ require 'spec_helper'
 
 describe PitchCritic do
 
-  before(:all) do
-    @class_type = PitchCritic
-    @params_for_new = [order=1]
-    @filename = "data/test/pitch_critic_#{order}.yml"
-  end
-  it_should_behave_like "a critic"
+  it_should_behave_like "a critic", PitchCritic, [order=1], "data/test/pitch_critic_#{order}.yml"
 
   context ".reset" do
     it "should reset to the state in which no notes have been heard yet" do
@@ -23,7 +18,7 @@ describe PitchCritic do
   end
 
   context ".listen" do
-    # FIXME
+    pending
   end
 
   context ".get_expectations" do

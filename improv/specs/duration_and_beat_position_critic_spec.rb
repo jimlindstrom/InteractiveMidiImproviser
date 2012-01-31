@@ -15,12 +15,7 @@ describe DurationAndBeatPositionCritic do
     @nq2.analyze!
   end
 
-  before(:all) do
-    @class_type = DurationAndBeatPositionCritic
-    @params_for_new = [order=2, lookahead=1]
-    @filename = "data/test/duration_and_beat_position_critic_#{order}_#{lookahead}.yml"
-  end
-  it_should_behave_like "a critic"
+  it_should_behave_like "a critic", DurationAndBeatPositionCritic, [order=2, lookahead=1], "data/test/duration_and_beat_position_critic_#{order}_#{lookahead}.yml"
 
   context ".reset" do
     it "should reset to the state in which no notes have been heard yet" do

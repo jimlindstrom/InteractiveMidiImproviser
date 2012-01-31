@@ -3,9 +3,6 @@
 require 'spec_helper'
 
 describe InteractiveImprovisor do
-  before do
-  end
-
   context ".new" do
     it "should create a new InteractiveImprovisor" do
       i = InteractiveImprovisor.new
