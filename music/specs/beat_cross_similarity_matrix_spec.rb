@@ -16,6 +16,15 @@ describe Music::BeatCrossSimilarityMatrix do
     it "should take two beat arrays and return a cross similarity matrix" do
       Music::BeatCrossSimilarityMatrix.new(@beat_array1, @beat_array2).should be_an_instance_of Music::BeatCrossSimilarityMatrix
     end
+    it "should take two beat arrays (possibly containing rests) and return a cross similarity matrix" do
+      nq = Music::NoteQueue.new
+      nq.push Music::Note.new(Music::Pitch.new(1), Music::Duration.new(1))
+      nq.push Music::Note.new(Music::Pitch.new(2), Music::Duration.new(2))
+      nq.push Music::Rest.new(                     Music::Duration.new(1))
+      @beat_array1 = nq.beat_array
+
+      Music::BeatCrossSimilarityMatrix.new(@beat_array1, @beat_array1).should be_an_instance_of Music::BeatCrossSimilarityMatrix
+    end
   end
 
   context "max_arithmetic_mean_of_diag" do

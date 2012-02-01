@@ -25,8 +25,6 @@ module CanDetectMeter
   end
 
   def detect_meter
-    return false if self.map{|x| x.class}.include?(Music::Rest) # FIXME:For now, we can't deal with these.
-
     bsm = Music::BeatSimilarityMatrix.new(self.beat_array)
     bsm_diags = (1..20).map{ |i| { :subbeat=>i, :score=>bsm.geometric_mean_of_diag(i) } }.sort{ |x,y| y[:score] <=> x[:score] }
     puts "\t\tbsm_diags: #{bsm_diags.inspect.gsub(/, {/, "\n\t\t            {")}" if LOGGING

@@ -5,7 +5,7 @@ require 'spec_helper'
 shared_examples "detects phrases" do |vector|
   it "detects the phrase onsets" do
     nq = vector[:note_queue]
-    nq.detect_phrases
+    nq.detect_phrases.should == true
     nq.phrases.collect{|p| p.start_idx }.should == vector[:phrase_boundaries].collect{|p| p[:start_idx] }
   end
 end
@@ -108,6 +108,9 @@ describe Music::NoteQueue do
     end
     context "oh my darling clementine", :known_fail=>true do
       it_should_behave_like "detects phrases", $phrasing_vectors["Clementine"]
+    end
+    context "when the saints", :known_fail=>true do
+      it_should_behave_like "detects phrases", $phrasing_vectors["When the Saints"]
     end
   end
 

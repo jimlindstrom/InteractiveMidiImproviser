@@ -33,8 +33,12 @@ describe Music::NoteQueue do
     it "returns an array containing one element per beat" do
       @nq.beat_array.length.should == (1+4+2)
     end
-    it "returns an array containing Notes where there are note onsets" do
-      @nq.beat_array[0+1+4].nil?.should be_false
+    it "returns an array containing Beats where there are note onsets" do
+      @nq.beat_array[0+1+4].should be_an_instance_of Music::Beat
+    end
+    it "returns an array containing Beats where there are rest onsets" do
+      @nq.push Music::Rest.new(Music::Duration.new(2))
+      @nq.beat_array[0+1+4+2].should be_an_instance_of Music::Beat
     end
     it "returns an array containing nils where there aren't note onsets" do
       @nq.beat_array[0+2].nil?.should be_true
@@ -43,7 +47,7 @@ describe Music::NoteQueue do
   end
 
   describe ".detect_meter" do
-    context "when the note queue is metrically clear" do
+    context "when the note queue is metrically clear and only contains notes" do
       before(:each) do
         vector = $meter_vectors["Bring back my bonnie to me"]
         @nq = vector[:note_queue]
@@ -62,17 +66,18 @@ describe Music::NoteQueue do
         @nq.detect_meter.should == false
       end
     end
-    context "if the note queue contains rests" do
+    context "when the note queue is metrically clear and contains notes and rests" do
       before(:each) do
         @nq = Music::NoteQueue.new
         @nq.tempo = 100
-        @nq.push Music::Note.new(Music::Pitch.new(1), Music::Duration.new(1))
-        @nq.push Music::Note.new(Music::Pitch.new(2), Music::Duration.new(4))
-        @nq.push Music::Rest.new(                     Music::Duration.new(3))
-        @nq.push Music::Note.new(Music::Pitch.new(3), Music::Duration.new(2))
+        5.times do
+          @nq.push Music::Note.new(Music::Pitch.new(1), Music::Duration.new(3))
+          @nq.push Music::Note.new(Music::Pitch.new(3), Music::Duration.new(2))
+          @nq.push Music::Rest.new(                     Music::Duration.new(1))
+        end
       end
-      it "returns false" do
-        @nq.detect_meter.should == false
+      it "returns true" do
+        @nq.detect_meter.should == true
       end
     end
 
@@ -110,9 +115,8 @@ describe Music::NoteQueue do
     context "oh my darling clementine", :known_fail=>true do
       it_should_behave_like "detects the meter", $meter_vectors["Clementine"]
     end
-    context "when the saints..." do
-      #it_should_behave_like "detects the meter", $meter_vectors["When the Saints"]
-      pending "Can't handle rests in the note queue yet"
+    context "when the saints...", :known_fail=>true do
+      it_should_behave_like "detects the meter", $meter_vectors["When the Saints"]
     end
   end
 

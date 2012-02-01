@@ -993,89 +993,89 @@ $phrasing_vectors["Clementine"] =
 # When the saints...
 ###############################################################################
 
-###nq = Music::NoteQueue.new
-###nq.tempo = 100
-###
-###nq.push Music::Note.new(Music::Pitch.new(PD4), Music::Duration.new( 1))		#  0   Oh		++
-###nq.push Music::Note.new(Music::Pitch.new(PFs4),Music::Duration.new( 1))		#  1   when
-###nq.push Music::Note.new(Music::Pitch.new(PG4), Music::Duration.new( 1))		#  2   the
-###
-###nq.push Music::Note.new(Music::Pitch.new(PA4), Music::Duration.new( 4))		#  3   saints
-###
-###nq.push Music::Rest.new(                       Music::Duration.new( 1))		#  4   
-###nq.push Music::Note.new(Music::Pitch.new(PD4), Music::Duration.new( 1))		#  5   go
-###nq.push Music::Note.new(Music::Pitch.new(PFs4),Music::Duration.new( 1))		#  6   mar-
-###nq.push Music::Note.new(Music::Pitch.new(PG4), Music::Duration.new( 1))		#  7   ching
-###
-###nq.push Music::Note.new(Music::Pitch.new(PA4), Music::Duration.new( 4))		#  8   in.	
-###
-###nq.push Music::Rest.new(                       Music::Duration.new( 1))		#  9   			--
-###nq.push Music::Note.new(Music::Pitch.new(PD4), Music::Duration.new( 1))		# 10   Oh		++
-###nq.push Music::Note.new(Music::Pitch.new(PFs4),Music::Duration.new( 1))		# 11   when
-###nq.push Music::Note.new(Music::Pitch.new(PG4), Music::Duration.new( 1))		# 12   the
-###
-###nq.push Music::Note.new(Music::Pitch.new(PA4), Music::Duration.new( 2))		# 13   saints
-###nq.push Music::Note.new(Music::Pitch.new(PFs4),Music::Duration.new( 2))		# 14   go
-###
-###nq.push Music::Note.new(Music::Pitch.new(PD4), Music::Duration.new( 2))		# 15   mar-
-###nq.push Music::Note.new(Music::Pitch.new(PFs4),Music::Duration.new( 2))		# 16   ching
-###
-###nq.push Music::Note.new(Music::Pitch.new(PE4), Music::Duration.new( 4))		# 17   in.
-###
-###nq.push Music::Rest.new(                       Music::Duration.new( 1))		# 18   			--
-###nq.push Music::Note.new(Music::Pitch.new(PFs4),Music::Duration.new( 1))		# 19   Oh		++
-###nq.push Music::Note.new(Music::Pitch.new(PFs4),Music::Duration.new( 1))		# 20   Lord
-###nq.push Music::Note.new(Music::Pitch.new(PE4), Music::Duration.new( 1))		# 21   I
-###
-###nq.push Music::Note.new(Music::Pitch.new(PD4), Music::Duration.new( 3))		# 22   want
-###nq.push Music::Note.new(Music::Pitch.new(PD4), Music::Duration.new( 1))		# 23   to
-###
-###nq.push Music::Note.new(Music::Pitch.new(PFs4),Music::Duration.new( 2))		# 24   be
-###nq.push Music::Note.new(Music::Pitch.new(PA4), Music::Duration.new( 1))		# 25   in
-###nq.push Music::Note.new(Music::Pitch.new(PA4), Music::Duration.new( 1))		# 26   that
-###
-###nq.push Music::Note.new(Music::Pitch.new(PA4), Music::Duration.new( 1))		# 27   num-
-###nq.push Music::Note.new(Music::Pitch.new(PG4), Music::Duration.new( 3))		# 28   ber.
-###
-###nq.push Music::Rest.new(                       Music::Duration.new( 1))		# 29   			--
-###nq.push Music::Note.new(Music::Pitch.new(PD4), Music::Duration.new( 1))		# 30   Oh		++
-###nq.push Music::Note.new(Music::Pitch.new(PFs4),Music::Duration.new( 1))		# 31   when
-###nq.push Music::Note.new(Music::Pitch.new(PG4), Music::Duration.new( 1))		# 32   the
-###
-###nq.push Music::Note.new(Music::Pitch.new(PA4), Music::Duration.new( 2))		# 33   saints
-###nq.push Music::Note.new(Music::Pitch.new(PFs4),Music::Duration.new( 2))		# 34   go
-###
-###nq.push Music::Note.new(Music::Pitch.new(PD4), Music::Duration.new( 2))		# 35   mar-
-###nq.push Music::Note.new(Music::Pitch.new(PE4), Music::Duration.new( 2))		# 36   ching
-###
-###nq.push Music::Note.new(Music::Pitch.new(PD4), Music::Duration.new( 4))		# 37   in.		--
-###
-###m = Music::Meter.new(4, 4, 1) # 4/4 time, quarter note pulses
-###b = Music::BeatPosition.new
-###b.measure     = 0
-###b.beat        = 0 # 0-based: first beat
-###b.subbeat     = 0 # 0-based: first eighth note
-###b.beats_per_measure = 4 # 4 beats
-###b.subbeats_per_beat = 1 # quarter notes
-###
-###$meter_vectors["When the Saints"] =
-###  {
-###    :meter               => m,
-###    :first_beat_position => b,
-###    :note_queue          => nq
-###  }
-###
-###phrases = [ ]
-###phrases.push({ :start_idx =>  0, :end_idx =>  9 })
-###phrases.push({ :start_idx => 10, :end_idx => 18 })
-###phrases.push({ :start_idx => 19, :end_idx => 29 })
-###phrases.push({ :start_idx => 30, :end_idx => 37 })
-###
-###$phrasing_vectors["When the Saints"] =
-###  {
-###    :note_queue          => nq,
-###    :phrase_boundaries   => phrases
-###  }
-###
+nq = Music::NoteQueue.new
+nq.tempo = 100
+
+nq.push Music::Note.new(Music::Pitch.new(PD4), Music::Duration.new( 1))		#  0   Oh		++
+nq.push Music::Note.new(Music::Pitch.new(PFs4),Music::Duration.new( 1))		#  1   when
+nq.push Music::Note.new(Music::Pitch.new(PG4), Music::Duration.new( 1))		#  2   the
+
+nq.push Music::Note.new(Music::Pitch.new(PA4), Music::Duration.new( 4))		#  3   saints
+
+nq.push Music::Rest.new(                       Music::Duration.new( 1))		#  4   
+nq.push Music::Note.new(Music::Pitch.new(PD4), Music::Duration.new( 1))		#  5   go
+nq.push Music::Note.new(Music::Pitch.new(PFs4),Music::Duration.new( 1))		#  6   mar-
+nq.push Music::Note.new(Music::Pitch.new(PG4), Music::Duration.new( 1))		#  7   ching
+
+nq.push Music::Note.new(Music::Pitch.new(PA4), Music::Duration.new( 4))		#  8   in.	
+
+nq.push Music::Rest.new(                       Music::Duration.new( 1))		#  9   			--
+nq.push Music::Note.new(Music::Pitch.new(PD4), Music::Duration.new( 1))		# 10   Oh		++
+nq.push Music::Note.new(Music::Pitch.new(PFs4),Music::Duration.new( 1))		# 11   when
+nq.push Music::Note.new(Music::Pitch.new(PG4), Music::Duration.new( 1))		# 12   the
+
+nq.push Music::Note.new(Music::Pitch.new(PA4), Music::Duration.new( 2))		# 13   saints
+nq.push Music::Note.new(Music::Pitch.new(PFs4),Music::Duration.new( 2))		# 14   go
+
+nq.push Music::Note.new(Music::Pitch.new(PD4), Music::Duration.new( 2))		# 15   mar-
+nq.push Music::Note.new(Music::Pitch.new(PFs4),Music::Duration.new( 2))		# 16   ching
+
+nq.push Music::Note.new(Music::Pitch.new(PE4), Music::Duration.new( 4))		# 17   in.
+
+nq.push Music::Rest.new(                       Music::Duration.new( 1))		# 18   			--
+nq.push Music::Note.new(Music::Pitch.new(PFs4),Music::Duration.new( 1))		# 19   Oh		++
+nq.push Music::Note.new(Music::Pitch.new(PFs4),Music::Duration.new( 1))		# 20   Lord
+nq.push Music::Note.new(Music::Pitch.new(PE4), Music::Duration.new( 1))		# 21   I
+
+nq.push Music::Note.new(Music::Pitch.new(PD4), Music::Duration.new( 3))		# 22   want
+nq.push Music::Note.new(Music::Pitch.new(PD4), Music::Duration.new( 1))		# 23   to
+
+nq.push Music::Note.new(Music::Pitch.new(PFs4),Music::Duration.new( 2))		# 24   be
+nq.push Music::Note.new(Music::Pitch.new(PA4), Music::Duration.new( 1))		# 25   in
+nq.push Music::Note.new(Music::Pitch.new(PA4), Music::Duration.new( 1))		# 26   that
+
+nq.push Music::Note.new(Music::Pitch.new(PA4), Music::Duration.new( 1))		# 27   num-
+nq.push Music::Note.new(Music::Pitch.new(PG4), Music::Duration.new( 3))		# 28   ber.
+
+nq.push Music::Rest.new(                       Music::Duration.new( 1))		# 29   			--
+nq.push Music::Note.new(Music::Pitch.new(PD4), Music::Duration.new( 1))		# 30   Oh		++
+nq.push Music::Note.new(Music::Pitch.new(PFs4),Music::Duration.new( 1))		# 31   when
+nq.push Music::Note.new(Music::Pitch.new(PG4), Music::Duration.new( 1))		# 32   the
+
+nq.push Music::Note.new(Music::Pitch.new(PA4), Music::Duration.new( 2))		# 33   saints
+nq.push Music::Note.new(Music::Pitch.new(PFs4),Music::Duration.new( 2))		# 34   go
+
+nq.push Music::Note.new(Music::Pitch.new(PD4), Music::Duration.new( 2))		# 35   mar-
+nq.push Music::Note.new(Music::Pitch.new(PE4), Music::Duration.new( 2))		# 36   ching
+
+nq.push Music::Note.new(Music::Pitch.new(PD4), Music::Duration.new( 4))		# 37   in.		--
+
+m = Music::Meter.new(4, 4, 1) # 4/4 time, quarter note pulses
+b = Music::BeatPosition.new
+b.measure     = 0
+b.beat        = 0 # 0-based: first beat
+b.subbeat     = 0 # 0-based: first eighth note
+b.beats_per_measure = 4 # 4 beats
+b.subbeats_per_beat = 1 # quarter notes
+
+$meter_vectors["When the Saints"] =
+  {
+    :meter               => m,
+    :first_beat_position => b,
+    :note_queue          => nq
+  }
+
+phrases = [ ]
+phrases.push({ :start_idx =>  0, :end_idx =>  9 })
+phrases.push({ :start_idx => 10, :end_idx => 18 })
+phrases.push({ :start_idx => 19, :end_idx => 29 })
+phrases.push({ :start_idx => 30, :end_idx => 37 })
+
+$phrasing_vectors["When the Saints"] =
+  {
+    :note_queue          => nq,
+    :phrase_boundaries   => phrases
+  }
+
 
 
