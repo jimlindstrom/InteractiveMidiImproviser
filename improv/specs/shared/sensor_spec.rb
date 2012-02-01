@@ -2,7 +2,7 @@
 
 require 'spec_helper'
 
-shared_examples_for "a sensor" do |sensor, expected_num_responses|
+shared_examples_for "a sensor" do #|sensor, expected_num_responses|
   context ".get_stimulus" do
     it "return a Midi::EventQueue" do
       sensor.get_stimulus.should be_an_instance_of Midi::EventQueue
