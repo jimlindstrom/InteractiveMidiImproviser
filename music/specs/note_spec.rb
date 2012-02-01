@@ -7,7 +7,7 @@ describe Music::Note do
   end
 
   context "new" do
-    it "should take a note and a duration" do
+    it "should take a pitch and a duration" do
       Music::Note.new(Music::Pitch.new(0), Music::Duration.new(0)).should be_an_instance_of Music::Note
     end
   end
