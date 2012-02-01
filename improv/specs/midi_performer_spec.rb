@@ -21,5 +21,8 @@ describe MidiPerformer, :midi_tests => true do
     Midi::Loopback.destroy
   end
 
-  it_should_behave_like "a performer"
+  it_should_behave_like "a performer" do
+    let(:performer) {@performer}
+    let(:event_queue) {@event_queue}
+  end
 end

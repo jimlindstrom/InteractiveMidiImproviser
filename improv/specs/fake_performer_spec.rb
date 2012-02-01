@@ -14,5 +14,8 @@ describe FakePerformer do
 
   end
 
-  it_should_behave_like "a performer"
+  it_should_behave_like "a performer" do
+    let(:performer) {@performer}
+    let(:event_queue) {@event_queue}
+  end
 end
