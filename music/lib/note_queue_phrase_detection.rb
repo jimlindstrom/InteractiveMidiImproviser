@@ -13,6 +13,7 @@ module CanDetectPhrases
 
   def detect_phrases
     return false if self.length < 2 # we need >= 2 per group, and at least one group
+    return false if self.map{|x| x.class}.include?(Music::Rest) # FIXME:For now, we can't deal with these.
 
     analyze!
     $phrase_similarity_cache = {} # reset the phase similarity queue (FIXME: not threadsafe or well architected)
