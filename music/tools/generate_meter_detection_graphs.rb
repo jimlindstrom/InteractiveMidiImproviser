@@ -14,36 +14,16 @@ def do_auto_correl(key, expected, meter_idx, offset_idx)
   bsm.save(key, expected, meter_idx, offset_idx)
 end
 
-key = "Bring back my bonnie to me"
-do_auto_correl(key, "[3, 4], 1, 2", 3, 2)
+$meter_vectors.keys.sort.each do |key|
+  cur_vector = $meter_vectors[key]
+
+  subbeats_per_measure = cur_vector[:meter].beats_per_measure * 
+                         cur_vector[:meter].subbeats_per_beat
+
+  initial_subbeat = (cur_vector[:first_beat_position].beat * cur_vector[:meter].subbeats_per_beat) +
+                     cur_vector[:first_beat_position].subbeat
+
+  string = "[#{cur_vector[:meter].beats_per_measure}, 4], #{cur_vector[:meter].subbeats_per_beat}, #{initial_subbeat}"
   
-key = "Battle hymn of the republic"
-do_auto_correl(key, "[4, 4], 4, 15", 16, 15)
-
-key = "Bach Minuet in G"
-do_auto_correl(key, "[3, 4], 2, 0", 6, 0)
-
-key = "Somewhere over the rainbow"
-do_auto_correl(key, "[4, 4], 2, 0", 8, 0)
-
-key = "This train is bound for glory"
-do_auto_correl(key, "[4, 4], 4, 0", 16, 0)
-
-key = "Bach Minuet (2)"
-do_auto_correl(key, "[3, 4], 2, 0", 6, 0)
-
-key = "Amazing Grace"
-do_auto_correl(key, "[3, 4], 2, 0", 6, 0)
-
-key = "Ode to Joy"
-do_auto_correl(key, "[4, 4], 2, 0", 8, 0)
-
-key = "Auld Lang Syne"
-do_auto_correl(key, "[4, 4], 2, 0", 8, 0)
-
-key = "Clementine"
-do_auto_correl(key, "[3, 4], 4, 8", 12, 8)
-
-#key = "When the Saints"
-#do_auto_correl(key, "[4, 4], 1, 0", 4, 0)
-
+  do_auto_correl(key, string, subbeats_per_measure, initial_subbeat)
+end
