@@ -44,9 +44,9 @@ module Music
       cache_key = self.hash_key + ";" + b.hash_key
       return $beat_similarity_cache[cache_key] if !$beat_similarity_cache[cache_key].nil?
 
-      if @cur_note.class == Music::Rest
-        pitch_similarity = 0.00
-      elsif b.cur_note.class == Music::Rest
+      if @cur_note.class == Music::Rest and b.cur_note.class == Music::Rest
+        pitch_similarity = 1.00
+      elsif @cur_note.class == Music::Rest or b.cur_note.class == Music::Rest
         pitch_similarity = 0.00
       elsif @cur_note.pitch.val == b.cur_note.pitch.val # this should really be moved to note.similarity_to
         # if exactly same pitches, give them a match of 1.00

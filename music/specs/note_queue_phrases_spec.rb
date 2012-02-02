@@ -25,10 +25,11 @@ describe Music::NoteQueue do
       $phrasing_vectors.keys.each do |key|
         vector = $phrasing_vectors[key]
         nq = vector[:note_queue]
-        nq.detect_phrases
+        success = nq.detect_phrases
 
         actual_boundaries = vector[:phrase_boundaries].collect{ |p| p[:start_idx] }
-        calced_boundaries = nq.phrases.collect{ |p| p.start_idx }
+        calced_boundaries = nq.phrases.collect{ |p| p.start_idx } if  success
+        calced_boundaries = []                                    if !success
 
         @false_pos    += (calced_boundaries - actual_boundaries).length # switch to using actual boundaries
         @false_neg    += (actual_boundaries - calced_boundaries).length

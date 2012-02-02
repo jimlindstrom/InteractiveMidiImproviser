@@ -18,7 +18,6 @@ describe Music::Beat do
     it "should return 0.0 when compared to nil" do
       @b.similarity_to(nil).should be_within(0.01).of(0.0)
     end
-    # FIXME rest-to-rest comparison should be 1.0 if duration is same
     it "should return > 0.0 when compared to a rest of the same duration" do
       n0 = Music::Note.new(Music::Pitch.new(100), Music::Duration.new(2))
       r  = Music::Rest.new(                       Music::Duration.new(2))
