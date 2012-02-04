@@ -35,7 +35,7 @@ module Music
       f.puts "<img style='border: 1px solid #a0a0a0;' src=\"https://chart.googleapis.com/chart?cht=ls&chd=s:underp&chm=N,000000,0,-1,11|s,3399CC,0,#{marker_idx-1}.0,11.0&chxt=x&chxr=0,1,20,1&chd=t:#{data.join(',')}&chs=500x200\">"
       f.puts "<br/>"
   
-      return (1..20).map{ |i| {:offset=>i,:score=>geometric_mean_of_diag(i) } }.sort{|x,y| y[:score]<=>x[:score]}[1][:offset]
+      return (1..20).map{ |i| {:offset=>i,:score=>geometric_mean_of_diag(i) } }.sort{|x,y| y[:score]<=>x[:score]}[0][:offset]
     end
   
     def save_offset_candidates(f, meter, marker_idx)
