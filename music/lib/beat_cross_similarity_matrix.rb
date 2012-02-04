@@ -19,7 +19,9 @@ module Music
       (0..(beat_array1.size-1)).each do |x|
         @val[x] = []
         (0..x).each do |y|
-          if beat_array1[x].nil? 
+          if beat_array1[x].nil? and beat_array2[y].nil? and (y>0) and (x>0)
+            @val[x][y] = 0.6*@val[x-1][y-1]
+          elsif beat_array1[x].nil? 
             @val[x][y] = 0.0
           else
             @val[x][y] = beat_array1[x].similarity_to beat_array2[y] 
@@ -54,7 +56,7 @@ module Music
         x += 1
         y += 1
       end
-      return prod
+      return prod / 1.2**(@width-i)
     end
 
     def max_arithmetic_mean_of_diag(penalize_overhanging_notes=true)

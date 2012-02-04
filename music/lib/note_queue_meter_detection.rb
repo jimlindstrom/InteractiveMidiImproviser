@@ -28,6 +28,7 @@ module CanDetectMeter
     bsm = Music::BeatSimilarityMatrix.new(self.beat_array)
     bsm_diags = (1..20).map{ |i| { :subbeat=>i, :score=>bsm.geometric_mean_of_diag(i) } }.sort{ |x,y| y[:score] <=> x[:score] }
     puts "\t\tbsm_diags: #{bsm_diags.inspect.gsub(/, {/, "\n\t\t            {")}" if LOGGING
+    #candidates = bsm_diags.select{ |x| x[:score]/bsm_diags[0][:score] > (5.0/80.0) }
 
     return false if !detect_meter_period(bsm, bsm_diags)
     return false if (initial_beat_position = detect_initial_beat_position(bsm)).nil?
@@ -42,11 +43,11 @@ private
   def detect_meter_period(bsm, bsm_diags)
     success = false
 
-    if !success
-      puts "\ttrying to detect meter using tactus:" if LOGGING
-      success = detect_meter_period__assuming_tactus_pulse_is_dominant(bsm, bsm_diags)
-      puts "\t\t#{success ? "suceeded" : "failed"}." if LOGGING
-    end
+    #if !success
+    #  puts "\ttrying to detect meter using tactus:" if LOGGING
+    #  success = detect_meter_period__assuming_tactus_pulse_is_dominant(bsm, bsm_diags)
+    #  puts "\t\t#{success ? "suceeded" : "failed"}." if LOGGING
+    #end
 
     if !success
       puts "\ttrying to detect meter using meter pulse:" if LOGGING
@@ -88,7 +89,7 @@ private
     confidence = bsm_diags[0][:score].to_f / bsm_diags[1][:score]
     if confidence < 2.0
       puts "\t\tpeak-to-next-peak ratio (#{confidence}) is too low" if LOGGING
-      return false
+      #return false
     end
 
     case subbeats_per_measure = bsm_diags[0][:subbeat] # FIXME: this assumes that the meter can only be 2/4, 3/4 or 4/4
@@ -134,7 +135,7 @@ private
 
     if confidence < 1.10 and correls[0][:subbeat] > 0
       puts "\t\tConfidence (#{confidence}) about starting subbeat (#{initial_subbeat}) is too low" if LOGGING
-      return nil
+      #return nil
     end
 
     b = Music::BeatPosition.new
