@@ -2,21 +2,6 @@
 
 require 'spec_helper'
 
-shared_examples "detects the meter" do |vector|
-  before(:all) do
-    @nq = vector[:note_queue]
-    @success = @nq.detect_meter
-  end
-  it "detects the time signature" do
-    @success.should == true
-    @nq.meter.val.should == vector[:meter].val
-  end
-  it "detects the offset" do
-    @success.should == true
-    @nq.first.analysis[:beat_position].to_hash.inspect.should == vector[:first_beat_position].to_hash.inspect
-  end
-end
-
 describe Music::NoteQueue do
 
   before(:each) do
@@ -80,43 +65,51 @@ describe Music::NoteQueue do
         @nq.detect_meter.should == true
       end
     end
-
-  end
-
-
-  describe ".detect_meter" do
-    context "my bonnie lies...", :known_fail=>true do
-      it_should_behave_like "detects the meter", $meter_vectors["Bring back my bonnie to me"]
-    end
-    context "battle hymn..." do
-      it_should_behave_like "detects the meter", $meter_vectors["Battle hymn of the republic"]
-    end
-    context "bach minuet..." do
-      it_should_behave_like "detects the meter", $meter_vectors["Bach Minuet in G"]
-    end
-    context "somewhere over...", :known_fail=>true do
-      it_should_behave_like "detects the meter", $meter_vectors["Somewhere over the rainbow"]
-    end
-    context "this train...", :known_fail=>true do
-      it_should_behave_like "detects the meter", $meter_vectors["This train is bound for glory"]
-    end
-    context "bach minuet 2..." do
-      it_should_behave_like "detects the meter", $meter_vectors["Bach Minuet (2)"]
-    end
-    context "amazing grace...", :known_fail=>true do
-      it_should_behave_like "detects the meter", $meter_vectors["Amazing Grace"]
-    end
-    context "ode to joy...", :known_fail=>true do
-      it_should_behave_like "detects the meter", $meter_vectors["Ode to Joy"]
-    end
-    context "auld lang syne", :known_fail=>true do
-      it_should_behave_like "detects the meter", $meter_vectors["Auld Lang Syne"]
-    end
-    context "oh my darling clementine", :known_fail=>true do
-      it_should_behave_like "detects the meter", $meter_vectors["Clementine"]
-    end
-    context "when the saints...", :known_fail=>true do
-      it_should_behave_like "detects the meter", $meter_vectors["When the Saints"]
+    context "when run over all training vectors" do
+      it "detects the meter of >85% the time" do
+        successes     = []
+        failures      = []
+        num_successes = 0
+        $meter_vectors.keys.sort.each do |key|
+          vector = $meter_vectors[key]
+          @nq = vector[:note_queue]
+          if @nq.detect_meter
+            if @nq.meter.val == vector[:meter].val
+              if @nq.first.analysis[:beat_position].to_hash.inspect == vector[:first_beat_position].to_hash.inspect
+                num_successes += 1
+                successes.push "%-34s" % "\"#{key}\"" 
+              else
+                failures.push ("%-34s" % "\"#{key}\"" ) + 
+                              "wrong initial beat   (" + 
+                              @nq.first.analysis[:beat_position].to_hash.inspect.gsub(/:measure=>0, /, "") + " != " +
+                              vector[:first_beat_position].to_hash.inspect.gsub(/:measure=>0, /, "") + ")"
+              end
+            else
+              calced_subbeats_per_measure =  @nq.meter.beats_per_measure * @nq.meter.subbeats_per_beat
+              actual_subbeats_per_measure =  vector[:meter].beats_per_measure * vector[:meter].subbeats_per_beat
+              error_direction = calced_subbeats_per_measure > actual_subbeats_per_measure ? ">" : "<"
+              failures.push ("%-34s" % "\"#{key}\"" ) + 
+                            "wrong time signature (" + 
+                            @nq.meter.val.inspect.gsub(/, :beat_unit=>4/, "").gsub(/_per[A-Za-z_]*/, '') + 
+                            " #{error_direction} " +
+                            vector[:meter].val.inspect.gsub(/, :beat_unit=>4/, "").gsub(/_per[A-Za-z_]*/, '') + ")"
+            end
+          else
+            failures.push "\"#{key}\": failed to find a meter"
+          end
+        end
+  
+        if failures.length > 0
+          puts "\tsuccesses:"
+          puts "\t\t" + successes.join("\n\t\t")
+          puts 
+          puts "\tfailures:"
+          puts "\t\t" + failures.join("\n\t\t")
+        end
+  
+        success_rate = num_successes.to_f / $meter_vectors.keys.length
+        success_rate.should be >= 0.85
+      end
     end
   end
 

@@ -40,51 +40,6 @@ module CanDetectMeter
 private
 
   def detect_meter_period(bsm, bsm_diags)
-    success = false
-
-    #if !success
-    #  puts "\ttrying to detect meter using tactus:" if LOGGING
-    #  success = detect_meter_period__assuming_tactus_pulse_is_dominant(bsm, bsm_diags)
-    #  puts "\t\t#{success ? "suceeded" : "failed"}." if LOGGING
-    #end
-
-    if !success
-      puts "\ttrying to detect meter using meter pulse:" if LOGGING
-      success = detect_meter_period__assuming_meter_pulse_is_dominant(bsm, bsm_diags)
-      puts "\t\t#{success ? "suceeded" : "failed"}." if LOGGING
-    end
-
-    return success
-  end
-
-  def detect_meter_period__assuming_tactus_pulse_is_dominant(bsm, bsm_diags)
-    confidence = bsm_diags[0][:score].to_f / bsm_diags[1][:score]
-    if confidence < 1.5
-      puts "\t\tpeak-to-next-peak ratio (#{confidence}) is too low" if LOGGING
-      return false
-    end
-
-    subbeats_per_beat    = bsm_diags[0][:subbeat]
-    subbeats_per_measure = bsm_diags[1][:subbeat] 
-    if subbeats_per_measure % subbeats_per_beat != 0
-      puts "\t\tsubbeats/measure (#{subbeats_per_measure}) not a multiple of subbeats/beat (#{subbeats_per_beat})" if LOGGING
-      return false 
-    end
-
-    beats_per_measure    = subbeats_per_measure / subbeats_per_beat
-    beat_unit            = 4
-    puts "\t\tMeter.new(#{beats_per_measure}, #{beat_unit}, #{subbeats_per_beat})" if LOGGING
-    begin
-      @meter = Music::Meter.new(beats_per_measure, beat_unit, subbeats_per_beat)
-    rescue ArgumentError
-      puts "\t\tFailed to instantiate meter" if LOGGING
-      return false # if any of the params were bogus, just return and fail
-    end
-
-    return true
-  end
-
-  def detect_meter_period__assuming_meter_pulse_is_dominant(bsm, bsm_diags)
     confidence = bsm_diags[0][:score].to_f / bsm_diags[1][:score]
     if confidence < 2.0
       puts "\t\tpeak-to-next-peak ratio (#{confidence}) is too low" if LOGGING
@@ -93,23 +48,40 @@ private
 
     case subbeats_per_measure = bsm_diags[0][:subbeat] # FIXME: this assumes that the meter can only be 2/4, 3/4 or 4/4
       when 2 .. 4
-        subbeats_per_beat = 1
+        subbeats_per_beat = 1 # 2/4, 3/4, 4/4 (quarter note beats)
+        beats_per_measure = subbeats_per_measure/subbeats_per_beat
       when 6, 8
-        subbeats_per_beat = 2
+        subbeats_per_beat = 2 # 3/4, 4/4 (eighth note beats)
+        beats_per_measure = subbeats_per_measure/subbeats_per_beat
+      when 9
+        subbeats_per_beat = 3 # 3/4 (triplets)
+        beats_per_measure = subbeats_per_measure/subbeats_per_beat
       when 12
         if bsm.geometric_mean_of_diag(3) > bsm.geometric_mean_of_diag(4)
-          subbeats_per_beat = 3
+          subbeats_per_beat = 3 # 4/4 (triplets)
+          beats_per_measure = subbeats_per_measure/subbeats_per_beat
         else
-          subbeats_per_beat = 4
+          if bsm.geometric_mean_of_diag(6) > 0.4*bsm.geometric_mean_of_diag(12)
+            subbeats_per_beat = 2 # 3/4 (eighths; two measure phrases)
+            beats_per_measure = 3
+          else
+            subbeats_per_beat = 4 # 3/4 (sixteenths)
+            beats_per_measure = subbeats_per_measure/subbeats_per_beat
+          end
         end
       when 16
-        subbeats_per_beat = 4
+        if bsm.geometric_mean_of_diag(8) > 0.4*bsm.geometric_mean_of_diag(12)
+          subbeats_per_beat = 2 # 4/4 (eighths; two measure phrases)
+          beats_per_measure = 4
+        else
+          subbeats_per_beat = 4 # 4/4 (sixteenths)
+          beats_per_measure = 4
+        end
       else
         puts "\t\tunexpected subbeats_per_measure: #{bsm_diags[0][:beat]}" if LOGGING
         return false
     end
 
-    beats_per_measure = subbeats_per_measure/subbeats_per_beat
     beat_unit = 4
     puts "\t\tMeter.new(#{beats_per_measure}, #{beat_unit}, #{subbeats_per_beat})" if LOGGING
     begin
