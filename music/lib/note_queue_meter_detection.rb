@@ -28,7 +28,6 @@ module CanDetectMeter
     bsm = Music::BeatSimilarityMatrix.new(self.beat_array)
     bsm_diags = (1..20).map{ |i| { :subbeat=>i, :score=>bsm.geometric_mean_of_diag(i) } }.sort{ |x,y| y[:score] <=> x[:score] }
     puts "\t\tbsm_diags: #{bsm_diags.inspect.gsub(/, {/, "\n\t\t            {")}" if LOGGING
-    #candidates = bsm_diags.select{ |x| x[:score]/bsm_diags[0][:score] > (5.0/80.0) }
 
     return false if !detect_meter_period(bsm, bsm_diags)
     return false if (initial_beat_position = detect_initial_beat_position(bsm)).nil?
