@@ -50,9 +50,17 @@ private
       when 2 .. 4
         subbeats_per_beat = 1 # 2/4, 3/4, 4/4 (quarter note beats)
         beats_per_measure = subbeats_per_measure/subbeats_per_beat
-      when 6, 8
-        subbeats_per_beat = 2 # 3/4, 4/4 (eighth note beats)
+      when 6
+        subbeats_per_beat = 2 # 3/4 (eighth note beats)
         beats_per_measure = subbeats_per_measure/subbeats_per_beat
+      when 8
+        if bsm.geometric_mean_of_diag(16) > 0.4*bsm.geometric_mean_of_diag(8)
+          subbeats_per_beat = 4 # 4/4 (sixteenth note beats; strong tactus)
+          beats_per_measure = 4
+        else
+          subbeats_per_beat = 2 # 4/4 (eighth note beats)
+          beats_per_measure = subbeats_per_measure/subbeats_per_beat
+        end
       when 9
         subbeats_per_beat = 3 # 3/4 (triplets)
         beats_per_measure = subbeats_per_measure/subbeats_per_beat
@@ -70,7 +78,7 @@ private
           end
         end
       when 16
-        if bsm.geometric_mean_of_diag(8) > 0.4*bsm.geometric_mean_of_diag(12)
+        if bsm.geometric_mean_of_diag(8) > 0.1*bsm.geometric_mean_of_diag(16)
           subbeats_per_beat = 2 # 4/4 (eighths; two measure phrases)
           beats_per_measure = 4
         else
