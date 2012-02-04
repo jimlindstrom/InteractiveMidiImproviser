@@ -1398,7 +1398,7 @@ nq.push Music::Rest.new(                       Music::Duration.new( 2))		#  7   
 nq.push Music::Note.new(Music::Pitch.new(PA4 ),Music::Duration.new( 1))		#  8   sit-		++
 nq.push Music::Note.new(Music::Pitch.new(PA4 ),Music::Duration.new( 2))		#  9   ting
 nq.push Music::Note.new(Music::Pitch.new(PCs5),Music::Duration.new( 3))		# 10   in
-nq.push Music::Note.new(Music::Pitch.new(PCs5),Music::Duration.new( 1))		# 11   his
+nq.push Music::Note.new(Music::Pitch.new(PCs5),Music::Duration.new( 2))		# 11   his
 
 nq.push Music::Note.new(Music::Pitch.new(PB4 ),Music::Duration.new( 1))		# 12   no-
 nq.push Music::Note.new(Music::Pitch.new(PA4 ),Music::Duration.new( 1))		# 13   o-
