@@ -72,7 +72,7 @@ describe Music::NoteQueue do
         num_successes = 0
         $meter_vectors.keys.sort.each do |key|
           vector = $meter_vectors[key]
-          puts "\tTrying to detect meter for: #{key}"
+          $log.info "\tTrying to detect meter for: #{key}" if $log
           @nq = vector[:note_queue]
           if @nq.detect_meter
             if @nq.meter.val == vector[:meter].val
@@ -100,12 +100,13 @@ describe Music::NoteQueue do
           end
         end
   
-        if failures.length > 0
-          puts "\tsuccesses:"
-          puts "\t\t" + successes.join("\n\t\t")
-          puts 
-          puts "\tfailures:"
-          puts "\t\t" + failures.join("\n\t\t")
+        if failures.length > 0 and $log
+          $log.info "\n" +
+                    "\tsuccesses:\n" +
+                    "\t\t" + successes.join("\n\t\t") +
+                    "\n" +
+                    "\tfailures:\n" +
+                    "\t\t" + failures.join("\n\t\t")
         end
   
         success_rate = num_successes.to_f / $meter_vectors.keys.length

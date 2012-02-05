@@ -7,3 +7,12 @@ Dir[File.expand_path(File.join(File.dirname(__FILE__),'vectors','*.rb'))].each {
 
 # load any shared examples
 #Dir[File.expand_path(File.join(File.dirname(__FILE__),'shared','*.rb'))].each {|f| require f}
+
+require 'logger'
+
+RSpec.configure do |config|
+  config.before(:each) do
+    $log = Logger.new('log/test.log')
+    $log.level = Logger::DEBUG
+  end
+end

@@ -2,50 +2,9 @@
 
 require 'spec_helper'
 
-shared_examples "detects phrases" do |vector|
-  it "detects the phrase onsets" do
-    nq = vector[:note_queue]
-    nq.detect_phrases.should == true
-    nq.phrases.collect{|p| p.start_idx }.should == vector[:phrase_boundaries].collect{|p| p[:start_idx] }
-  end
-end
-
 describe Music::NoteQueue do
 
   before(:each) do
-  end
-
-  describe ".detect_phrases", :high_level_stats=>true do
-    before(:all) do
-      @false_pos    = 0
-      @false_neg    = 0
-      @true_pos     = 0
-      @exp_true_pos = 0
-
-      $phrasing_vectors.keys.each do |key|
-        vector = $phrasing_vectors[key]
-        nq = vector[:note_queue]
-        success = nq.detect_phrases
-
-        actual_boundaries = vector[:phrase_boundaries].collect{ |p| p[:start_idx] }
-        calced_boundaries = nq.phrases.collect{ |p| p.start_idx } if  success
-        calced_boundaries = []                                    if !success
-
-        @false_pos    += (calced_boundaries - actual_boundaries).length # switch to using actual boundaries
-        @false_neg    += (actual_boundaries - calced_boundaries).length
-        @true_pos     += (actual_boundaries & calced_boundaries).length
-        @exp_true_pos += actual_boundaries.length
-      end
-    end
-
-    it "should include all actual boundary candidates", :known_fail=>true do
-      pct_found = @true_pos / @exp_true_pos.to_f
-      pct_found.should be_within(0.05).of(1.0)
-    end
-    it "should not include wrong boundary candidates", :known_fail=>true do
-      pct_extra = @false_pos / @exp_true_pos.to_f
-      pct_extra.should be_within(0.05).of(0.0)
-    end
   end
 
   describe ".detect_phrases" do
@@ -79,39 +38,63 @@ describe Music::NoteQueue do
     end
   end
 
-  describe ".detect_phrases" do
-    context "my bonnie lies...", :known_fail=>true do
-      it_should_behave_like "detects phrases", $phrasing_vectors["Bring back my bonnie to me"]
+  describe ".detect_phrases", :high_level_stats=>true do
+    before(:all) do
+      @false_pos    = 0
+      @false_neg    = 0
+      @true_pos     = 0
+      @exp_true_pos = 0
+
+      @successes = []
+      @failures  = []
+
+      $phrasing_vectors.keys.sort.each do |key|
+        $log.info "\tTrying to detect phrases for: #{key}" if $log
+        vector = $phrasing_vectors[key]
+        nq = vector[:note_queue]
+        success = nq.detect_phrases
+
+        actual_boundaries = vector[:phrase_boundaries].collect{ |p| p[:start_idx] }
+        calced_boundaries = nq.phrases.collect{ |p| p.start_idx } if  success
+        calced_boundaries = []                                    if !success
+
+        @false_pos    += (calced_boundaries - actual_boundaries).length # switch to using actual boundaries
+        @false_neg    += (actual_boundaries - calced_boundaries).length
+        @true_pos     += (actual_boundaries & calced_boundaries).length
+        @exp_true_pos += actual_boundaries.length
+
+        if success and (calced_boundaries == actual_boundaries)
+          @successes.push "#{key}"
+        elsif success and (calced_boundaries != actual_boundaries)
+          @failures.push "%-34s" % "\"#{key}\"" +
+                         "calculated: #{calced_boundaries.inspect} != expected: #{actual_boundaries.inspect}"
+        else # !success
+          @failures.push "%-34s" % "\"#{key}\"" +
+                         "failed"
+        end
+      end
+
+      if @failures.length > 0 and $log
+        $log.info "\n" +
+                  "\tsuccesses:\n" + 
+                  "\t\t" + @successes.join("\n\t\t") +
+                  "\n" +
+                  "\tfailures:\n" +
+                  "\t\t" + @failures.join("\n\t\t")
+      end
     end
-    context "battle hymn...", :known_fail=>true do
-      it_should_behave_like "detects phrases", $phrasing_vectors["Battle hymn of the republic"]
+
+    it "should produce the expected phrase list > 50% of the time" do
+      pct_success = @successes.length / $phrasing_vectors.keys.length.to_f
+      pct_success.should be > 0.50
     end
-    context "bach minuet...", :known_fail=>true do
-      it_should_behave_like "detects phrases", $phrasing_vectors["Bach Minuet in G"]
+    it "should include 95% of all actual boundary candidates" do
+      pct_found = @true_pos / @exp_true_pos.to_f
+      pct_found.should be > 0.95 
     end
-    context "somewhere over..." do
-      it_should_behave_like "detects phrases", $phrasing_vectors["Somewhere over the rainbow"]
-    end
-    context "this train..." do
-      it_should_behave_like "detects phrases", $phrasing_vectors["This train is bound for glory"]
-    end
-    context "bach minuet 2...", :known_fail=>true do
-      it_should_behave_like "detects phrases", $phrasing_vectors["Bach Minuet (2)"]
-    end
-    context "amazing grace...", :known_fail=>true do
-      it_should_behave_like "detects phrases", $phrasing_vectors["Amazing Grace"]
-    end
-    context "ode to joy...", :known_fail=>true do
-      it_should_behave_like "detects phrases", $phrasing_vectors["Ode to Joy"]
-    end
-    context "auld lang syne", :known_fail=>true do
-      it_should_behave_like "detects phrases", $phrasing_vectors["Auld Lang Syne"]
-    end
-    context "oh my darling clementine", :known_fail=>true do
-      it_should_behave_like "detects phrases", $phrasing_vectors["Clementine"]
-    end
-    context "when the saints", :known_fail=>true do
-      it_should_behave_like "detects phrases", $phrasing_vectors["When the Saints"]
+    it "should include wrong boundary candidates less than 5% of the time" do
+      pct_extra = @false_pos / @exp_true_pos.to_f
+      pct_extra.should be < 0.05
     end
   end
 

@@ -45,7 +45,7 @@ describe Music::BeatCrossSimilarityMatrix do
         @incorrect_pl.push Music::Phrase.new(@nq, 17, 25)
       end
 
-      it "should return >= 25% higher similarity for real phrases than for fake phrases (this train 1)" do
+      it "should return >= 20% higher similarity for real phrases than for fake phrases (this train 1)" do
         beat_array1 = Music::NoteQueue.new(  @correct_pl[0].notes).beat_array
         beat_array2 = Music::NoteQueue.new(  @correct_pl[1].notes).beat_array
         beat_array3 = Music::NoteQueue.new(@incorrect_pl[0].notes).beat_array
@@ -56,10 +56,10 @@ describe Music::BeatCrossSimilarityMatrix do
         s12 = m12.max_arithmetic_mean_of_diag 
         s23 = m23.max_arithmetic_mean_of_diag 
   
-        s12.should be >= 1.25*s23
+        s12.should be >= 1.20*s23
       end
 
-      it "should return >= 25% higher similarity for real phrases than for fake phrases (this train 2)" do
+      it "should return >= 20% higher similarity for real phrases than for fake phrases (this train 2)" do
         beat_array1 = Music::NoteQueue.new(  @correct_pl[0].notes).beat_array
         beat_array2 = Music::NoteQueue.new(  @correct_pl[3].notes).beat_array
         beat_array3 = Music::NoteQueue.new(@incorrect_pl[1].notes).beat_array
@@ -70,10 +70,10 @@ describe Music::BeatCrossSimilarityMatrix do
         s12 = m12.max_arithmetic_mean_of_diag 
         s23 = m23.max_arithmetic_mean_of_diag 
   
-        s12.should be >= 1.25*s23
+        s12.should be >= 1.20*s23
       end
 
-      it "should return >= 25% higher similarity for real phrases than for fake phrases (this train 3)" do
+      it "should return >= 20% higher similarity for real phrases than for fake phrases (this train 3)" do
         beat_array1 = Music::NoteQueue.new(  @correct_pl[1].notes).beat_array
         beat_array2 = Music::NoteQueue.new(  @correct_pl[3].notes).beat_array
         beat_array3 = Music::NoteQueue.new(@incorrect_pl[2].notes).beat_array
@@ -84,7 +84,7 @@ describe Music::BeatCrossSimilarityMatrix do
         s12 = m12.max_arithmetic_mean_of_diag 
         s23 = m23.max_arithmetic_mean_of_diag 
   
-        s12.should be >= 1.25*s23
+        s12.should be >= 1.20*s23
       end
     end
 
@@ -104,7 +104,7 @@ describe Music::BeatCrossSimilarityMatrix do
         @incorrect_pl.push Music::Phrase.new(@nq, 12, 22)
       end
 
-      it "should return >= 25% higher similarity for real phrases than for fake phrases (somewhere 1)" do
+      it "should return >= 20% higher similarity for real phrases than for fake phrases (somewhere 1)" do
         beat_array1 = Music::NoteQueue.new(  @correct_pl[0].notes).beat_array
         beat_array2 = Music::NoteQueue.new(  @correct_pl[2].notes).beat_array
         beat_array3 = Music::NoteQueue.new(@incorrect_pl[0].notes).beat_array
@@ -115,10 +115,10 @@ describe Music::BeatCrossSimilarityMatrix do
         s12 = m12.max_arithmetic_mean_of_diag 
         s23 = m23.max_arithmetic_mean_of_diag 
   
-        s12.should be >= 1.25*s23
+        s12.should be >= 1.20*s23
       end
 
-      it "should return >= 25% higher similarity for real phrases than for fake phrases (somewhere 2)" do
+      it "should return >= 20% higher similarity for real phrases than for fake phrases (somewhere 2)" do
         beat_array1 = Music::NoteQueue.new(  @correct_pl[0].notes).beat_array
         beat_array2 = Music::NoteQueue.new(  @correct_pl[3].notes).beat_array
         beat_array3 = Music::NoteQueue.new(@incorrect_pl[1].notes).beat_array
@@ -129,10 +129,10 @@ describe Music::BeatCrossSimilarityMatrix do
         s12 = m12.max_arithmetic_mean_of_diag 
         s23 = m23.max_arithmetic_mean_of_diag 
   
-        s12.should be >= 1.25*s23
+        s12.should be >= 1.20*s23
       end
 
-      it "should return >= 25% higher similarity for real phrases than for fake phrases (somewhere 3)" do
+      it "should return >= 20% higher similarity for real phrases than for fake phrases (somewhere 3)" do
         beat_array1 = Music::NoteQueue.new(  @correct_pl[0].notes).beat_array #   7- 9
         beat_array2 = Music::NoteQueue.new(  @correct_pl[2].notes).beat_array #  10-16
         beat_array3 = Music::NoteQueue.new(@incorrect_pl[2].notes).beat_array #  12-21
@@ -143,7 +143,7 @@ describe Music::BeatCrossSimilarityMatrix do
         s12 = m12.max_arithmetic_mean_of_diag 
         s23 = m23.max_arithmetic_mean_of_diag 
   
-        s12.should be >= 1.25*s23
+        s12.should be >= 1.20*s23
       end
     end
 

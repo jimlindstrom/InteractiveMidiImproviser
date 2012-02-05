@@ -2,8 +2,6 @@
 
 # assumes it is included in NoteQueue
 module CanDetectMeter
-  LOGGING = true #false
-
   attr_accessor :tempo, :meter
 
   def beat_array
@@ -27,7 +25,7 @@ module CanDetectMeter
   def detect_meter
     bsm = Music::BeatSimilarityMatrix.new(self.beat_array)
     bsm_diags = (1..20).map{ |i| { :subbeat=>i, :score=>bsm.geometric_mean_of_diag(i) } }.sort{ |x,y| y[:score] <=> x[:score] }
-    puts "\t\tbsm_diags: #{bsm_diags.inspect.gsub(/, {/, "\n\t\t            {")}" if LOGGING
+    $log.info "\t\tbsm_diags: #{bsm_diags.inspect.gsub(/, {/, "\n\t\t            {")}" if $log
 
     return false if !detect_meter_period(bsm, bsm_diags)
     return false if (initial_beat_position = detect_initial_beat_position(bsm)).nil?
@@ -42,7 +40,7 @@ private
   def detect_meter_period(bsm, bsm_diags)
     confidence = bsm_diags[0][:score].to_f / bsm_diags[1][:score]
     if confidence < 2.0
-      puts "\t\tpeak-to-next-peak ratio (#{confidence}) is too low" if LOGGING
+      $log.info "\t\tpeak-to-next-peak ratio (#{confidence}) is too low" if $log
       #return false
     end
 
@@ -101,16 +99,16 @@ private
           beats_per_measure = 4
         end
       else
-        puts "\t\tunexpected subbeats_per_measure: #{bsm_diags[0][:beat]}" if LOGGING
+        $log.warn "\t\tunexpected subbeats_per_measure: #{bsm_diags[0][:beat]}" if $log
         return false
     end
 
     beat_unit = 4
-    puts "\t\tMeter.new(#{beats_per_measure}, #{beat_unit}, #{subbeats_per_beat})" if LOGGING
+    $log.info "\t\tMeter.new(#{beats_per_measure}, #{beat_unit}, #{subbeats_per_beat})" if $log
     begin
       @meter = Music::Meter.new(beats_per_measure, beat_unit, subbeats_per_beat)
     rescue ArgumentError
-      puts "\t\tFailed to instantiate meter" if LOGGING
+      $log.warn "\t\tFailed to instantiate meter" if $log
       return false # if any of the params were bogus, just return and fail
     end
 
@@ -118,7 +116,7 @@ private
   end
  
   def detect_initial_beat_position(bsm)
-    puts "\ttrying to detect initial beat position:" if LOGGING
+    $log.info "\ttrying to detect initial beat position:" if $log
 
     correl_len = @meter.beats_per_measure * @meter.subbeats_per_beat
     ba = self.beat_array
@@ -131,13 +129,13 @@ private
       end
     end
     correls = (0..(correls.length-1)).collect { |i| { :subbeat=>i, :score=>correls[i] } }.sort{ |x,y| y[:score]<=>x[:score] }
-    puts "\t\tcorrels: #{correls.inspect.gsub(/, {/, "\n\t\t          {")}" if LOGGING
+    $log.info "\t\tcorrels: #{correls.inspect.gsub(/, {/, "\n\t\t          {")}" if $log
 
     initial_subbeat = correls[0][:subbeat]
     confidence = correls[0][:score].to_f / correls[1][:score]
 
     if confidence < 1.5
-      puts "\t\tConfidence (#{confidence}) about starting subbeat (#{initial_subbeat}) is too low" if LOGGING
+      $log.info "\t\tConfidence (#{confidence}) about starting subbeat (#{initial_subbeat}) is too low" if $log
       initial_subbeat = 0
     end
 
@@ -147,7 +145,7 @@ private
     b.subbeats_per_beat = @meter.subbeats_per_beat
     b.beat              = initial_subbeat / @meter.subbeats_per_beat
     b.subbeat           = initial_subbeat % @meter.subbeats_per_beat
-    puts "\t\tinitial beat pos: #{b.inspect}" if LOGGING
+    $log.info "\t\tinitial beat pos: #{b.inspect}" if $log
 
     return b
   end
