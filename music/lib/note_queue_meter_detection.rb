@@ -48,9 +48,23 @@ private
 
     # FIXME: this assumes that the meter can only be 2/4, 3/4 or 4/4
     case subbeats_per_measure = bsm_diags[0][:subbeat] 
-      when 2 .. 4
-        subbeats_per_beat = 1 # 2/4, 3/4, 4/4 (quarter note beats)
+      when 2
+        subbeats_per_beat = 1 # 2/4 (quarter note beats)
         beats_per_measure = subbeats_per_measure/subbeats_per_beat
+      when 3
+        subbeats_per_beat = 1 # 3/4(quarter note beats)
+        beats_per_measure = subbeats_per_measure/subbeats_per_beat
+      when 4
+        if bsm.geometric_mean_of_diag(8) > 0.1*bsm.geometric_mean_of_diag(4)
+          subbeats_per_beat = 2 # 4/4 (eighth note beats)
+          beats_per_measure = 4
+        elsif bsm.geometric_mean_of_diag(16) > 0.05*bsm.geometric_mean_of_diag(4)
+          subbeats_per_beat = 4 # 4/4 (eighth note beats)
+          beats_per_measure = 4
+        else
+          subbeats_per_beat = 1 # 4/4 (quarter note beats)
+          beats_per_measure = 4
+        end
       when 6
         subbeats_per_beat = 2 # 3/4 (eighth note beats)
         beats_per_measure = subbeats_per_measure/subbeats_per_beat
