@@ -46,7 +46,8 @@ private
       #return false
     end
 
-    case subbeats_per_measure = bsm_diags[0][:subbeat] # FIXME: this assumes that the meter can only be 2/4, 3/4 or 4/4
+    # FIXME: this assumes that the meter can only be 2/4, 3/4 or 4/4
+    case subbeats_per_measure = bsm_diags[0][:subbeat] 
       when 2 .. 4
         subbeats_per_beat = 1 # 2/4, 3/4, 4/4 (quarter note beats)
         beats_per_measure = subbeats_per_measure/subbeats_per_beat
@@ -105,7 +106,16 @@ private
   def detect_initial_beat_position(bsm)
     puts "\ttrying to detect initial beat position:" if LOGGING
 
-    correls = bsm.autocorrel_of_main_diag(@meter.beats_per_measure * @meter.subbeats_per_beat)
+    correl_len = @meter.beats_per_measure * @meter.subbeats_per_beat
+    ba = self.beat_array
+    correls = [1.0]*correl_len
+    (0..(ba.length-1)).each do |i|
+      if !(cur_beat = ba[i]).nil?
+        if (cur_note = cur_beat.cur_note).class == Music::Note
+          correls[correl_len - 1 - ((correl_len -1 + i) % correl_len)] *= (1 + cur_note.duration.val)
+        end
+      end
+    end
     correls = (0..(correls.length-1)).collect { |i| { :subbeat=>i, :score=>correls[i] } }.sort{ |x,y| y[:score]<=>x[:score] }
     puts "\t\tcorrels: #{correls.inspect.gsub(/, {/, "\n\t\t          {")}" if LOGGING
 

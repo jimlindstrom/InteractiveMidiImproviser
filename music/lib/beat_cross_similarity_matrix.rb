@@ -68,14 +68,6 @@ module Music
       means = (0..(@width-1)).map{ |i| geometric_mean_of_diag(i) }
       return means.max
     end
-  
-    def autocorrel_of_main_diag(len)
-      correls = [0.0]*len
-      (0..(@width-1)).each do |i|
-        correls[len - 1 - ((len -1 + i) % len)] += @val[i][i]
-      end
-      return correls
-    end
 
     def print
       puts "\tmatrix:"

@@ -40,8 +40,8 @@ module Music
   
     def save_offset_candidates(f, meter, marker_idx)
       scores = [0.0]*meter
-      (0..(@width-1)).each do |i|
-        scores[meter - 1 - ((meter -1 + i) % meter)] += @val[i][i]
+      (0..(@width-meter-1)).each do |i|
+        scores[meter - 1 - ((meter -1 + i) % meter)] += @val[meter+i][i] if @val[meter+i][i] > 0.6
       end
       m = scores.max
       scores.map!{|x| 80.0*x/m }

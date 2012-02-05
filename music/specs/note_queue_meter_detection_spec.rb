@@ -72,6 +72,7 @@ describe Music::NoteQueue do
         num_successes = 0
         $meter_vectors.keys.sort.each do |key|
           vector = $meter_vectors[key]
+          puts "\tTrying to detect meter for: #{key}"
           @nq = vector[:note_queue]
           if @nq.detect_meter
             if @nq.meter.val == vector[:meter].val

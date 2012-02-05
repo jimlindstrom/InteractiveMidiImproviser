@@ -1353,8 +1353,8 @@ nq.push Music::Note.new(Music::Pitch.new(PA4 ),Music::Duration.new( 6))		# 31   
 m = Music::Meter.new(4, 4, 2) # 4/4 time, eighth note pulses
 b = Music::BeatPosition.new
 b.measure     = 0
-b.beat        = 0 # 0-based: first beat
-b.subbeat     = 0 # 0-based: first sixteenth note
+b.beat        = 3 # 0-based: 4th beat
+b.subbeat     = 0 # 0-based: first eighth note
 b.beats_per_measure = 4 # 4 beats
 b.subbeats_per_beat = 2 # eighth notes
 
@@ -1456,7 +1456,7 @@ $phrasing_vectors["Nowhere Man"] =
 
 
 ###############################################################################
-# Blue Monk
+# Ask Me Now
 ###############################################################################
 
 nq = Music::NoteQueue.new
@@ -1518,7 +1518,7 @@ b.subbeat     = 0 # 0-based: first sixteenth note
 b.beats_per_measure = 4 # 4 beats
 b.subbeats_per_beat = 4 # eighth notes
 
-$meter_vectors["Blue Monk"] =
+$meter_vectors["Ask Me Now (Monk)"] =
   {
     :meter               => m,
     :first_beat_position => b,
@@ -1531,7 +1531,7 @@ phrases.push({ :start_idx => 12, :end_idx => 18 })
 phrases.push({ :start_idx => 19, :end_idx => 31 })
 phrases.push({ :start_idx => 32, :end_idx => 39 })
 
-$phrasing_vectors["Blue Monk"] =
+$phrasing_vectors["Ask Me Now (Monk)"] =
   {
     :note_queue          => nq,
     :phrase_boundaries   => phrases
