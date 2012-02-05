@@ -93,7 +93,7 @@ private
           end
         end
       when 16
-        if bsm.geometric_mean_of_diag(8) > 0.1*bsm.geometric_mean_of_diag(16)
+        if bsm.geometric_mean_of_diag(8) > 0.05*bsm.geometric_mean_of_diag(16)
           subbeats_per_beat = 2 # 4/4 (eighths; two measure phrases)
           beats_per_measure = 4
         else
