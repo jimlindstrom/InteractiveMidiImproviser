@@ -108,11 +108,11 @@ private
 
     correl_len = @meter.beats_per_measure * @meter.subbeats_per_beat
     ba = self.beat_array
-    correls = [1.0]*correl_len
+    correls = [0.0]*correl_len
     (0..(ba.length-1)).each do |i|
       if !(cur_beat = ba[i]).nil?
         if (cur_note = cur_beat.cur_note).class == Music::Note
-          correls[correl_len - 1 - ((correl_len -1 + i) % correl_len)] *= (1 + cur_note.duration.val)
+          correls[correl_len - 1 - ((correl_len -1 + i) % correl_len)] += cur_note.duration.val
         end
       end
     end
@@ -122,9 +122,9 @@ private
     initial_subbeat = correls[0][:subbeat]
     confidence = correls[0][:score].to_f / correls[1][:score]
 
-    if confidence < 1.10 and correls[0][:subbeat] > 0
+    if confidence < 1.5
       puts "\t\tConfidence (#{confidence}) about starting subbeat (#{initial_subbeat}) is too low" if LOGGING
-      #return nil
+      initial_subbeat = 0
     end
 
     b = Music::BeatPosition.new
