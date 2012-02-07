@@ -95,6 +95,16 @@ describe Music::Meter do
     end
   end
 
+  context "subbeats_per_measure" do
+    it "should get the number of subbeats per measure" do
+      @beats_per_measure = 3 # 3/4 time
+      @beat_unit         = 2
+      @subbeats_per_beat = 4 # expressed in sixteenth notes
+      m = Music::Meter.new(@beats_per_measure, @beat_unit, @subbeats_per_beat)
+      m.subbeats_per_measure.should equal @beats_per_measure * @subbeats_per_beat
+    end
+  end
+
   context "beat_unit" do
     it "should get beat unit" do
       @beats_per_measure = 2 # 3/4 time

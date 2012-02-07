@@ -73,6 +73,24 @@ module Music
   
       return eq
     end
+  
+    def beat_array
+      beats = []
+      prev = nil
+      self.each do |note|
+        b = Music::Beat.new
+        b.prev_note = prev
+        b.cur_note = note
+        beats.push b
+  
+        (note.duration.val-1).times do
+          beats.push nil
+        end
+  
+        prev = note
+      end
+      return beats
+    end
 
     def analyze!
       return if !@have_done_analysis.nil?    

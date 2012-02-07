@@ -4,24 +4,6 @@
 module CanDetectMeter
   attr_accessor :tempo, :meter
 
-  def beat_array
-    beats = []
-    prev = nil
-    self.each do |note|
-      b = Music::Beat.new
-      b.prev_note = prev
-      b.cur_note = note
-      beats.push b
-
-      (note.duration.val-1).times do
-        beats.push nil
-      end
-
-      prev = note
-    end
-    return beats
-  end
-
   def detect_meter
     bsm = Music::BeatSimilarityMatrix.new(self.beat_array)
     bsm_diags = (1..20).map{ |i| { :subbeat=>i, :score=>bsm.geometric_mean_of_diag(i) } }.sort{ |x,y| y[:score] <=> x[:score] }
@@ -44,7 +26,7 @@ private
       #return false
     end
 
-    # FIXME: this assumes that the meter can only be 2/4, 3/4 or 4/4
+    # note: this assumes that the meter can only be 2/4, 3/4 or 4/4
     case subbeats_per_measure = bsm_diags[0][:subbeat] 
       when 2
         subbeats_per_beat = 1 # 2/4 (quarter note beats)
@@ -118,7 +100,7 @@ private
   def detect_initial_beat_position(bsm)
     $log.info "\ttrying to detect initial beat position:" if $log
 
-    correl_len = @meter.beats_per_measure * @meter.subbeats_per_beat
+    correl_len = @meter.subbeats_per_measure
     ba = self.beat_array
     correls = [0.0]*correl_len
     (0..(ba.length-1)).each do |i|

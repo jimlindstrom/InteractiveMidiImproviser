@@ -45,6 +45,10 @@ module Music
       b.subbeats_per_beat = @subbeats_per_beat
       return b
     end
+
+    def subbeats_per_measure
+      @beats_per_measure * @subbeats_per_beat
+    end
   
     def val
       { :beats_per_measure => @beats_per_measure, 
