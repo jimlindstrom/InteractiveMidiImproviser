@@ -39,7 +39,7 @@ PG5  =        79
 ###############################################################################
 
 nq = Music::NoteQueue.new
-nq.tempo = 100
+nq.tempo = 80
 
 nq.push Music::Note.new(Music::Pitch.new(PG4 ),Music::Duration.new(1)) # my			0		++
 
@@ -63,7 +63,7 @@ nq.push Music::Note.new(Music::Pitch.new(PC5 ),Music::Duration.new(1)) # o-			13
 nq.push Music::Note.new(Music::Pitch.new(PB4 ),Music::Duration.new(1)) # -ver		14
 nq.push Music::Note.new(Music::Pitch.new(PC5 ),Music::Duration.new(1)) # the		15
 
-nq.push Music::Note.new(Music::Pitch.new(PD4 ),Music::Duration.new(5)) # sea		16		--
+nq.push Music::Note.new(Music::Pitch.new(PD5 ),Music::Duration.new(5)) # sea		16		--
 
 nq.push Music::Note.new(Music::Pitch.new(PG4 ),Music::Duration.new(1)) # my			17		++
 
@@ -262,7 +262,7 @@ $phrasing_vectors["Battle hymn of the republic"] =
 ###############################################################################
 
 nq = Music::NoteQueue.new
-nq.tempo = 100
+nq.tempo = 80
 
 nq.push Music::Note.new(Music::Pitch.new(PD5 ),Music::Duration.new(2))		#  0	++
 nq.push Music::Note.new(Music::Pitch.new(PG4 ),Music::Duration.new(1)) 		#  1
@@ -349,7 +349,7 @@ $phrasing_vectors["Bach Minuet in G"] =
 ###############################################################################
 
 nq = Music::NoteQueue.new
-nq.tempo = 100
+nq.tempo = 60
 
 nq.push Music::Note.new(Music::Pitch.new(PC4 ),Music::Duration.new(4)) # some-		 0		++
 nq.push Music::Note.new(Music::Pitch.new(PC5 ),Music::Duration.new(4)) # -where		 1
@@ -447,8 +447,8 @@ nq.push Music::Note.new(Music::Pitch.new(PB4  ),Music::Duration.new(1)) # for		2
 nq.push Music::Note.new(Music::Pitch.new(PGs4 ),Music::Duration.new(2)) # glo-		23
 nq.push Music::Note.new(Music::Pitch.new(PE4  ),Music::Duration.new(2)) # -ry		24	--
 
-nq.push Music::Note.new(Music::Pitch.new(PFs4 ),Music::Duration.new(2)) # don't		25	++
-nq.push Music::Note.new(Music::Pitch.new(PFs4 ),Music::Duration.new(2)) # take		26
+nq.push Music::Note.new(Music::Pitch.new(PE4  ),Music::Duration.new(2)) # don't		25	++
+nq.push Music::Note.new(Music::Pitch.new(PE4  ),Music::Duration.new(2)) # take		26
 nq.push Music::Note.new(Music::Pitch.new(PE4  ),Music::Duration.new(1)) # no-		27
 nq.push Music::Note.new(Music::Pitch.new(PE4  ),Music::Duration.new(1)) # -thing	28
 nq.push Music::Note.new(Music::Pitch.new(PE4  ),Music::Duration.new(1)) # but		29
@@ -508,7 +508,7 @@ $phrasing_vectors["This train is bound for glory"] =
 ###############################################################################
 
 nq = Music::NoteQueue.new
-nq.tempo = 100
+nq.tempo = 50
 
 nq.push Music::Note.new(Music::Pitch.new(PD5  ),Music::Duration.new(2)) 	#  0	++
 nq.push Music::Note.new(Music::Pitch.new(PD5  ),Music::Duration.new(2))		#  1
@@ -578,7 +578,7 @@ $phrasing_vectors["Bach Minuet (2)"] =
 ###############################################################################
 
 nq = Music::NoteQueue.new
-nq.tempo = 100
+nq.tempo = 50
 
 nq.push Music::Note.new(Music::Pitch.new(PC4 ),Music::Duration.new( 1))		#  0	++
 nq.push Music::Note.new(Music::Pitch.new(PF4 ),Music::Duration.new( 1))		#  1
@@ -664,7 +664,7 @@ $phrasing_vectors["Amazing Grace"] =
 ###############################################################################
 
 nq = Music::NoteQueue.new
-nq.tempo = 100
+nq.tempo = 70
 
 nq.push Music::Note.new(Music::Pitch.new(PB4 ),Music::Duration.new( 2))		#  0 ++
 nq.push Music::Note.new(Music::Pitch.new(PB4 ),Music::Duration.new( 2))		#  1
@@ -777,7 +777,7 @@ $phrasing_vectors["Ode to Joy"] =
 ###############################################################################
 
 nq = Music::NoteQueue.new
-nq.tempo = 100
+nq.tempo = 90
 
 nq.push Music::Note.new(Music::Pitch.new(PG3 ),Music::Duration.new( 2))		#  0  ++
 
@@ -1000,7 +1000,7 @@ $phrasing_vectors["Clementine"] =
 ###############################################################################
 
 nq = Music::NoteQueue.new
-nq.tempo = 100
+nq.tempo = 40
 
 nq.push Music::Note.new(Music::Pitch.new(PD4 ),Music::Duration.new( 1))		#  0   Oh		++
 nq.push Music::Note.new(Music::Pitch.new(PFs4),Music::Duration.new( 1))		#  1   when
@@ -1089,7 +1089,7 @@ $phrasing_vectors["When the Saints"] =
 ###############################################################################
 
 nq = Music::NoteQueue.new
-nq.tempo = 100
+nq.tempo = 90
 
 nq.push Music::Note.new(Music::Pitch.new(PG4 ),Music::Duration.new( 2))		#  0   Yes			++
 nq.push Music::Note.new(Music::Pitch.new(PA4 ),Music::Duration.new( 2))		#  1   we'll
@@ -1164,7 +1164,7 @@ nq.push Music::Note.new(Music::Pitch.new(PD5 ),Music::Duration.new( 4))		# 57   
 nq.push Music::Note.new(Music::Pitch.new(PB4 ),Music::Duration.new( 3))		# 58   with
 nq.push Music::Note.new(Music::Pitch.new(PC5 ),Music::Duration.new( 1))		# 59   the
 nq.push Music::Note.new(Music::Pitch.new(PD5 ),Music::Duration.new( 2))		# 60   trai-
-nq.push Music::Note.new(Music::Pitch.new(PE4 ),Music::Duration.new( 6))		# 61   tor,
+nq.push Music::Note.new(Music::Pitch.new(PE5 ),Music::Duration.new( 6))		# 61   tor,
 
 nq.push Music::Note.new(Music::Pitch.new(PD5 ),Music::Duration.new( 4))		# 62   Up
 nq.push Music::Note.new(Music::Pitch.new(PB4 ),Music::Duration.new( 3))		# 63   with
@@ -1189,7 +1189,7 @@ nq.push Music::Note.new(Music::Pitch.new(PE4 ),Music::Duration.new( 8))		# 78   
 nq.push Music::Note.new(Music::Pitch.new(PD4 ),Music::Duration.new( 4))		# 79   Shout-		++
 nq.push Music::Note.new(Music::Pitch.new(PD4 ),Music::Duration.new( 3))		# 80   ing
 nq.push Music::Note.new(Music::Pitch.new(PC4 ),Music::Duration.new( 1))		# 81   the
-nq.push Music::Note.new(Music::Pitch.new(PB3 ),Music::Duration.new( 2))		# 82   Batt-
+nq.push Music::Note.new(Music::Pitch.new(PB4 ),Music::Duration.new( 2))		# 82   Batt-
 nq.push Music::Note.new(Music::Pitch.new(PD4 ),Music::Duration.new( 2))		# 83   le
 nq.push Music::Note.new(Music::Pitch.new(PG4 ),Music::Duration.new( 3))		# 84   cry
 nq.push Music::Note.new(Music::Pitch.new(PB4 ),Music::Duration.new( 1))		# 85   of
@@ -1230,11 +1230,11 @@ $phrasing_vectors["Battle Cry of Freedom"] =
 
 
 ###############################################################################
-# Yesterday (Beatles)
+# Yesterday (Beatles)   -- FIXME: there are some accidentals wrong, toward the end
 ###############################################################################
 
 nq = Music::NoteQueue.new
-nq.tempo = 100
+nq.tempo = 50
 
 nq.push Music::Note.new(Music::Pitch.new(PG4 ),Music::Duration.new( 1))		#  0   Yes-		++
 nq.push Music::Note.new(Music::Pitch.new(PF4 ),Music::Duration.new( 1))		#  1   ter-
@@ -1307,7 +1307,7 @@ $phrasing_vectors["Yesterday (Beatles)"] =
 ###############################################################################
 
 nq = Music::NoteQueue.new
-nq.tempo = 100
+nq.tempo = 60
 
 nq.push Music::Note.new(Music::Pitch.new(PB4 ),Music::Duration.new( 1))		#  0   In			++
 nq.push Music::Note.new(Music::Pitch.new(PC5 ),Music::Duration.new( 1))		#  1   the
@@ -1383,7 +1383,7 @@ $phrasing_vectors["Yellow Submarine"] =
 ###############################################################################
 
 nq = Music::NoteQueue.new
-nq.tempo = 100
+nq.tempo = 50
 
 nq.push Music::Note.new(Music::Pitch.new(PB4 ),Music::Duration.new( 2))		#  0   He's		++
 nq.push Music::Note.new(Music::Pitch.new(PB4 ),Music::Duration.new( 2))		#  1   a
@@ -1459,7 +1459,7 @@ $phrasing_vectors["Nowhere Man"] =
 ###############################################################################
 
 nq = Music::NoteQueue.new
-nq.tempo = 100
+nq.tempo = 90
 
 nq.push Music::Note.new(Music::Pitch.new(PC5 ),Music::Duration.new( 2))		#  0	++
 nq.push Music::Note.new(Music::Pitch.new(PG4 ),Music::Duration.new( 2))		#  1
@@ -1507,7 +1507,7 @@ nq.push Music::Note.new(Music::Pitch.new(PBb3),Music::Duration.new( 1))		# 36
 nq.push Music::Note.new(Music::Pitch.new(PF4 ),Music::Duration.new( 2))		# 37 
 nq.push Music::Note.new(Music::Pitch.new(PAb3),Music::Duration.new( 6))		# 38 
 
-nq.push Music::Note.new(Music::Pitch.new(PDb5),Music::Duration.new(12))		# 39	--
+nq.push Music::Note.new(Music::Pitch.new(PDb4),Music::Duration.new(12))		# 39	--
 
 m = Music::Meter.new(4, 4, 4) # 4/4 time, eighth note pulses
 b = Music::BeatPosition.new
@@ -1542,7 +1542,7 @@ $phrasing_vectors["Ask Me Now (Monk)"] =
 ###############################################################################
 
 nq = Music::NoteQueue.new
-nq.tempo = 100
+nq.tempo = 60
 
 nq.push Music::Note.new(Music::Pitch.new(PF4 ),Music::Duration.new( 1))		#  0	++
 nq.push Music::Note.new(Music::Pitch.new(PG4 ),Music::Duration.new( 1))		#  1
@@ -1617,7 +1617,7 @@ $phrasing_vectors["In a Sentimental Mood"] =
 ###############################################################################
 
 nq = Music::NoteQueue.new
-nq.tempo = 100
+nq.tempo = 50
 
 nq.push Music::Note.new(Music::Pitch.new(PC4 ),Music::Duration.new( 1))		#  0	++
 nq.push Music::Note.new(Music::Pitch.new(PEb4),Music::Duration.new( 1))		#  1
@@ -1687,7 +1687,7 @@ $phrasing_vectors["Monk's Mood"] =
 ###############################################################################
 
 nq = Music::NoteQueue.new
-nq.tempo = 100
+nq.tempo = 90
 
 nq.push Music::Note.new(Music::Pitch.new(PA4 ),Music::Duration.new( 2))		#  0	Close	++
 nq.push Music::Note.new(Music::Pitch.new(PGs4),Music::Duration.new( 1))		#  1	your
@@ -1718,36 +1718,36 @@ nq.push Music::Note.new(Music::Pitch.new(PFs4),Music::Duration.new( 2))		# 19	ay
 nq.push Music::Note.new(Music::Pitch.new(PE4 ),Music::Duration.new( 2))		# 20	be
 nq.push Music::Note.new(Music::Pitch.new(PFs4),Music::Duration.new( 8))		# 21	true.	--
 
-nq.push Music::Note.new(Music::Pitch.new(PA4 ),Music::Duration.new( 2))		# 22	And		++
-nq.push Music::Note.new(Music::Pitch.new(PGs4),Music::Duration.new( 2))		# 23	then
-
-nq.push Music::Note.new(Music::Pitch.new(PFs4),Music::Duration.new( 4))		# 24	while
-nq.push Music::Note.new(Music::Pitch.new(PGs4),Music::Duration.new( 2))		# 25	I'm
-nq.push Music::Note.new(Music::Pitch.new(PA4 ),Music::Duration.new( 1))		# 26	a-
-nq.push Music::Note.new(Music::Pitch.new(PB4 ),Music::Duration.new( 5))		# 27	way,	--
-
-nq.push Music::Note.new(Music::Pitch.new(PCs5),Music::Duration.new( 2))		# 28	I'll	++
-nq.push Music::Note.new(Music::Pitch.new(PDs5),Music::Duration.new( 2))		# 29	write
-
-nq.push Music::Note.new(Music::Pitch.new(PE5 ),Music::Duration.new( 4))		# 30	home
-nq.push Music::Note.new(Music::Pitch.new(PE5 ),Music::Duration.new( 2))		# 31	ev-
-nq.push Music::Note.new(Music::Pitch.new(PDs5),Music::Duration.new( 1))		# 32	ery
-nq.push Music::Note.new(Music::Pitch.new(PCs5),Music::Duration.new( 2))		# 33	da-
-
-nq.push Music::Note.new(Music::Pitch.new(PGs4),Music::Duration.new( 4))		# 34	ay,		--
-nq.push Music::Note.new(Music::Pitch.new(PCs5),Music::Duration.new( 1))		# 35	And		++
-nq.push Music::Note.new(Music::Pitch.new(PCs5),Music::Duration.new( 2))		# 36	I'll
-
-nq.push Music::Note.new(Music::Pitch.new(PCs5),Music::Duration.new( 4))		# 37	send
-nq.push Music::Note.new(Music::Pitch.new(PCs5),Music::Duration.new( 2))		# 38	all
-nq.push Music::Note.new(Music::Pitch.new(PB4 ),Music::Duration.new( 2))		# 39	my
-
-nq.push Music::Note.new(Music::Pitch.new(PA4 ),Music::Duration.new( 2))		# 40	lov-
-nq.push Music::Note.new(Music::Pitch.new(PGs4),Music::Duration.new( 4))		# 41	in'
-nq.push Music::Note.new(Music::Pitch.new(PFs4),Music::Duration.new( 2))		# 42	to
-
-nq.push Music::Note.new(Music::Pitch.new(PE4 ),Music::Duration.new( 8))		# 43	you		--
-
+#nq.push Music::Note.new(Music::Pitch.new(PA4 ),Music::Duration.new( 2))		# 22	And		++
+#nq.push Music::Note.new(Music::Pitch.new(PGs4),Music::Duration.new( 2))		# 23	then
+#
+#nq.push Music::Note.new(Music::Pitch.new(PFs4),Music::Duration.new( 4))		# 24	while
+#nq.push Music::Note.new(Music::Pitch.new(PGs4),Music::Duration.new( 2))		# 25	I'm
+#nq.push Music::Note.new(Music::Pitch.new(PA4 ),Music::Duration.new( 1))		# 26	a-
+#nq.push Music::Note.new(Music::Pitch.new(PB4 ),Music::Duration.new( 5))		# 27	way,	--
+#
+#nq.push Music::Note.new(Music::Pitch.new(PCs5),Music::Duration.new( 2))		# 28	I'll	++
+#nq.push Music::Note.new(Music::Pitch.new(PDs5),Music::Duration.new( 2))		# 29	write
+#
+#nq.push Music::Note.new(Music::Pitch.new(PE5 ),Music::Duration.new( 4))		# 30	home
+#nq.push Music::Note.new(Music::Pitch.new(PE5 ),Music::Duration.new( 2))		# 31	ev-
+#nq.push Music::Note.new(Music::Pitch.new(PDs5),Music::Duration.new( 1))		# 32	ery
+#nq.push Music::Note.new(Music::Pitch.new(PCs5),Music::Duration.new( 2))		# 33	da-
+#
+#nq.push Music::Note.new(Music::Pitch.new(PGs4),Music::Duration.new( 4))		# 34	ay,		--
+#nq.push Music::Note.new(Music::Pitch.new(PCs5),Music::Duration.new( 1))		# 35	And		++
+#nq.push Music::Note.new(Music::Pitch.new(PCs5),Music::Duration.new( 2))		# 36	I'll
+#
+#nq.push Music::Note.new(Music::Pitch.new(PCs5),Music::Duration.new( 4))		# 37	send
+#nq.push Music::Note.new(Music::Pitch.new(PCs5),Music::Duration.new( 2))		# 38	all
+#nq.push Music::Note.new(Music::Pitch.new(PB4 ),Music::Duration.new( 2))		# 39	my
+#
+#nq.push Music::Note.new(Music::Pitch.new(PA4 ),Music::Duration.new( 2))		# 40	lov-
+#nq.push Music::Note.new(Music::Pitch.new(PGs4),Music::Duration.new( 4))		# 41	in'
+#nq.push Music::Note.new(Music::Pitch.new(PFs4),Music::Duration.new( 2))		# 42	to
+#
+#nq.push Music::Note.new(Music::Pitch.new(PE4 ),Music::Duration.new( 8))		# 43	you		--
+#
 m = Music::Meter.new(4, 4, 2) # 4/4 time, eighth note pulses
 b = Music::BeatPosition.new
 b.measure     = 0
@@ -1767,9 +1767,9 @@ phrases = [ ]
 phrases.push({ :start_idx =>  0, :end_idx =>  6 })
 phrases.push({ :start_idx =>  7, :end_idx => 12 })
 phrases.push({ :start_idx => 13, :end_idx => 21 })
-phrases.push({ :start_idx => 22, :end_idx => 27 })
-phrases.push({ :start_idx => 28, :end_idx => 34 })
-phrases.push({ :start_idx => 35, :end_idx => 43 })
+#phrases.push({ :start_idx => 22, :end_idx => 27 })
+#phrases.push({ :start_idx => 28, :end_idx => 34 })
+#phrases.push({ :start_idx => 35, :end_idx => 43 })
 
 $phrasing_vectors["All My Loving"] =
   {

@@ -45,6 +45,8 @@ module Music
   
     def to_event_queue
       raise ArgumentError.new("tempo must be set") if @tempo.nil? 
+
+      duration_to_timestamp = 60.0 / @tempo * 200.0
   
       eq = Midi::EventQueue.new
       timestamp = 0
@@ -56,13 +58,13 @@ module Music
                          :velocity  => 100,
                          :timestamp => timestamp })
       
-            timestamp += note.duration.val * @tempo
+            timestamp += note.duration.val * duration_to_timestamp
             eq.enqueue Midi::NoteOffEvent.new({
                          :pitch     => note.pitch.val,
                          :velocity  => 100,
                          :timestamp => timestamp })
           when Music::Rest
-            timestamp += note.duration.val * @tempo
+            timestamp += note.duration.val * duration_to_timestamp
           else
             raise RuntimeError.new("unexpected class: #{note.class}")
         end

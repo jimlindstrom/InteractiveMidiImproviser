@@ -1,3 +1,8 @@
+One option for making this not detect the phrases a meters is to (a) go left-to-
+right, looking for the first peak that is x% higher than its neighbors, and (b)
+take tempo into account & do a breadth-first search out from the expected meter
+of, say, 60 bpm.
+
 It might be cleaner to not represent Rests explicitly, but rather to let notes
 have an IOI (which would include the rest's duration) as well as a duration.
 
